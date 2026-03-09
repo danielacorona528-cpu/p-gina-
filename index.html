@@ -3,119 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio Pro</title>
+    <title>Brayan Lucena - Sorteo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body {
-            background-color: #000;
-            background-image: 
-                radial-gradient(circle at 50% -20%, #1a1a1a, transparent),
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 100% 100%, 30px 30px, 30px 30px;
+            background-color: #050505;
             color: white;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
         }
 
-        .bento-item {
-            background: rgba(10, 10, 10, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            transition: all 0.2s ease-in-out;
+        /* Fondo con destellos similares a la original */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 0%, #1e1e1e 0%, #050505 70%);
+            z-index: -1;
         }
 
-        .bento-item:active {
-            transform: scale(0.97);
-            border-color: rgba(255, 255, 255, 0.3);
+        .bento-card {
+            background: linear-gradient(145deg, #111111, #0a0a0a);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .icon-box {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(145deg, #1a1a1a, #000);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .btn-gradient {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: transform 0.2s;
+        }
+
+        .btn-gradient:active {
+            transform: scale(0.95);
+        }
+
+        .logo-container img {
+            filter: grayscale(100%) brightness(200%);
+            opacity: 0.7;
+            width: 80px;
         }
     </style>
 </head>
-<body class="flex flex-col items-center min-h-screen p-6">
+<body class="flex flex-col items-center p-4">
+    <div class="bg-glow"></div>
 
-    <div class="mt-12 text-center w-full">
-        <div class="relative inline-block">
-            <img src="https://via.placeholder.com/150" alt="Profile" 
-                 class="w-24 h-24 rounded-full border-[1px] border-white/20 p-1">
+    <header class="text-center mt-10 mb-8">
+        <div class="relative inline-block p-[2px] rounded-full bg-gradient-to-b from-blue-500 to-purple-600">
+            <img src="https://via.placeholder.com/150" alt="Brayan Lucena" 
+                 class="w-24 h-24 rounded-full border-4 border-black object-cover">
         </div>
-        <h1 class="text-2xl font-extrabold mt-4 tracking-tight">Tu Nombre</h1>
-        <p class="text-zinc-500 text-sm font-medium mt-1 mb-10 uppercase tracking-widest">Creador de Contenido</p>
-    </div>
+        <h1 class="text-2xl font-extrabold mt-4 tracking-tight">Brayan Lucena</h1>
+        <div class="bg-blue-600/20 text-blue-400 text-[10px] px-3 py-1 rounded-full inline-block font-bold mt-2 uppercase tracking-widest">
+            Gran Sorteo
+        </div>
+    </header>
 
-    <div class="w-full max-w-[400px] space-y-4">
+    <main class="w-full max-w-md space-y-6">
         
-        <a href="#" class="bento-item p-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="icon-box">
-                    <i class="fab fa-instagram text-xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-[15px] font-semibold">Instagram</h3>
-                    <p class="text-xs text-zinc-500">Sígueme para ver mi día a día</p>
-                </div>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square text-zinc-600 text-[10px] mr-2"></i>
-        </a>
+        <div class="bento-card p-6 text-center">
+            <h2 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                ESTA ES TU OPORTUNIDAD
+            </h2>
+            <p class="text-3xl font-black mt-2 text-white">¡QUÉRETE COROTO!</p>
+        </div>
 
-        <a href="#" class="bento-item p-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="icon-box">
-                    <i class="fab fa-tiktok text-xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-[15px] font-semibold">TikTok</h3>
-                    <p class="text-xs text-zinc-500">Videos cortos y trends</p>
-                </div>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square text-zinc-600 text-[10px] mr-2"></i>
-        </a>
+        <div class="space-y-3">
+            <a href="#" class="flex items-center justify-between p-5 bento-card border-l-4 border-l-blue-500">
+                <span class="font-bold">PARTICIPAR AHORA</span>
+                <i class="fa-solid fa-ticket text-blue-500"></i>
+            </a>
+            
+            <a href="#" class="flex items-center justify-between p-5 bento-card">
+                <span class="font-bold">LISTA DE GANADORES</span>
+                <i class="fa-solid fa-trophy text-yellow-500"></i>
+            </a>
+        </div>
 
-        <a href="#" class="bento-item p-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="icon-box">
-                    <i class="fab fa-youtube text-xl text-red-600"></i>
-                </div>
-                <div>
-                    <h3 class="text-[15px] font-semibold">YouTube</h3>
-                    <p class="text-xs text-zinc-500">Tutoriales y Vlogs</p>
-                </div>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square text-zinc-600 text-[10px] mr-2"></i>
-        </a>
+        <div class="grid grid-cols-3 gap-4 py-6 logo-container items-center justify-items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Logo_de_la_Loter%C3%ADa_del_T%C3%A1chira.png/1200px-Logo_de_la_Loter%C3%ADa_del_T%C3%A1chira.png" alt="Tachira">
+            <img src="https://conalot.gob.ve/wp-content/uploads/2022/01/LOGO-CONALOT-NUEVO.png" alt="Conalot">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6A7yR_fK_XpS9W5_5I_jD-1Z8V-1_y0_yvA&s" alt="Super Gana">
+        </div>
 
-        <a href="#" class="bento-item p-4 flex items-center justify-between border-white/20">
-            <div class="flex items-center gap-4">
-                <div class="icon-box bg-white">
-                    <i class="fa-brands fa-whatsapp text-xl text-black"></i>
-                </div>
-                <div>
-                    <h3 class="text-[15px] font-bold text-white">Contáctame</h3>
-                    <p class="text-xs text-zinc-500 italic">Hablemos por aquí</p>
-                </div>
-            </div>
-            <div class="bg-green-500 w-2 h-2 rounded-full animate-pulse mr-3"></div>
-        </a>
+        <div class="text-[10px] text-zinc-500 text-center leading-relaxed px-4">
+            Sorteo Avalado por la Conalot bajo el Runlot: <br>
+            <span class="text-zinc-300 font-mono text-[11px]">CNL-ORF-2025-000661</span>
+        </div>
 
-    </div>
+    </main>
 
-    <footer class="mt-auto py-12">
-        <p class="text-[10px] text-zinc-600 tracking-tighter uppercase font-bold">
-            © 2026 Crafted with Passion
-        </p>
+    <footer class="mt-12 mb-10 text-center">
+        <p class="text-xs text-zinc-600">Copyright © 2024. Desarrollado por <span class="text-white">SOFTVENCA</span></p>
+        <div class="flex justify-center gap-6 mt-4 text-xs font-bold text-zinc-400 uppercase tracking-widest">
+            <a href="#">Términos</a>
+            <a href="#">Soporte</a>
+        </div>
     </footer>
 
 </body>
