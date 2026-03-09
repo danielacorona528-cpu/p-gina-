@@ -13,7 +13,6 @@
         .bento-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; backdrop-filter: blur(12px); }
         .btn-luck { background: linear-gradient(90deg, #1e40af, #3b82f6); box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4); }
         .ticket-badge { background: #facc15; color: black; font-weight: 900; padding: 10px 18px; border-radius: 14px; margin: 4px; display: inline-block; transform: rotate(-1deg); animation: pop 0.3s ease; }
-        .ticket-vendido { background: #3f3f46; color: #a1a1aa; text-decoration: line-through; }
         @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
         .progress-fill { transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1); }
     </style>
@@ -31,13 +30,13 @@
 
     <div class="bento-card p-6 mb-6">
         <div class="flex justify-between items-center mb-3">
-            <span class="text-[10px] font-black uppercase text-zinc-400">Progreso del Sorteo</span>
-            <span class="text-blue-400 font-black text-sm" id="txt-porcentaje">0% Vendido</span>
+            <span class="text-[10px] font-black uppercase text-zinc-400">Disponibilidad Actual</span>
+            <span class="text-blue-400 font-black text-sm" id="txt-porcentaje">100% Disponible</span>
         </div>
         <div class="w-full h-4 bg-white/10 rounded-full overflow-hidden border border-white/5 p-0.5">
-            <div id="barra-progreso" class="progress-fill h-full bg-gradient-to-r from-blue-700 to-blue-400 rounded-full" style="width: 0%"></div>
+            <div id="barra-progreso" class="progress-fill h-full bg-gradient-to-r from-blue-700 to-blue-400 rounded-full" style="width: 100%"></div>
         </div>
-        <p id="tickets-restantes" class="text-[9px] text-zinc-500 mt-3 text-center uppercase tracking-widest font-bold">Cargando disponibilidad...</p>
+        <p id="tickets-restantes" class="text-[9px] text-zinc-500 mt-3 text-center uppercase tracking-widest font-bold">Calculando tickets...</p>
     </div>
 
     <div id="seccion-principal">
@@ -72,7 +71,7 @@
         <div class="bento-card p-6 mb-6 border-blue-500/20 bg-blue-500/5">
             <h3 class="text-sm font-black uppercase mb-4 text-center tracking-widest italic">¿Ya compraste? Verifica aquí</h3>
             <div class="flex gap-2">
-                <input type="number" id="input-verificar" placeholder="Ingresa tu número (#000)" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none">
+                <input type="number" id="input-verificar" placeholder="Ej: 5420" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none">
                 <button onclick="verificarTicket()" class="bg-white text-black font-black px-4 rounded-xl text-[10px] uppercase active:scale-95 transition-all">Consultar</button>
             </div>
             <div id="resultado-verificar" class="mt-3 text-[10px] font-bold text-center hidden"></div>
@@ -105,8 +104,8 @@
                 <svg class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4"><path d="M5 13l4 4L19 7" /></svg>
             </div>
             <h2 class="text-3xl font-black uppercase italic mb-2">¡RECIBIDO!</h2>
-            <p class="text-zinc-400 text-xs mb-6">Tu registro entró en validación y los números han sido reservados a tu nombre.</p>
-            <button onclick="location.reload()" class="bg-white/10 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10">Volver al Inicio</button>
+            <p class="text-zinc-400 text-xs mb-6">Registro en validación. Tus números han sido bloqueados para ti.</p>
+            <button onclick="location.reload()" class="bg-white/10 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10">Volver</button>
         </div>
     </div>
 
@@ -118,23 +117,24 @@
     </div>
 
     <script>
-        // CONFIGURACIÓN DEL SORTEO
-        const TOTAL_TICKETS = 1000;
-        let ticketsVendidos = JSON.parse(localStorage.getItem('tickets_vendidos')) || [];
-        let ticketsSeleccionadosTemporalmente = [];
+        // --- CONFIGURACIÓN PARA 10,000 TICKETS ---
+        const TOTAL_TICKETS = 10000;
+        let ticketsVendidos = JSON.parse(localStorage.getItem('luck_tickets_sold')) || [];
+        let seleccionActual = [];
 
-        // Inicializar la interfaz
         window.onload = () => {
-            actualizarInterfazProgreso();
+            actualizarProgreso();
         };
 
-        function actualizarInterfazProgreso() {
-            const numVendidos = ticketsVendidos.length;
-            const porcentaje = ((numVendidos / TOTAL_TICKETS) * 100).toFixed(0);
+        function actualizarProgreso() {
+            const vendidos = ticketsVendidos.length;
+            const disponibles = TOTAL_TICKETS - vendidos;
+            const porcLibre = ((disponibles / TOTAL_TICKETS) * 100).toFixed(1);
             
-            document.getElementById('barra-progreso').style.width = porcentaje + '%';
-            document.getElementById('txt-porcentaje').innerText = porcentaje + '% Vendido';
-            document.getElementById('tickets-restantes').innerText = `Quedan ${TOTAL_TICKETS - numVendidos} números disponibles`;
+            // Actualizar interfaz
+            document.getElementById('barra-progreso').style.width = porcLibre + '%';
+            document.getElementById('txt-porcentaje').innerText = porcLibre + '% Quedan Libres';
+            document.getElementById('tickets-restantes').innerText = `Quedan ${disponibles.toLocaleString()} tickets de ${TOTAL_TICKETS.toLocaleString()}`;
         }
 
         function pidoTickets(cant) {
@@ -144,85 +144,52 @@
             const monto = document.getElementById('monto-final');
 
             container.innerHTML = '';
-            ticketsSeleccionadosTemporalmente = [];
+            seleccionActual = [];
 
-            let intentos = 0;
-            while(ticketsSeleccionadosTemporalmente.length < cant && intentos < 2000) {
-                let n = Math.floor(Math.random() * TOTAL_TICKETS).toString().padStart(3, '0');
+            while(seleccionActual.length < cant) {
+                // Genera número entre 0000 y 9999
+                let n = Math.floor(Math.random() * TOTAL_TICKETS).toString().padStart(4, '0');
                 
-                // CONTROL REAL: Solo agregar si no está vendido y no está repetido en la selección actual
-                if (!ticketsVendidos.includes(n) && !ticketsSeleccionadosTemporalmente.includes(n)) {
-                    ticketsSeleccionadosTemporalmente.push(n);
+                // CONTROL: No vendido y no repetido en la selección
+                if (!ticketsVendidos.includes(n) && !seleccionActual.includes(n)) {
+                    seleccionActual.push(n);
                     container.innerHTML += `<div class="ticket-badge">#${n}</div>`;
                 }
-                intentos++;
-            }
-
-            if (ticketsSeleccionadosTemporalmente.length < cant) {
-                alert("¡Lo sentimos! No quedan suficientes tickets disponibles.");
-                return;
+                
+                // Seguridad por si se agotan
+                if(ticketsVendidos.length >= TOTAL_TICKETS) break;
             }
 
             box.classList.remove('hidden');
             barra.classList.remove('hidden');
             monto.innerText = cant * 310;
             
-            confetti({ 
-                particleCount: 80, 
-                spread: 50, 
-                origin: { y: 0.8 },
-                colors: ['#3b82f6', '#facc15']
-            });
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 }, colors: ['#3b82f6', '#facc15'] });
         }
 
         function verificarTicket() {
-            const val = document.getElementById('input-verificar').value.padStart(3, '0');
+            const val = document.getElementById('input-verificar').value.padStart(4, '0');
             const res = document.getElementById('resultado-verificar');
             res.classList.remove('hidden');
             
             if(document.getElementById('input-verificar').value === "") {
                 res.innerHTML = "INGRESA UN NÚMERO";
-                res.className = "mt-3 text-[10px] font-bold text-center text-zinc-500";
                 return;
             }
 
-            res.innerHTML = `<span class="animate-pulse">CONSULTANDO BASE DE DATOS...</span>`;
-            
+            res.innerHTML = "BUSCANDO...";
             setTimeout(() => {
                 if (ticketsVendidos.includes(val)) {
-                    res.innerHTML = `EL TICKET #${val} YA ESTÁ <span class="text-red-500">VENDIDO</span>.`;
+                    res.innerHTML = `TICKET #${val} ❌ YA ESTÁ VENDIDO`;
+                    res.className = "mt-3 text-[10px] font-bold text-center text-red-400 bg-red-500/10 py-2 rounded-lg border border-red-500/20";
                 } else {
-                    res.innerHTML = `EL TICKET #${val} ESTÁ <span class="text-green-500">LIBRE</span>. ¡PUEDE SER TUYO!`;
+                    res.innerHTML = `TICKET #${val} ✅ SIGUE DISPONIBLE`;
+                    res.className = "mt-3 text-[10px] font-bold text-center text-green-400 bg-green-500/10 py-2 rounded-lg border border-green-500/20";
                 }
-                res.className = "mt-3 text-[10px] font-bold text-center text-white bg-white/5 py-2 rounded-lg";
-            }, 800);
+            }, 600);
         }
 
         function irAPagar() {
             document.getElementById('seccion-principal').classList.add('hidden');
             document.getElementById('barra-footer').classList.add('hidden');
-            document.getElementById('seccion-pago').classList.remove('hidden');
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        function finalizarTodo() {
-            const nombre = document.getElementById('nombre-cliente').value;
-            if(nombre.trim().length < 3) {
-                alert("Ingresa tu nombre para el registro.");
-                return;
-            }
-
-            // GUARDADO REAL DE TICKETS
-            // Pasamos los temporales a la lista oficial de vendidos
-            ticketsVendidos = [...ticketsVendidos, ...ticketsSeleccionadosTemporalmente];
-            localStorage.setItem('tickets_vendidos', JSON.stringify(ticketsVendidos));
-
-            document.getElementById('seccion-pago').classList.add('hidden');
-            document.getElementById('seccion-exito').classList.remove('hidden');
-            
-            actualizarInterfazProgreso();
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.5 } });
-        }
-    </script>
-</body>
-</html>
+            document
