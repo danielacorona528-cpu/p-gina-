@@ -33,6 +33,8 @@
                 <img src="jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Coroto" class="max-w-full h-auto">
             </div>
             <div class="p-8">
+                <h3 class="text-blue-400 font-bold text-center mb-4 uppercase tracking-widest text-xs italic">¡QUÉRETE COROTO!</h3>
+                
                 <div class="flex justify-between items-center mb-8">
                     <div>
                         <h2 class="text-2xl font-black italic uppercase">Bera SBR 2024</h2>
@@ -55,6 +57,19 @@
                 </button>
             </div>
         </div>
+
+        <div class="flex justify-around items-center bg-white/5 p-6 rounded-[28px] border border-white/10 mb-8 grayscale brightness-150">
+            <img src="conalot.png" class="h-10" alt="Conalot">
+            <img src="supergana.png" class="h-10" alt="Super Gana">
+            <img src="tachira.png" class="h-10" alt="Lotería del Táchira">
+        </div>
+
+        <div class="text-center px-4 mb-12">
+            <p class="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Sorteo Avalado por la Conalot bajo el Runlot:</p>
+            <p class="text-[10px] text-blue-500 font-black tracking-widest">CNL-ORF-2025-000661</p>
+            <a href="#" class="text-[9px] text-zinc-600 underline mt-2 inline-block uppercase">Términos y Condiciones</a>
+        </div>
+
         <div id="box-suerte" class="hidden mb-12 text-center">
             <div id="contenedor-num" class="flex flex-wrap justify-center gap-4"></div>
         </div>
@@ -92,41 +107,5 @@
         <button onclick="location.reload()" class="mt-8 text-blue-400 font-bold uppercase text-xs tracking-widest underline">Volver al inicio</button>
     </div>
 
-    <div id="barra" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 border-t border-white/10 hidden z-50">
-        <div class="max-w-md mx-auto flex justify-between items-center px-2">
-            <div class="text-2xl font-black text-white"><span id="total">0</span> <span class="text-xs">Bs</span></div>
-            <button type="button" onclick="irAPago()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black text-sm uppercase text-white shadow-lg active:scale-95 transition-all">Continuar</button>
-        </div>
-    </div>
-
-    <script>
-        function generar(n) {
-            const cont = document.getElementById('contenedor-num');
-            cont.innerHTML = '';
-            for(let i=0; i<n; i++) {
-                let num = Math.floor(Math.random()*1000).toString().padStart(3,'0');
-                cont.innerHTML += `<div class="ticket-badge">#${num}</div>`;
-            }
-            document.getElementById('box-suerte').classList.remove('hidden');
-            document.getElementById('barra').classList.remove('hidden');
-            document.getElementById('total').innerText = n * 310;
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 } });
-        }
-
-        function irAPago() {
-            document.getElementById('pantalla-sorteo').classList.add('hidden');
-            document.getElementById('barra').classList.add('hidden');
-            document.getElementById('pantalla-pago').classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
-
-        function confirmarPago() {
-            const nombre = document.getElementById('nombre-usuario').value;
-            if(nombre.trim() === "") { alert("Por favor, ingresa tu nombre."); return; }
-            document.getElementById('pantalla-pago').classList.add('hidden');
-            document.getElementById('pantalla-exito').classList.remove('hidden');
-            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
-        }
-    </script>
-</body>
-</html>
+    <footer class="text-center mt-8 pb-10">
+        <p class="text-[10px] text-zinc
