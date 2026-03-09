@@ -3,62 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Portafolio - Estilo Vercel</title>
+    <title>Mi Portafolio Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background-color: #0a0a0a;
+            background-color: #000;
             color: white;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+        .bento-card {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .glass:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
+        .bento-card:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .glow {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4">
+<body class="flex flex-col items-center min-h-screen p-6 pt-16">
 
-    <div class="text-center mb-8">
-        <div class="w-24 h-24 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-full mx-auto mb-4 border-4 border-zinc-800 shadow-xl">
-            <img src="https://via.placeholder.com/150" alt="Perfil" class="rounded-full w-full h-full object-cover">
+    <div class="text-center mb-10">
+        <div class="relative inline-block">
+            <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur opacity-30"></div>
+            <img src="https://via.placeholder.com/150" alt="Tu Foto" 
+                 class="relative w-28 h-28 rounded-full border-2 border-white/10 object-cover shadow-2xl">
         </div>
-        <h1 class="text-2xl font-bold">Tu Nombre Aquí</h1>
-        <p class="text-zinc-400">Creador de Contenido & Desarrollador</p>
+        <h1 class="text-3xl font-extrabold mt-6 tracking-tight">TU NOMBRE</h1>
+        <p class="text-zinc-500 font-medium mt-1">@tu_usuario</p>
     </div>
 
-    <div class="w-full max-w-md space-y-4">
+    <div class="w-full max-w-[380px] space-y-3">
         
-        <a href="https://instagram.com/tu-usuario" target="_blank" class="glass w-full py-4 px-6 rounded-2xl flex items-center justify-between group">
-            <span class="font-medium">Instagram</span>
-            <span class="opacity-50 group-hover:opacity-100">→</span>
+        <a href="#" class="bento-card w-full p-5 flex items-center gap-4 group">
+            <div class="w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center border border-white/5">
+                <i class="fab fa-instagram text-xl text-pink-500"></i>
+            </div>
+            <div class="flex-1">
+                <p class="font-bold text-sm">Instagram</p>
+                <p class="text-xs text-zinc-500">Mis últimas fotos</p>
+            </div>
+            <i class="fa-solid fa-chevron-right text-zinc-600 text-xs"></i>
         </a>
 
-        <a href="https://tiktok.com/@tu-usuario" target="_blank" class="glass w-full py-4 px-6 rounded-2xl flex items-center justify-between group">
-            <span class="font-medium">TikTok</span>
-            <span class="opacity-50 group-hover:opacity-100">→</span>
+        <a href="#" class="bento-card w-full p-5 flex items-center gap-4">
+            <div class="w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center border border-white/5">
+                <i class="fab fa-tiktok text-xl text-white"></i>
+            </div>
+            <div class="flex-1">
+                <p class="font-bold text-sm">TikTok</p>
+                <p class="text-xs text-zinc-500">Contenido diario</p>
+            </div>
+            <i class="fa-solid fa-chevron-right text-zinc-600 text-xs"></i>
         </a>
 
-        <a href="https://youtube.com/tu-canal" target="_blank" class="glass w-full py-4 px-6 rounded-2xl flex items-center justify-between group">
-            <span class="font-medium">YouTube</span>
-            <span class="opacity-50 group-hover:opacity-100">→</span>
+        <a href="#" class="bento-card w-full p-5 flex items-center gap-4">
+            <div class="w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center border border-white/5">
+                <i class="fab fa-youtube text-xl text-red-500"></i>
+            </div>
+            <div class="flex-1">
+                <p class="font-bold text-sm">Canal de YouTube</p>
+                <p class="text-xs text-zinc-500">Suscríbete para más</p>
+            </div>
+            <i class="fa-solid fa-chevron-right text-zinc-600 text-xs"></i>
         </a>
 
-        <a href="mailto:tu@correo.com" class="glass w-full py-4 px-6 rounded-2xl flex items-center justify-between group bg-white/10 border-white/20">
-            <span class="font-medium font-bold text-blue-400">Contáctame</span>
-            <span class="opacity-50 group-hover:opacity-100">✉️</span>
+        <a href="https://wa.me/tu-numero" class="bento-card w-full p-5 flex items-center gap-4 bg-white/5 border-white/20">
+            <div class="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center">
+                <i class="fab fa-whatsapp text-xl text-green-500"></i>
+            </div>
+            <div class="flex-1">
+                <p class="font-bold text-sm text-green-400">WhatsApp</p>
+                <p class="text-xs text-zinc-400 text-opacity-80">Hablemos por aquí</p>
+            </div>
+            <i class="fa-solid fa-paper-plane text-green-500 text-xs"></i>
         </a>
 
     </div>
 
-    <footer class="mt-12 text-zinc-600 text-sm">
-        © 2024 Creado con ❤️
+    <footer class="mt-auto py-10 opacity-30 text-xs tracking-widest uppercase">
+        © 2026 • Portafolio Digital
     </footer>
 
 </body>
