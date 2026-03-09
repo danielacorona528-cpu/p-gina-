@@ -9,229 +9,155 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
         
-        body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; }
+        body { 
+            background-color: #050505; 
+            color: white; 
+            font-family: 'Outfit', sans-serif; 
+            margin: 0; 
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
         
-        /* Fondo con degradado real */
         .main-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 0%, #003366 0%, #050505 70%);
+            background: radial-gradient(circle at 50% 0%, #002d5a 0%, #050505 75%);
             z-index: -1;
         }
 
-        .bento { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; backdrop-filter: blur(10px); }
+        .bento { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 32px; 
+            backdrop-filter: blur(15px); 
+        }
         
-        /* Botones de selección */
-        .btn-select { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 15px; font-weight: 900; font-size: 12px; transition: all 0.2s; }
-        .btn-select:active { background: rgba(59, 130, 246, 0.2); transform: scale(0.95); }
+        .btn-select { 
+            background: rgba(255, 255, 255, 0.04); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 18px; 
+            padding: 16px; 
+            font-weight: 900; 
+            font-size: 11px; 
+            letter-spacing: 1px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .btn-select:active { background: rgba(37, 99, 235, 0.2); transform: scale(0.92); border-color: #2563eb; }
 
-        /* Botón de Suerte */
-        .btn-luck { background: linear-gradient(90deg, #1e40af, #3b82f6); border-radius: 20px; padding: 18px; font-weight: 900; text-transform: uppercase; font-style: italic; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); width: 100%; }
+        .btn-luck { 
+            background: linear-gradient(135deg, #1e40af, #3b82f6); 
+            border-radius: 24px; 
+            padding: 20px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            font-style: italic; 
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.3); 
+            width: 100%; 
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .btn-luck:active { transform: scale(0.96); opacity: 0.9; }
 
-        /* Estilo Ticket Badge */
-        .ticket { background: #facc15; color: #000; font-weight: 900; padding: 8px 15px; border-radius: 10px; margin: 4px; display: inline-block; transform: rotate(-2deg); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .ticket { 
+            background: #facc15; 
+            color: #000; 
+            font-weight: 900; 
+            padding: 10px 18px; 
+            border-radius: 12px; 
+            margin: 5px; 
+            display: inline-block; 
+            transform: rotate(-1.5deg); 
+            box-shadow: 0 6px 15px rgba(250, 204, 21, 0.3);
+            animation: popIn 0.4s ease-out;
+        }
+        @keyframes popIn { from { transform: scale(0.5) rotate(5deg); opacity: 0; } to { transform: scale(1) rotate(-1.5deg); opacity: 1; } }
 
-        /* RECIBO ESTILO /COMPRA/323 */
-        .check-circle { width: 70px; height: 70px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-        .receipt-line { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .label { color: #64748b; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .value { color: #fff; font-weight: 700; font-size: 14px; }
-        .ticket-mini { background: #2563eb; color: #fff; padding: 3px 8px; border-radius: 5px; font-weight: 900; font-size: 11px; margin-left: 4px; }
+        /* DISEÑO DE RECIBO /COMPRA/323 */
+        .check-circle { 
+            width: 80px; height: 80px; 
+            background: #2563eb; 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 24px; 
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
+        }
+        .receipt-line { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .label { color: #64748b; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; }
+        .value { color: #fff; font-weight: 700; font-size: 15px; text-transform: uppercase; }
+        .ticket-mini { background: #2563eb; color: #fff; padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 12px; margin-left: 6px; font-style: italic; }
 
-        /* Panel Admin */
-        .admin-box { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #2563eb; }
+        .admin-entry { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
-<body class="max-w-md mx-auto p-4 pb-24">
+<body class="max-w-md mx-auto p-5 pb-28">
     <div class="main-bg"></div>
 
-    <header class="text-center my-8">
-        <div class="relative inline-block p-1 bg-blue-600 rounded-full mb-4 cursor-pointer" ondblclick="verAdmin()">
-            <img src="logo2 (1).png" alt="Logo" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
+    <header class="text-center my-10">
+        <div class="relative inline-block p-1 bg-blue-600 rounded-full mb-5 cursor-pointer active:scale-90 transition-transform" ondblclick="toggleAdmin()">
+            <img src="logo2 (1).png" alt="Brayan Lucena" class="w-28 h-28 rounded-full border-4 border-black object-cover bg-white shadow-2xl">
+            <div class="absolute bottom-1 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-[#050505]"></div>
         </div>
-        <h1 class="text-3xl font-black italic tracking-tighter uppercase">BRAYAN LUCENA</h1>
-        <p class="text-blue-500 text-[10px] font-black tracking-[0.3em] uppercase">Coroto de la Suerte</p>
+        <h1 class="text-4xl font-black italic tracking-tighter uppercase leading-none">BRAYAN LUCENA</h1>
+        <p class="text-blue-500 text-[11px] font-black tracking-[0.4em] uppercase mt-2">Coroto de la Suerte</p>
     </header>
 
-    <div class="bento p-6 mb-6">
-        <div class="flex justify-between items-center mb-2">
-            <span class="text-[10px] font-black uppercase text-zinc-500">Disponibilidad</span>
-            <span id="porcentaje-txt" class="text-blue-400 font-black text-sm">100% Libres</span>
+    <div class="bento p-7 mb-8">
+        <div class="flex justify-between items-center mb-3">
+            <span class="text-[11px] font-black uppercase text-zinc-500 tracking-widest">Disponibilidad</span>
+            <span id="porc-num" class="text-blue-400 font-black text-sm italic">100% LIBRES</span>
         </div>
-        <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-            <div id="barra" class="h-full bg-blue-600 transition-all duration-1000" style="width: 100%"></div>
+        <div class="w-full h-3.5 bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/5">
+            <div id="porc-bar" class="h-full bg-gradient-to-r from-blue-700 to-blue-400 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(37,99,235,0.5)]" style="width: 100%"></div>
         </div>
     </div>
 
-    <div id="home">
-        <div class="bento overflow-hidden mb-6">
-            <div class="bg-white p-4">
-                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" class="w-full h-auto">
+    <div id="view-home">
+        <div class="bento overflow-hidden mb-8 shadow-2xl">
+            <div class="bg-white p-5 flex justify-center">
+                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" class="w-full h-auto transform hover:scale-105 transition-transform duration-700">
             </div>
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-black italic uppercase">Bera SBR 2026</h2>
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <h2 class="text-2xl font-black italic uppercase leading-none">Bera SBR<br><span class="text-blue-500">2026</span></h2>
+                        <span class="inline-block mt-3 text-[9px] font-black text-zinc-500 uppercase tracking-widest">Sorteo Activo</span>
+                    </div>
                     <div class="text-right">
-                        <span class="text-3xl font-black">310</span><span class="text-blue-500 text-xs font-bold block">Bs</span>
+                        <span class="text-4xl font-black text-white">310</span>
+                        <span class="text-blue-500 text-[10px] font-black block uppercase italic">Bs / Ticket</span>
                     </div>
                 </div>
-                <div class="grid grid-cols-3 gap-2 mb-4">
-                    <button onclick="generar(1)" class="btn-select">1 TICKET</button>
-                    <button onclick="generar(3)" class="btn-select">3 TICKETS</button>
-                    <button onclick="generar(5)" class="btn-select text-blue-400">5 TICKETS</button>
+                
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <button onclick="generarTickets(1)" class="btn-select">1 TICKET</button>
+                    <button onclick="generarTickets(3)" class="btn-select">3 TICKETS</button>
+                    <button onclick="generarTickets(5)" class="btn-select text-blue-400 border-blue-900/30">5 TICKETS</button>
                 </div>
-                <button onclick="generar(1)" class="btn-luck">¡PROBAR SUERTE!</button>
+                
+                <button onclick="generarTickets(1)" class="btn-luck">¡OBTENER NÚMEROS!</button>
             </div>
         </div>
 
-        <div id="area-numeros" class="hidden text-center mb-10">
-            <p class="text-[10px] font-black text-yellow-500 uppercase mb-2">Tus números asignados:</p>
-            <div id="lista-tickets"></div>
+        <div id="area-suerte" class="hidden text-center mb-12">
+            <p class="text-[10px] font-black text-blue-400 uppercase mb-3 italic tracking-widest">Tus números asignados:</p>
+            <div id="contenedor-tickets"></div>
         </div>
     </div>
 
-    <div id="pago" class="hidden">
+    <div id="view-pago" class="hidden">
         <div class="bento p-8">
-            <h2 class="text-xl font-black uppercase text-blue-500 text-center mb-6 italic">Confirmar Pago Móvil</h2>
-            <div class="bg-white/5 p-4 rounded-2xl mb-6 text-sm">
-                <p class="flex justify-between mb-2"><span class="text-zinc-500">Banco:</span> <strong>Banesco</strong></p>
-                <p class="flex justify-between mb-2"><span class="text-zinc-500">Cédula:</span> <strong>27.123.456</strong></p>
-                <p class="flex justify-between"><span class="text-zinc-500">Teléfono:</span> <strong>0412-1234567</strong></p>
+            <h2 class="text-2xl font-black uppercase text-blue-500 text-center mb-8 italic">Reportar Pago</h2>
+            <div class="bg-black/40 p-6 rounded-3xl mb-8 border border-white/5 space-y-4">
+                <div class="flex justify-between text-sm"><span class="label">Banco</span><strong>BANESCO</strong></div>
+                <div class="flex justify-between text-sm"><span class="label">Cédula</span><strong>27.123.456</strong></div>
+                <div class="flex justify-between text-sm"><span class="label">Teléfono</span><strong>0412-1234567</strong></div>
             </div>
-            <input type="text" id="nombre" placeholder="Tu Nombre Completo" class="w-full bg-white/10 p-4 rounded-xl mb-4 border border-white/10 outline-none focus:border-blue-500 font-bold">
-            <p class="text-[10px] font-black text-zinc-500 mb-2 uppercase ml-2">Adjuntar Comprobante</p>
-            <input type="file" id="capture" class="w-full bg-white/5 p-3 rounded-xl mb-8 text-xs border border-white/10">
-            <button onclick="procesar()" class="btn-luck">Finalizar Compra</button>
-        </div>
-    </div>
-
-    <div id="exito" class="hidden">
-        <div class="check-circle">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
-        </div>
-        <h2 class="text-3xl font-black uppercase italic text-center tracking-tighter mb-1">¡Compra Exitosa!</h2>
-        <p id="res-fecha" class="text-center text-zinc-500 text-[10px] font-bold uppercase tracking-widest mb-10"></p>
-        
-        <div class="bento p-6">
-            <div class="receipt-line">
-                <span class="label">Comprador</span>
-                <span id="res-nombre" class="value uppercase"></span>
-            </div>
-            <div class="receipt-line">
-                <span class="label">Sorteo</span>
-                <span class="value uppercase">Bera SBR 2026</span>
-            </div>
-            <div class="receipt-line border-none">
-                <span class="label">Tickets</span>
-                <div id="res-tkts" class="flex flex-wrap justify-end max-w-[60%]"></div>
-            </div>
-        </div>
-        
-        <div class="mt-8 p-4 bg-blue-600/10 rounded-2xl border border-blue-500/20 text-center">
-            <p class="text-[10px] text-blue-400 font-black uppercase">Tu pago está en proceso de verificación</p>
-        </div>
-        <button onclick="location.reload()" class="w-full mt-10 py-4 text-zinc-500 font-black uppercase text-[10px] tracking-widest">Volver al inicio</button>
-    </div>
-
-    <div id="admin" class="fixed inset-0 bg-black z-[100] hidden p-6 overflow-y-auto">
-        <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
-            <h2 class="text-xl font-black uppercase text-blue-500">Panel de Control</h2>
-            <button onclick="cerrarAdmin()" class="bg-white/10 px-4 py-2 rounded-lg text-[10px] font-black">CERRAR</button>
-        </div>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <button onclick="descargar()" class="bg-green-600 p-4 rounded-xl font-black text-[10px] uppercase">Descargar CSV</button>
-            <button onclick="resetear()" class="bg-red-600 p-4 rounded-xl font-black text-[10px] uppercase">Reiniciar Todo</button>
-        </div>
-        <div id="lista-ventas"></div>
-    </div>
-
-    <div id="footer" class="fixed bottom-0 left-0 w-full p-6 bg-black/90 border-t border-white/10 hidden backdrop-blur-md">
-        <div class="flex justify-between items-center max-w-md mx-auto">
-            <div class="text-3xl font-black"><span id="total">0</span> <span class="text-xs text-blue-500 italic">Bs</span></div>
-            <button onclick="irAPagar()" class="bg-blue-600 px-10 py-4 rounded-xl font-black uppercase text-sm">Continuar</button>
-        </div>
-    </div>
-
-    <script>
-        const MAX = 10000;
-        let db = JSON.parse(localStorage.getItem('sorteo_db')) || { ventas: [], vendidos: [] };
-        let seleccionados = [];
-
-        window.onload = actualizar;
-
-        function actualizar() {
-            const disp = MAX - db.vendidos.length;
-            const porc = ((disp / MAX) * 100).toFixed(1);
-            document.getElementById('barra').style.width = porc + '%';
-            document.getElementById('porcentaje-txt').innerText = porc + '% Libres';
-        }
-
-        function generar(cant) {
-            seleccionados = [];
-            const div = document.getElementById('lista-tickets');
-            div.innerHTML = '';
-            for(let i=0; i<cant; i++) {
-                let n;
-                do { n = Math.floor(Math.random()*MAX).toString().padStart(4, '0'); } 
-                while(db.vendidos.includes(n) || seleccionados.includes(n));
-                seleccionados.push(n);
-                div.innerHTML += `<div class="ticket">#${n}</div>`;
-            }
-            document.getElementById('area-numeros').classList.remove('hidden');
-            document.getElementById('footer').classList.remove('hidden');
-            document.getElementById('total').innerText = cant * 310;
-            confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
-        }
-
-        function irAPagar() {
-            document.getElementById('home').classList.add('hidden');
-            document.getElementById('footer').classList.add('hidden');
-            document.getElementById('pago').classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
-
-        function procesar() {
-            const nom = document.getElementById('nombre').value;
-            if(nom.length < 3 || !document.getElementById('capture').value) return alert("Completa los datos y el capture");
-
-            const fecha = new Date().toLocaleString();
-            const venta = { cliente: nom, tickets: [...seleccionados], fecha: fecha };
             
-            db.ventas.push(venta);
-            db.vendidos = [...db.vendidos, ...seleccionados];
-            localStorage.setItem('sorteo_db', JSON.stringify(db));
-
-            document.getElementById('res-nombre').innerText = nom;
-            document.getElementById('res-fecha').innerText = fecha;
-            const tktsDiv = document.getElementById('res-tkts');
-            tktsDiv.innerHTML = '';
-            seleccionados.forEach(t => tktsDiv.innerHTML += `<span class="ticket-mini">#${t}</span>`);
-
-            document.getElementById('pago').classList.add('hidden');
-            document.getElementById('exito').classList.remove('hidden');
-            actualizar();
-            confetti({ particleCount: 150 });
-        }
-
-        function verAdmin() {
-            if(prompt("Clave:") === "2026") {
-                document.getElementById('admin').classList.remove('hidden');
-                const div = document.getElementById('lista-ventas');
-                div.innerHTML = '';
-                [...db.ventas].reverse().forEach(v => {
-                    div.innerHTML += `<div class="admin-box"><div class="flex justify-between text-[10px] font-bold mb-1 uppercase"><span>${v.cliente}</span><span class="text-zinc-500">${v.fecha}</span></div><div class="text-blue-400 font-black">${v.tickets.join(' - ')}</div></div>`;
-                });
-            }
-        }
-        function cerrarAdmin() { document.getElementById('admin').classList.add('hidden'); }
-        function descargar() {
-            let csv = "Fecha,Cliente,Tickets\n";
-            db.ventas.forEach(v => csv += `${v.fecha},${v.cliente},${v.tickets.join('-')}\n`);
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'ventas.csv'; a.click();
-        }
-        function resetear() { if(confirm("¿BORRAR TODO?")) { localStorage.clear(); location.reload(); } }
-    </script>
-</body>
-</html>
+            <div class="space-y-5">
+                <input type="text" id="input-nombre" placeholder="Nombre y Apellido" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 outline-none focus:border-blue-500 font-bold transition-all text-white">
+                <div class="relative">
+                    <input type="file" id="input-file" class="w-full bg-white/5 p-4 rounded-2xl text-xs text-zinc-500 border border-white/10 file:hidden">
+                    <span class="absolute right-5 top-4.5 text-[10px] font-black text-blue-500 uppercase pointer-events-none">Subir Capture</span>
+                </div>
+                <button onclick="
