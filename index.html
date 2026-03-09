@@ -21,18 +21,18 @@
 
     <header class="text-center mt-10 mb-8">
         <div class="relative inline-block p-1 rounded-full bg-blue-500 shadow-lg">
-            <img src="/logo2 (1).png" alt="Brayan Lucena" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
+            <img src="logo2 (1).png" alt="Brayan" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
         </div>
-        <h1 class="text-3xl font-black mt-4 uppercase italic tracking-tighter text-white">BRAYAN LUCENA</h1>
+        <h1 class="text-3xl font-black mt-4 uppercase italic tracking-tighter">BRAYAN LUCENA</h1>
         <span class="bg-blue-600/20 text-blue-400 text-[10px] px-4 py-1.5 rounded-full font-black mt-2 inline-block border border-blue-600/30 uppercase tracking-widest">Sorteo Activo</span>
     </header>
 
     <div id="pantalla-sorteo">
         <div class="bento-card mb-8">
             <div class="bg-white p-6 flex justify-center">
-                <img src="/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Coroto" class="max-w-full h-auto">
+                <img src="jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Coroto" class="max-w-full h-auto">
             </div>
-            <div class="p-8 text-white">
+            <div class="p-8">
                 <div class="flex justify-between items-center mb-8">
                     <div>
                         <h2 class="text-2xl font-black italic uppercase">Bera SBR 2024</h2>
@@ -45,9 +45,9 @@
                 </div>
                 
                 <div class="grid grid-cols-3 gap-3 mb-6">
-                    <button type="button" onclick="generar(1)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white active:bg-blue-600">1 Ticket</button>
-                    <button type="button" onclick="generar(3)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white active:bg-blue-600">3 Tickets</button>
-                    <button type="button" onclick="generar(5)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white active:bg-blue-600">5 Tickets</button>
+                    <button type="button" onclick="generar(1)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white active:scale-95 transition-all">1 Ticket</button>
+                    <button type="button" onclick="generar(3)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white active:scale-95 transition-all">3 Tickets</button>
+                    <button type="button" onclick="generar(5)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white active:scale-95 transition-all">5 Tickets</button>
                 </div>
 
                 <button type="button" onclick="generar(1)" class="btn-luck w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-3 active:scale-95 text-white uppercase">
@@ -61,16 +61,15 @@
     </div>
 
     <div id="pantalla-pago" class="hidden">
-        <div class="bento-card p-8">
-            <h2 class="text-2xl font-black italic uppercase mb-6 text-center text-blue-400">PAGO MÓVIL</h2>
-            <div class="bg-blue-600/10 border border-blue-600/30 rounded-2xl p-4 mb-8 text-sm text-white">
-                <p class="flex justify-between mb-2 italic uppercase"><span>Banco:</span> <strong>Banesco</strong></p>
-                <p class="flex justify-between mb-2 italic uppercase"><span>Cédula:</span> <strong>27.123.456</strong></p>
-                <p class="flex justify-between mb-2 italic uppercase"><span>Teléfono:</span> <strong>0412-1234567</strong></p>
+        <div class="bento-card p-8 text-center">
+            <h2 class="text-2xl font-black italic uppercase mb-6 text-blue-400">PAGO MÓVIL</h2>
+            <div class="bg-blue-600/10 border border-blue-600/30 rounded-2xl p-4 mb-8 text-sm">
+                <p class="flex justify-between mb-2"><span>Banco:</span> <strong>Banesco</strong></p>
+                <p class="flex justify-between mb-2"><span>Cédula:</span> <strong>27.123.456</strong></p>
+                <p class="flex justify-between mb-2"><span>Teléfono:</span> <strong>0412-1234567</strong></p>
             </div>
             <div class="space-y-4">
                 <input type="text" id="nombre-usuario" placeholder="Nombre Completo" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 text-white">
-                <label class="block text-[10px] font-bold text-zinc-500 ml-2">SUBIR CAPTURA</label>
                 <input type="file" id="file-pago" class="w-full bg-white/5 border border-white/10 p-3 rounded-2xl text-xs text-zinc-400">
             </div>
             <button type="button" onclick="confirmarPago()" class="btn-luck w-full py-5 rounded-3xl font-black text-lg mt-8 text-white uppercase">Finalizar Registro</button>
@@ -80,14 +79,54 @@
     <div id="pantalla-exito" class="hidden text-center">
         <div class="bento-card p-10">
             <div class="success-icon">
-                <svg xmlns="http://www.w3.org/2000/center h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7" />
                 </svg>
             </div>
             <h2 class="text-3xl font-black uppercase italic mb-2">¡PAGO RECIBIDO!</h2>
-            <p class="text-zinc-400 text-sm mb-6">Registro completado. Verificaremos tu pago en breve.</p>
+            <p class="text-zinc-400 text-sm mb-6">Registro completado con éxito. Verificaremos tu pago en breve.</p>
             <div class="border-t border-white/10 pt-6">
-                <span class="bg-green-500/20 text-green-400 px-4 py-1 rounded-full text-xs font-bold border border-green-500/30 uppercase">Pendiente por Validar</span>
+                <span class="bg-green-500/20 text-green-400 px-4 py-1 rounded-full text-xs font-bold border border-green-500/30 uppercase tracking-tighter">Pendiente por Validar</span>
             </div>
         </div>
-        <button onclick="location.reload()" class="mt-8 text-blue-400 font-
+        <button onclick="location.reload()" class="mt-8 text-blue-400 font-bold uppercase text-xs tracking-widest underline">Volver al inicio</button>
+    </div>
+
+    <div id="barra" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 border-t border-white/10 hidden z-50">
+        <div class="max-w-md mx-auto flex justify-between items-center px-2">
+            <div class="text-2xl font-black text-white"><span id="total">0</span> <span class="text-xs">Bs</span></div>
+            <button type="button" onclick="irAPago()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black text-sm uppercase text-white shadow-lg active:scale-95 transition-all">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        function generar(n) {
+            const cont = document.getElementById('contenedor-num');
+            cont.innerHTML = '';
+            for(let i=0; i<n; i++) {
+                let num = Math.floor(Math.random()*1000).toString().padStart(3,'0');
+                cont.innerHTML += `<div class="ticket-badge">#${num}</div>`;
+            }
+            document.getElementById('box-suerte').classList.remove('hidden');
+            document.getElementById('barra').classList.remove('hidden');
+            document.getElementById('total').innerText = n * 310;
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 } });
+        }
+
+        function irAPago() {
+            document.getElementById('pantalla-sorteo').classList.add('hidden');
+            document.getElementById('barra').classList.add('hidden');
+            document.getElementById('pantalla-pago').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function confirmarPago() {
+            const nombre = document.getElementById('nombre-usuario').value;
+            if(nombre.trim() === "") { alert("Por favor, ingresa tu nombre."); return; }
+            document.getElementById('pantalla-pago').classList.add('hidden');
+            document.getElementById('pantalla-exito').classList.remove('hidden');
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+        }
+    </script>
+</body>
+</html>
