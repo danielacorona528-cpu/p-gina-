@@ -15,13 +15,12 @@
             font-family: 'Outfit', sans-serif; 
             margin: 0; 
             padding: 0;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         
         .main-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 0%, #002d5a 0%, #050505 80%);
+            background: radial-gradient(circle at 50% 0%, #002d5a 0%, #050505 85%);
             z-index: -1;
         }
 
@@ -30,6 +29,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08); 
             border-radius: 32px; 
             backdrop-filter: blur(15px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
         
         .btn-select { 
@@ -39,11 +39,9 @@
             padding: 16px; 
             font-weight: 900; 
             font-size: 11px; 
-            color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
         }
-        .btn-select.active { background: rgba(37, 99, 235, 0.4); border-color: #3b82f6; transform: scale(1.05); }
-        .btn-select:active { transform: scale(0.95); }
+        .btn-select:active { background: rgba(37, 99, 235, 0.3); transform: scale(0.92); }
 
         .btn-luck { 
             background: linear-gradient(135deg, #1e40af, #3b82f6); 
@@ -52,14 +50,13 @@
             font-weight: 900; 
             text-transform: uppercase; 
             font-style: italic; 
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); 
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.3); 
             width: 100%; 
             border: none;
             color: white;
+            cursor: pointer;
             font-size: 16px;
-            transition: all 0.3s;
         }
-        .btn-luck:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .ticket-badge { 
             background: #facc15; 
@@ -71,21 +68,24 @@
             display: inline-block; 
             transform: rotate(-1.5deg); 
             box-shadow: 0 6px 15px rgba(250, 204, 21, 0.3);
-            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes pop { from { transform: scale(0) rotate(10deg); } to { transform: scale(1) rotate(-1.5deg); } }
-
-        .receipt-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        /* ESTILO RECIBO PREMIUM */
+        .check-circle { 
+            width: 80px; height: 80px; 
+            background: #2563eb; 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 24px; 
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
+        }
+        .receipt-line { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .receipt-label { color: #64748b; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; }
         .receipt-value { color: #fff; font-weight: 700; font-size: 15px; text-transform: uppercase; }
-        .ticket-pill { background: #2563eb; color: #fff; padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 12px; margin-left: 6px; font-style: italic; }
+        .ticket-mini { background: #2563eb; color: #fff; padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 12px; margin-left: 6px; font-style: italic; }
 
-        .admin-item { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        
-        /* Custom Input File */
-        .custom-file { position: relative; overflow: hidden; display: block; }
-        .custom-file input[type="file"] { position: absolute; opacity: 0; right: 0; top: 0; }
+        input[type="text"] { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 14px; color: white; outline: none; }
+        input[type="text"]:focus { border-color: #3b82f6; }
     </style>
 </head>
 <body class="max-w-md mx-auto p-5 pb-28">
@@ -93,7 +93,7 @@
 
     <header class="text-center my-10">
         <div class="relative inline-block p-1 bg-blue-600 rounded-full mb-5 cursor-pointer" ondblclick="abrirAdmin()">
-            <img src="logo2 (1).png" alt="Logo" class="w-28 h-28 rounded-full border-4 border-black object-cover bg-white shadow-2xl transition-transform hover:scale-105">
+            <img src="logo2 (1).png" alt="Brayan Lucena" class="w-28 h-28 rounded-full border-4 border-black object-cover bg-white shadow-2xl">
         </div>
         <h1 class="text-4xl font-black italic tracking-tighter uppercase leading-none">BRAYAN LUCENA</h1>
         <p class="text-blue-500 text-[11px] font-black tracking-[0.4em] uppercase mt-2">Coroto de la Suerte</p>
@@ -102,255 +102,18 @@
     <div class="bento p-7 mb-8">
         <div class="flex justify-between items-center mb-3">
             <span class="text-[11px] font-black uppercase text-zinc-500 tracking-widest">Disponibilidad</span>
-            <span id="porc-texto" class="text-blue-400 font-black text-sm italic">Cargando...</span>
+            <span id="porc-txt" class="text-blue-400 font-black text-sm italic">Cargando...</span>
         </div>
         <div class="w-full h-3 bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/5">
-            <div id="porc-barra" class="h-full bg-blue-600 rounded-full transition-all duration-1000" style="width: 0%"></div>
+            <div id="porc-bar" class="h-full bg-gradient-to-r from-blue-700 to-blue-400 rounded-full transition-all duration-1000" style="width: 0%"></div>
         </div>
     </div>
 
     <div id="view-home">
-        <div class="bento overflow-hidden mb-8 shadow-2xl">
+        <div class="bento overflow-hidden mb-8">
             <div class="bg-white p-5 flex justify-center">
-                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" class="w-full h-auto" alt="Bera SBR">
+                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" class="w-full h-auto">
             </div>
             <div class="p-8">
                 <div class="flex justify-between items-start mb-8">
-                    <div>
-                        <h2 class="text-2xl font-black italic uppercase leading-none">Bera SBR<br><span class="text-blue-500">2026</span></h2>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-4xl font-black text-white">310</span>
-                        <span class="text-blue-500 text-[10px] font-black block uppercase italic">Bs / Ticket</span>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-3 gap-3 mb-6">
-                    <button onclick="generarSuerte(1, this)" class="btn-select">1 TICKET</button>
-                    <button onclick="generarSuerte(3, this)" class="btn-select">3 TICKETS</button>
-                    <button onclick="generarSuerte(5, this)" class="btn-select text-blue-400">5 TICKETS</button>
-                </div>
-                
-                <button id="btn-principal" onclick="generarSuerte(1)" class="btn-luck">¡OBTENER NÚMEROS!</button>
-            </div>
-        </div>
-
-        <div id="area-suerte" class="hidden text-center mb-10">
-            <p class="text-[10px] font-black text-blue-400 uppercase mb-3 italic tracking-widest">Tus números asignados:</p>
-            <div id="lista-tickets" class="flex flex-wrap justify-center"></div>
-        </div>
-    </div>
-
-    <div id="view-pago" class="hidden">
-        <div class="bento p-8">
-            <h2 class="text-2xl font-black uppercase text-blue-500 text-center mb-8 italic">Reportar Pago</h2>
-            <div class="bg-black/40 p-6 rounded-3xl mb-8 border border-white/5 space-y-4">
-                <div class="flex justify-between text-sm"><span class="receipt-label">Banco</span><strong>BANESCO</strong></div>
-                <div class="flex justify-between text-sm"><span class="receipt-label">Cédula</span><strong>27.123.456</strong></div>
-                <div class="flex justify-between text-sm"><span class="receipt-label">Teléfono</span><strong>0412-1234567</strong></div>
-            </div>
-            
-            <input type="text" id="nombre-cliente" placeholder="Nombre y Apellido" class="w-full bg-white/10 p-5 rounded-2xl border border-white/10 outline-none text-white font-bold mb-4 focus:border-blue-500 transition-colors">
-            
-            <label class="custom-file w-full bg-white/5 p-4 rounded-2xl text-center border border-dashed border-white/20 mb-8 cursor-pointer hover:bg-white/10">
-                <span id="file-name" class="text-xs text-zinc-400 font-bold uppercase">Adjuntar Comprobante</span>
-                <input type="file" id="file-capture" onchange="document.getElementById('file-name').innerText = this.files[0].name">
-            </label>
-            
-            <button onclick="procesarVenta()" class="btn-luck">Finalizar Registro</button>
-            <button onclick="location.reload()" class="w-full mt-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Cancelar</button>
-        </div>
-    </div>
-
-    <div id="view-exito" class="hidden">
-        <div class="check-circle mt-10" style="width: 80px; height: 80px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
-        </div>
-        <h2 class="text-3xl font-black uppercase italic text-center tracking-tighter mb-1">¡Registro Exitoso!</h2>
-        <p id="res-fecha" class="text-center text-zinc-500 text-[10px] font-black uppercase mb-10 tracking-widest"></p>
-        
-        <div class="bento p-8">
-            <div class="receipt-row">
-                <span class="receipt-label">Comprador</span>
-                <span id="res-nombre" class="receipt-value"></span>
-            </div>
-            <div class="receipt-row">
-                <span class="receipt-label">Sorteo</span>
-                <span class="receipt-value">Bera SBR 2026</span>
-            </div>
-            <div class="receipt-row border-none flex-col items-start gap-4">
-                <span class="receipt-label">Tus Números</span>
-                <div id="res-tickets" class="flex flex-wrap gap-2"></div>
-            </div>
-        </div>
-        <button onclick="location.reload()" class="w-full mt-10 py-5 bg-white/5 rounded-3xl text-zinc-500 font-black uppercase text-[11px] tracking-widest">Volver al Inicio</button>
-    </div>
-
-    <div id="view-admin" class="fixed inset-0 bg-black/98 z-[100] hidden p-6 overflow-y-auto">
-        <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-5">
-            <h2 class="text-2xl font-black uppercase text-blue-500">Panel Ventas</h2>
-            <button onclick="cerrarAdmin()" class="bg-white/10 px-6 py-2 rounded-full text-[10px] font-black">CERRAR</button>
-        </div>
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <button onclick="exportarExcel()" class="bg-green-600 py-5 rounded-2xl font-black text-[10px] uppercase">Descargar CSV</button>
-            <button onclick="resetearSistema()" class="bg-red-600 py-5 rounded-2xl font-black text-[10px] uppercase">Resetear Todo</button>
-        </div>
-        <div id="lista-admin"></div>
-    </div>
-
-    <div id="footer-pago" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 border-t border-white/10 hidden z-50">
-        <div class="flex justify-between items-center max-w-md mx-auto">
-            <div class="text-3xl font-black text-white"><span id="footer-monto">0</span> <span class="text-xs text-blue-500 italic">Bs</span></div>
-            <button onclick="irAPagar()" class="bg-blue-600 px-12 py-5 rounded-2xl font-black uppercase text-sm active:scale-95 transition-transform">Continuar</button>
-        </div>
-    </div>
-
-    <script>
-        const TOTAL = 10000;
-        const PRECIO = 310;
-        let db = JSON.parse(localStorage.getItem('bera_final_db')) || { ventas: [], usados: [] };
-        let seleccion = [];
-
-        window.onload = actualizarUI;
-
-        function actualizarUI() {
-            const disp = TOTAL - db.usados.length;
-            const porc = ((disp / TOTAL) * 100).toFixed(1);
-            document.getElementById('porc-barra').style.width = porc + '%';
-            document.getElementById('porc-texto').innerText = `${porc}% LIBRES (${disp} disp.)`;
-        }
-
-        function generarSuerte(cant, elemento = null) {
-            // UI Feedback
-            if(elemento) {
-                document.querySelectorAll('.btn-select').forEach(b => b.classList.remove('active'));
-                elemento.classList.add('active');
-            }
-
-            const btnP = document.getElementById('btn-principal');
-            btnP.innerText = "GENERANDO...";
-            btnP.disabled = true;
-
-            setTimeout(() => {
-                seleccion = [];
-                const container = document.getElementById('lista-tickets');
-                container.innerHTML = '';
-                
-                if(db.usados.length + cant > TOTAL) {
-                    alert("No hay suficientes números disponibles.");
-                    return location.reload();
-                }
-
-                for(let i=0; i<cant; i++) {
-                    let n;
-                    do { n = Math.floor(Math.random()*TOTAL).toString().padStart(4, '0'); } 
-                    while(db.usados.includes(n) || seleccion.includes(n));
-                    seleccion.push(n);
-                    
-                    const el = document.createElement('div');
-                    el.className = 'ticket-badge';
-                    el.innerText = `#${n}`;
-                    container.appendChild(el);
-                }
-
-                document.getElementById('area-suerte').classList.remove('hidden');
-                document.getElementById('footer-pago').classList.remove('hidden');
-                document.getElementById('footer-monto').innerText = (cant * PRECIO).toLocaleString('es-VE');
-                
-                btnP.innerText = "¡OBTENER OTROS NÚMEROS!";
-                btnP.disabled = false;
-                
-                confetti({ particleCount: 40, spread: 70, origin: { y: 0.8 }, colors: ['#2563eb', '#facc15', '#ffffff'] });
-            }, 400);
-        }
-
-        function irAPagar() {
-            if(seleccion.length === 0) return;
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('footer-pago').classList.add('hidden');
-            document.getElementById('view-pago').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function procesarVenta() {
-            const nom = document.getElementById('nombre-cliente').value.trim();
-            const file = document.getElementById('file-capture').value;
-            
-            if(!nom || !file) {
-                alert("Por favor, ingresa tu nombre y adjunta el comprobante.");
-                return;
-            }
-            
-            const fecha = new Date().toLocaleString('es-VE');
-            db.ventas.push({ nombre: nom, tickets: [...seleccion], fecha: fecha });
-            db.usados = [...db.usados, ...seleccion];
-            localStorage.setItem('bera_final_db', JSON.stringify(db));
-
-            // Llenar vista éxito
-            document.getElementById('res-nombre').innerText = nom;
-            document.getElementById('res-fecha').innerText = fecha;
-            const resT = document.getElementById('res-tickets');
-            resT.innerHTML = '';
-            seleccion.forEach(t => {
-                const span = document.createElement('span');
-                span.className = 'ticket-pill';
-                span.innerText = `#${t}`;
-                resT.appendChild(span);
-            });
-
-            document.getElementById('view-pago').classList.add('hidden');
-            document.getElementById('view-exito').classList.remove('hidden');
-            actualizarUI();
-            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
-        }
-
-        function abrirAdmin() {
-            const pass = prompt("Clave de Administrador:");
-            if(pass === "2026") {
-                document.getElementById('view-admin').classList.remove('hidden');
-                const list = document.getElementById('lista-admin');
-                list.innerHTML = '';
-                
-                if(db.ventas.length === 0) {
-                    list.innerHTML = '<p class="text-center text-zinc-600 py-10">No hay ventas registradas</p>';
-                }
-
-                [...db.ventas].reverse().forEach(v => {
-                    list.innerHTML += `
-                        <div class="admin-item">
-                            <div class="flex justify-between text-[10px] font-bold mb-1">
-                                <span class="text-white">${v.nombre}</span>
-                                <span class="text-zinc-500">${v.fecha}</span>
-                            </div>
-                            <div class="text-blue-500 font-black text-sm tracking-wider">
-                                ${v.tickets.join(' • ')}
-                            </div>
-                        </div>`;
-                });
-            } else if (pass !== null) {
-                alert("Clave incorrecta");
-            }
-        }
-
-        function cerrarAdmin() { document.getElementById('view-admin').classList.add('hidden'); }
-
-        function exportarExcel() {
-            if(db.ventas.length === 0) return alert("No hay datos para exportar");
-            let csv = "\uFEFFFecha,Nombre,Tickets\n";
-            db.ventas.forEach(v => csv += `${v.fecha},${v.nombre},"${v.tickets.join(' - ')}"\n`);
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `Ventas_Bera_2026_${new Date().getTime()}.csv`;
-            a.click();
-        }
-
-        function resetearSistema() {
-            if(confirm("¿Estás seguro de que deseas borrar TODAS las ventas y reiniciar el sistema? Esta acción no se puede deshacer.")) {
-                localStorage.removeItem('bera_final_db');
-                location.reload();
-            }
-        }
-    </script>
-</body>
-</html>
+                    <h2 class="text-2xl font-black italic
