@@ -8,112 +8,152 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; }
+        body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
         .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 0%, #001f3f 0%, #050505 85%); z-index: -1; }
-        .bento-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; backdrop-filter: blur(12px); overflow: hidden; }
+        .bento-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; backdrop-filter: blur(12px); }
         .btn-luck { background: linear-gradient(90deg, #1e40af, #3b82f6); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
-        .ticket-badge { background: #facc15; color: black; font-weight: 800; padding: 12px 20px; border-radius: 15px; margin: 5px; display: inline-block; }
+        .ticket-badge { background: #facc15; color: black; font-weight: 800; padding: 12px 20px; border-radius: 15px; margin: 5px; display: inline-block; animation: pop 0.3s ease; }
+        @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body class="max-w-md mx-auto p-4 pb-32">
     <div class="bg-glow"></div>
 
     <header class="text-center mt-10 mb-8">
-        <div class="relative inline-block p-1 rounded-full bg-blue-500">
-            <img src="logo2%20(1).png" alt="Perfil" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
+        <div class="relative inline-block p-1 rounded-full bg-blue-500 shadow-lg">
+            <img src="logo2 (1).png" alt="Brayan" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
         </div>
         <h1 class="text-3xl font-black mt-4 uppercase italic tracking-tighter">BRAYAN LUCENA</h1>
+        <span class="bg-blue-600/20 text-blue-400 text-[10px] px-4 py-1.5 rounded-full font-black mt-2 inline-block border border-blue-600/30 uppercase tracking-widest">Sorteo Activo</span>
     </header>
 
     <div id="seccion-principal">
-        <div class="bento-card mb-8 text-center">
-            <div class="bg-white p-6">
-                <img src="jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Moto" class="mx-auto max-h-48">
+        <div class="bento-card mb-6 overflow-hidden">
+            <div class="bg-white p-6 flex justify-center">
+                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Moto Bera" class="max-w-full h-auto">
             </div>
             <div class="p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold uppercase italic text-left text-white">Bera SBR 2024</h2>
-                    <span class="text-blue-500 font-black text-2xl uppercase">310 Bs</span>
+                <h3 class="text-blue-400 font-bold text-center mb-4 uppercase tracking-widest text-xs italic">¡QUÉRETE COROTO!</h3>
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="text-2xl font-black italic uppercase">Bera SBR 2024</h2>
+                        <p class="text-zinc-500 text-[10px] font-bold uppercase mt-1 tracking-widest text-left">Sorteo Autorizado</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-blue-500 font-black text-3xl">310</span>
+                        <span class="text-blue-500 font-bold text-sm block italic">Bs</span>
+                    </div>
                 </div>
                 
                 <div class="grid grid-cols-3 gap-3 mb-6">
-                    <button class="btn-generar bg-white/10 py-4 rounded-2xl font-black" data-tickets="1">1 Ticket</button>
-                    <button class="btn-generar bg-white/10 py-4 rounded-2xl font-black" data-tickets="3">3 Tickets</button>
-                    <button class="btn-generar bg-white/10 py-4 rounded-2xl font-black" data-tickets="5">5 Tickets</button>
+                    <button onclick="pidoTickets(1)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm hover:bg-white/20 active:scale-95 transition-all">1 Ticket</button>
+                    <button onclick="pidoTickets(3)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm hover:bg-white/20 active:scale-95 transition-all">3 Tickets</button>
+                    <button onclick="pidoTickets(5)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm hover:bg-white/20 active:scale-95 transition-all">5 Tickets</button>
                 </div>
-                
-                <button class="btn-generar btn-luck w-full py-5 rounded-3xl font-black text-xl text-white uppercase" data-tickets="1">¡Dame mi suerte!</button>
+
+                <button onclick="pidoTickets(1)" class="btn-luck w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-3 active:scale-95 text-white uppercase">
+                    ¡DAME MI SUERTE!
+                </button>
             </div>
         </div>
 
-        <div class="flex justify-around items-center bg-white/5 p-4 rounded-3xl mb-8 grayscale">
-            <img src="conalot.png" class="h-6" onerror="this.style.display='none'">
-            <img src="supergana.png" class="h-6" onerror="this.style.display='none'">
-            <img src="tachira.png" class="h-6" onerror="this.style.display='none'">
+        <div class="flex justify-around items-center bg-white/5 p-6 rounded-[28px] border border-white/10 mb-6 grayscale opacity-70">
+            <img src="https://brayanlucena2.vercel.app/01KB7XJHRR2TC2YW06D29BSCCG.png" class="h-8" alt="Conalot">
+            <img src="https://brayanlucena2.vercel.app/01KB7XKDXWKTAYQQYC8HPJ96Z9.png" class="h-8" alt="SuperGana">
+            <img src="https://brayanlucena2.vercel.app/01KB7XK2M5FV6NVX8V9X1AK498.png" class="h-8" alt="Tachira">
         </div>
 
-        <div id="resultado-suerte" class="hidden text-center mb-10">
-            <div id="lista-tickets"></div>
+        <div class="text-center px-4 mb-8">
+            <p class="text-[9px] text-zinc-500 uppercase font-bold tracking-widest">Sorteo Avalado por la Conalot bajo el Runlot:</p>
+            <p class="text-[9px] text-blue-500 font-black tracking-widest uppercase">CNL-ORF-2025-000661</p>
+        </div>
+
+        <div id="contenedor-suerte" class="hidden text-center mb-10">
+            <div id="tickets-generados" class="flex flex-wrap justify-center"></div>
         </div>
     </div>
 
-    <div id="seccion-pago" class="hidden">
+    <div id="seccion-pago" class="hidden animate-fade-in">
         <div class="bento-card p-8">
-            <h2 class="text-2xl font-black text-blue-400 mb-6 uppercase text-center">Pago Móvil</h2>
-            <div class="bg-blue-600/10 p-4 rounded-2xl mb-6 text-sm">
-                <p>Banco: <b>Banesco</b></p>
-                <p>Cédula: <b>27.123.456</b></p>
-                <p>Teléfono: <b>0412-1234567</b></p>
+            <h2 class="text-2xl font-black text-blue-400 mb-6 uppercase text-center italic">Pago Móvil</h2>
+            <div class="bg-blue-600/10 border border-blue-600/30 rounded-2xl p-4 mb-6 text-sm">
+                <div class="flex justify-between mb-2"><span>Banco:</span> <strong>Banesco</strong></div>
+                <div class="flex justify-between mb-2"><span>Cédula:</span> <strong>27.123.456</strong></div>
+                <div class="flex justify-between mb-2"><span>Teléfono:</span> <strong>0412-1234567</strong></div>
             </div>
-            <input type="text" id="nombre" placeholder="Nombre Completo" class="w-full bg-white/10 p-4 rounded-2xl mb-4 outline-none">
-            <input type="file" id="foto" class="w-full bg-white/10 p-3 rounded-2xl mb-6 text-xs">
-            <button id="finalizar" class="btn-luck w-full py-5 rounded-3xl font-black uppercase text-white">Confirmar Pago</button>
+            <input type="text" id="nombre-cliente" placeholder="Tu Nombre Completo" class="w-full bg-white/10 p-4 rounded-2xl mb-4 outline-none border border-white/10 focus:border-blue-500 text-white">
+            <label class="block text-[10px] font-bold text-zinc-500 mb-2 ml-2 uppercase">Adjuntar comprobante</label>
+            <input type="file" id="comprobante" class="w-full bg-white/10 p-3 rounded-2xl mb-6 text-xs text-zinc-400">
+            <button onclick="finalizarTodo()" class="btn-luck w-full py-5 rounded-3xl font-black uppercase text-white shadow-lg">Confirmar Pago</button>
         </div>
     </div>
 
-    <div id="barra-footer" class="fixed bottom-0 left-0 w-full p-6 bg-black/90 border-t border-white/10 hidden">
+    <div id="seccion-exito" class="hidden text-center">
+        <div class="bento-card p-10 border-green-500/30 bg-green-500/5">
+            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h2 class="text-3xl font-black uppercase italic mb-2">¡PAGO CONFIRMADO!</h2>
+            <p class="text-zinc-400 text-sm mb-6">Tu registro ha sido recibido. Estamos validando la información.</p>
+            <span class="bg-green-500/20 text-green-400 px-4 py-1 rounded-full text-[10px] font-black border border-green-500/30 uppercase">Estado: Pendiente de Validación</span>
+        </div>
+        <button onclick="location.reload()" class="mt-8 text-blue-500 font-bold uppercase text-[10px] underline tracking-widest">Volver al inicio</button>
+    </div>
+
+    <div id="barra-footer" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 border-t border-white/10 hidden z-50">
         <div class="flex justify-between items-center max-w-md mx-auto">
-            <div class="text-2xl font-black"><span id="monto">0</span> Bs</div>
-            <button id="btn-continuar" class="bg-blue-600 px-8 py-4 rounded-2xl font-black uppercase text-sm">Continuar</button>
+            <div class="text-2xl font-black text-white"><span id="monto-final">0</span> <span class="text-xs text-blue-500">Bs</span></div>
+            <button onclick="irAPagar()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black uppercase text-sm text-white active:scale-95 transition-all">Continuar</button>
         </div>
     </div>
+
+    <footer class="text-center mt-8 pb-10">
+        <p class="text-[9px] text-zinc-700 uppercase">Copyright © 2024. Desarrollado por <span class="text-zinc-500 font-bold">SOFTVENCA</span></p>
+    </footer>
 
     <script>
-        // Lógica de generación de tickets
-        document.querySelectorAll('.btn-generar').forEach(boton => {
-            boton.addEventListener('click', () => {
-                const cantidad = parseInt(boton.getAttribute('data-tickets'));
-                const lista = document.getElementById('lista-tickets');
-                lista.innerHTML = '';
-                
-                for(let i=0; i < cantidad; i++) {
-                    const num = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-                    lista.innerHTML += `<div class="ticket-badge">#${num}</div>`;
-                }
-                
-                document.getElementById('resultado-suerte').classList.remove('hidden');
-                document.getElementById('barra-footer').classList.remove('hidden');
-                document.getElementById('monto').innerText = cantidad * 310;
-                
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
-            });
-        });
+        // Función para generar los tickets (BOTONES)
+        function pidoTickets(cant) {
+            const container = document.getElementById('tickets-generados');
+            const box = document.getElementById('contenedor-suerte');
+            const barra = document.getElementById('barra-footer');
+            const monto = document.getElementById('monto-final');
 
-        // Cambio de pantalla
-        document.getElementById('btn-continuar').addEventListener('click', () => {
+            container.innerHTML = '';
+            for(let i=0; i<cant; i++) {
+                let n = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                container.innerHTML += `<div class="ticket-badge">#${n}</div>`;
+            }
+
+            box.classList.remove('hidden');
+            barra.classList.remove('hidden');
+            monto.innerText = cant * 310;
+
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
+        }
+
+        // Navegación a pago
+        function irAPagar() {
             document.getElementById('seccion-principal').classList.add('hidden');
             document.getElementById('barra-footer').classList.add('hidden');
             document.getElementById('seccion-pago').classList.remove('hidden');
-            window.scrollTo(0, 0);
-        });
+            window.scrollTo(0,0);
+        }
 
-        // Finalizar
-        document.getElementById('finalizar').addEventListener('click', () => {
-            const nombre = document.getElementById('nombre').value;
-            if(!nombre) return alert("Escribe tu nombre");
-            alert("¡Registro recibido! Verificaremos tu pago.");
-            location.reload();
-        });
+        // Finalización
+        function finalizarTodo() {
+            const nombre = document.getElementById('nombre-cliente').value;
+            if(nombre.trim() === "") {
+                alert("Por favor, ingresa tu nombre.");
+                return;
+            }
+            document.getElementById('seccion-pago').classList.add('hidden');
+            document.getElementById('seccion-exito').classList.remove('hidden');
+            
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+        }
     </script>
 </body>
 </html>
