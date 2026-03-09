@@ -43,12 +43,14 @@
                         <span class="text-blue-500 font-bold text-sm block italic">Bs</span>
                     </div>
                 </div>
+                
                 <div class="grid grid-cols-3 gap-3 mb-6">
-                    <button onclick="generar(1)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-sm text-white">1 Ticket</button>
+                    <button onclick="generar(2)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-sm text-white">2 Tickets</button>
                     <button onclick="generar(3)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-sm text-white">3 Tickets</button>
                     <button onclick="generar(5)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-sm text-white">5 Tickets</button>
                 </div>
-                <button onclick="generar(1)" class="btn-luck w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-3 active:scale-95 text-white">
+
+                <button onclick="generar(2)" class="btn-luck w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-3 active:scale-95 text-white">
                     ¡DAME MI SUERTE!
                 </button>
             </div>
@@ -61,17 +63,4 @@
     <div id="pantalla-pago" class="hidden">
         <div class="bento-card p-8">
             <h2 class="text-2xl font-black italic uppercase mb-6 text-center text-blue-400">PAGO MÓVIL</h2>
-            <div class="bg-blue-600/10 border border-blue-600/30 rounded-2xl p-4 mb-8 text-sm">
-                <p class="flex justify-between mb-2"><span class="opacity-60 text-xs">Banco:</span> <strong>Banesco</strong></p>
-                <p class="flex justify-between mb-2"><span class="opacity-60 text-xs">Cédula:</span> <strong>27.123.456</strong></p>
-                <p class="flex justify-between mb-2"><span class="opacity-60 text-xs">Teléfono:</span> <strong>0412-1234567</strong></p>
-            </div>
-            <div class="space-y-4">
-                <input type="text" id="nombre-usuario" placeholder="Nombre Completo" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 text-white">
-                <input type="file" accept="image/*" id="file-pago" class="w-full bg-white/5 border border-white/10 p-3 rounded-2xl text-xs text-zinc-400">
-            </div>
-            <button onclick="confirmarPago()" class="btn-luck w-full py-5 rounded-3xl font-black text-lg mt-8 text-white uppercase">Finalizar Registro</button>
-        </div>
-    </div>
-
-    <div id="pantalla-
+            <div class="bg-blue-600/10
