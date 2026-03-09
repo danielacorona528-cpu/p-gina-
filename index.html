@@ -3,105 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brayan Lucena - Sorteo</title>
+    <title>Sorteos Pro - Brayan Lucena Style</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background: #050505; color: white; font-family: 'Poppins', sans-serif; }
         
-        body {
-            background-color: #050505;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
+        .ticket {
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid #222;
+            background: #111;
+            transition: all 0.2s;
         }
-
-        /* Fondo con destellos similares a la original */
-        .bg-glow {
+        .ticket.selected {
+            background: #2563eb;
+            border-color: #60a5fa;
+            transform: scale(0.9);
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+        }
+        .ticket.sold {
+            background: #1a1a1a;
+            color: #333;
+            cursor: not-allowed;
+            border: none;
+        }
+        .sticky-cart {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 0%, #1e1e1e 0%, #050505 70%);
-            z-index: -1;
-        }
-
-        .bento-card {
-            background: linear-gradient(145deg, #111111, #0a0a0a);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .btn-gradient {
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            transition: transform 0.2s;
-        }
-
-        .btn-gradient:active {
-            transform: scale(0.95);
-        }
-
-        .logo-container img {
-            filter: grayscale(100%) brightness(200%);
-            opacity: 0.7;
-            width: 80px;
+            bottom: 0; left: 0; width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #333;
+            padding: 20px;
+            display: none; /* Se muestra al seleccionar */
+            z-index: 50;
         }
     </style>
 </head>
-<body class="flex flex-col items-center p-4">
-    <div class="bg-glow"></div>
+<body class="pb-32">
 
-    <header class="text-center mt-10 mb-8">
-        <div class="relative inline-block p-[2px] rounded-full bg-gradient-to-b from-blue-500 to-purple-600">
-            <img src="https://via.placeholder.com/150" alt="Brayan Lucena" 
-                 class="w-24 h-24 rounded-full border-4 border-black object-cover">
+    <div class="p-6 text-center">
+        <div class="w-20 h-20 rounded-full border-2 border-blue-500 mx-auto p-1">
+            <img src="https://via.placeholder.com/100" class="rounded-full w-full h-full object-cover">
         </div>
-        <h1 class="text-2xl font-extrabold mt-4 tracking-tight">Brayan Lucena</h1>
-        <div class="bg-blue-600/20 text-blue-400 text-[10px] px-3 py-1 rounded-full inline-block font-bold mt-2 uppercase tracking-widest">
-            Gran Sorteo
+        <h1 class="text-xl font-extrabold mt-4">BRAYAN LUCENA</h1>
+        <div class="text-[10px] bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full inline-block mt-2 font-bold tracking-widest">
+            SORTEO ACTIVO
         </div>
-    </header>
+    </div>
 
-    <main class="w-full max-w-md space-y-6">
+    <div class="px-6 mb-6">
+        <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800">
+            <img src="https://via.placeholder.com/600x300/111/fff?text=TU+PREMIO+AQUÍ" class="w-full h-40 object-cover">
+            <div class="p-4 text-center">
+                <h2 class="text-lg font-bold uppercase">MOTO 0KM + $500</h2>
+                <p class="text-green-500 font-bold text-xl mt-1">$5.00 <span class="text-xs text-zinc-500 font-normal">por ticket</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="px-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-sm">ELIGE TUS NÚMEROS:</h3>
+            <span class="text-xs text-zinc-500">Quedan 450 disp.</span>
+        </div>
         
-        <div class="bento-card p-6 text-center">
-            <h2 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                ESTA ES TU OPORTUNIDAD
-            </h2>
-            <p class="text-3xl font-black mt-2 text-white">¡QUÉRETE COROTO!</p>
-        </div>
+        <div class="grid grid-cols-5 gap-2" id="grid-tickets">
+            </div>
+    </div>
 
-        <div class="space-y-3">
-            <a href="#" class="flex items-center justify-between p-5 bento-card border-l-4 border-l-blue-500">
-                <span class="font-bold">PARTICIPAR AHORA</span>
-                <i class="fa-solid fa-ticket text-blue-500"></i>
-            </a>
+    <div id="cart" class="sticky-cart shadow-2xl">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div>
+                <p class="text-xs text-zinc-400">Tickets: <span id="count" class="text-white font-bold">0</span></p>
+                <p class="text-lg font-black text-white">TOTAL: $<span id="total">0</span></p>
+            </div>
+            <button onclick="enviarPedido()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
+                PAGAR AHORA <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const pricePerTicket = 5;
+        let selectedTickets = [];
+        const grid = document.getElementById('grid-tickets');
+
+        // Generar 100 números (puedes poner 500 si quieres)
+        for (let i = 1; i <= 100; i++) {
+            const num = i.toString().padStart(3, '0');
+            const div = document.createElement('div');
+            div.className = 'ticket';
+            div.innerText = num;
             
-            <a href="#" class="flex items-center justify-between p-5 bento-card">
-                <span class="font-bold">LISTA DE GANADORES</span>
-                <i class="fa-solid fa-trophy text-yellow-500"></i>
-            </a>
-        </div>
+            // Simular algunos vendidos
+            if([5, 12, 45, 88].includes(i)) {
+                div.classList.add('sold');
+            } else {
+                div.onclick = () => toggleTicket(num, div);
+            }
+            grid.appendChild(div);
+        }
 
-        <div class="grid grid-cols-3 gap-4 py-6 logo-container items-center justify-items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Logo_de_la_Loter%C3%ADa_del_T%C3%A1chira.png/1200px-Logo_de_la_Loter%C3%ADa_del_T%C3%A1chira.png" alt="Tachira">
-            <img src="https://conalot.gob.ve/wp-content/uploads/2022/01/LOGO-CONALOT-NUEVO.png" alt="Conalot">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6A7yR_fK_XpS9W5_5I_jD-1Z8V-1_y0_yvA&s" alt="Super Gana">
-        </div>
+        function toggleTicket(num, element) {
+            if (selectedTickets.includes(num)) {
+                selectedTickets = selectedTickets.filter(t => t !== num);
+                element.classList.remove('selected');
+            } else {
+                selectedTickets.push(num);
+                element.classList.add('selected');
+            }
+            updateCart();
+        }
 
-        <div class="text-[10px] text-zinc-500 text-center leading-relaxed px-4">
-            Sorteo Avalado por la Conalot bajo el Runlot: <br>
-            <span class="text-zinc-300 font-mono text-[11px]">CNL-ORF-2025-000661</span>
-        </div>
+        function updateCart() {
+            const cart = document.getElementById('cart');
+            const count = document.getElementById('count');
+            const total = document.getElementById('total');
+            
+            if (selectedTickets.length > 0) {
+                cart.style.display = 'block';
+                count.innerText = selectedTickets.length;
+                total.innerText = (selectedTickets.length * pricePerTicket).toFixed(2);
+            } else {
+                cart.style.display = 'none';
+            }
+        }
 
-    </main>
-
-    <footer class="mt-12 mb-10 text-center">
-        <p class="text-xs text-zinc-600">Copyright © 2024. Desarrollado por <span class="text-white">SOFTVENCA</span></p>
-        <div class="flex justify-center gap-6 mt-4 text-xs font-bold text-zinc-400 uppercase tracking-widest">
-            <a href="#">Términos</a>
-            <a href="#">Soporte</a>
-        </div>
-    </footer>
-
+        function enviarPedido() {
+            const numList = selectedTickets.join(', ');
+            const mensaje = `Hola Brayan, quiero comprar los tickets: ${numList}. Total: $${(selectedTickets.length * pricePerTicket)}`;
+            const url = `https://wa.me/tu-numero-aqui?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+    </script>
 </body>
 </html>
