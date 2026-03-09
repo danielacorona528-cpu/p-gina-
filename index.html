@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorteos VIP - Brayan Lucena</title>
+    <title>Brayan Lucena - Sorteos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,9 +11,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
         body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; }
         
+        /* El resplandor azul característico de la página de Brayan */
         .bg-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 0%, #003366 0%, #050505 85%);
+            background: radial-gradient(circle at 50% 0%, #001f3f 0%, #050505 85%);
             z-index: -1;
         }
 
@@ -25,15 +26,15 @@
         }
 
         .btn-luck {
-            background: linear-gradient(90deg, #2563eb, #3b82f6);
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
             transition: 0.3s;
         }
 
-        .ticket-animado {
+        .ticket-badge {
             background: #facc15;
             color: black;
-            font-weight: 900;
+            font-weight: 800;
             padding: 12px 20px;
             border-radius: 15px;
             animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -52,8 +53,8 @@
 
     <div id="step-1">
         <header class="text-center mt-10 mb-8">
-            <div class="relative inline-block p-1 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400">
-                <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=400&fit=crop" class="w-24 h-24 rounded-full border-4 border-black object-cover">
+            <div class="relative inline-block p-1 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400 shadow-xl shadow-blue-500/30">
+                <img src="https://i.postimg.cc/mD3m9vH1/image.png" alt="Brayan Lucena" class="w-24 h-24 rounded-full border-4 border-black object-cover">
             </div>
             <h1 class="text-3xl font-black mt-4 tracking-tighter uppercase italic">BRAYAN LUCENA</h1>
             <span class="bg-blue-600/20 text-blue-400 text-[10px] px-4 py-1.5 rounded-full font-black mt-2 inline-block border border-blue-600/30 uppercase tracking-widest">
@@ -62,11 +63,11 @@
         </header>
 
         <div class="bento-card overflow-hidden mb-6">
-            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&q=80" alt="Moto SBR" class="w-full h-60 object-cover">
+            <img src="https://i.postimg.cc/m5ZzW1x/moto-sbr.jpg" alt="Bera SBR 2024" class="w-full h-60 object-cover">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <h2 class="text-2xl font-black italic uppercase">Bera SBR 2024</h2>
+                        <h2 class="text-2xl font-black italic uppercase">Bera SBR 2024 0KM</h2>
                         <p class="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Sorteo Avalado por CONALOT</p>
                     </div>
                     <div class="text-blue-500 font-black text-2xl">$5.00</div>
@@ -79,20 +80,20 @@
                 </div>
 
                 <button onclick="generarSuerte(1)" class="btn-luck w-full py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 active:scale-95">
-                    <i class="fa-solid fa-dice text-2xl animate-spin-slow"></i> ¡DAME MI SUERTE!
+                    <i class="fa-solid fa-dice text-2xl animate-pulse"></i> ¡DAME MI SUERTE!
                 </button>
             </div>
         </div>
 
-        <div id="box-suerte" class="hidden mb-10 text-center animate-pop">
+        <div id="box-suerte" class="hidden mb-10 text-center">
             <p class="text-[10px] font-black text-zinc-500 mb-4 uppercase tracking-widest italic">Tus números asignados:</p>
             <div id="contenedor-num" class="flex flex-wrap justify-center gap-3"></div>
         </div>
 
         <div class="grid grid-cols-3 gap-6 items-center py-8 opacity-40">
-            <img src="https://conalot.gob.ve/wp-content/uploads/2022/01/LOGO-CONALOT-NUEVO.png" class="w-full h-auto grayscale brightness-200">
-            <img src="https://www.loteriadeltachira.com/images/logo_tachira_new.png" class="w-full h-auto grayscale brightness-200">
-            <img src="https://i.ibb.co/L9Hqf3X/logo-seniat.png" class="w-full h-auto grayscale brightness-200">
+            <img src="https://i.postimg.cc/L9Hqf3X/logo-conalot.png" class="w-full h-auto grayscale brightness-200 object-contain" alt="Conalot">
+            <img src="https://i.postimg.cc/8P8fS6Xm/logo-loteria.png" class="w-full h-auto grayscale brightness-200 object-contain" alt="Lotería">
+            <img src="https://i.postimg.cc/R0Y6LzH6/logo-triple.png" class="w-full h-auto grayscale brightness-200 object-contain" alt="Triple Táchira">
         </div>
     </div>
 
@@ -101,9 +102,9 @@
         <div class="bento-card p-8">
             <h2 class="text-3xl font-black mb-8 italic tracking-tighter uppercase text-blue-500">Pago Móvil</h2>
             <div class="space-y-4 font-bold text-sm">
-                <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-zinc-500">BANCO</span> <span>BANESCO</span></div>
-                <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-zinc-500">CÉDULA</span> <span>V-00.000.000</span></div>
-                <div class="flex justify-between"><span class="text-zinc-500">TELÉFONO</span> <span>0412-0000000</span></div>
+                <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-zinc-500 uppercase text-[10px]">BANCO</span> <span>BANESCO</span></div>
+                <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-zinc-500 uppercase text-[10px]">CÉDULA</span> <span>V-00.000.000</span></div>
+                <div class="flex justify-between"><span class="text-zinc-500 uppercase text-[10px]">TELÉFONO</span> <span>0412-0000000</span></div>
             </div>
 
             <form onsubmit="finalizar(event)" class="mt-8 space-y-4">
@@ -111,75 +112,14 @@
                 <div class="bento-card p-6 border-dashed border-white/20 text-center">
                     <label class="cursor-pointer">
                         <i class="fa-solid fa-camera text-3xl text-blue-500 mb-3"></i>
-                        <p id="txt-file" class="text-[10px] font-black uppercase text-zinc-500 italic">Reportar Comprobante</p>
-                        <input type="file" required class="hidden" onchange="document.getElementById('txt-file').innerText = '✓ FOTO CARGADA'; document.getElementById('txt-file').classList.add('text-green-500')">
+                        <p id="txt-file" class="text-[10px] font-black uppercase text-zinc-500 italic">Subir Captura de Pago</p>
+                        <input type="file" required class="hidden" onchange="document.getElementById('txt-file').innerText = 'FOTO CARGADA ✓'; document.getElementById('txt-file').style.color = '#4ade80'">
                     </label>
                 </div>
-                <button type="submit" class="w-full bg-green-600 py-6 rounded-3xl font-black text-2xl shadow-xl shadow-green-600/20 uppercase tracking-tighter mt-4">Confirmar Mi Cupo</button>
+                <button type="submit" class="w-full bg-green-600 py-6 rounded-3xl font-black text-2xl shadow-xl shadow-green-600/20 uppercase mt-4">Confirmar Mi Pago</button>
             </form>
         </div>
     </div>
 
     <div id="step-3" class="hidden text-center py-20">
-        <div class="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/40">
-            <i class="fa-solid fa-check text-5xl text-white"></i>
-        </div>
-        <h2 class="text-4xl font-black mb-4 italic">¡LISTO!</h2>
-        <p class="text-zinc-500 px-8 text-sm leading-relaxed">Tu pago ha sido enviado para verificación. Mantente atento a los resultados.</p>
-        <button onclick="location.reload()" class="mt-12 bg-zinc-900 px-12 py-4 rounded-2xl font-black text-xs border border-white/10 uppercase">Volver al inicio</button>
-    </div>
-
-    <div id="barra-checkout" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 backdrop-blur-xl border-t border-white/10 hidden z-50">
-        <div class="max-w-md mx-auto flex justify-between items-center">
-            <div class="text-3xl font-black">$<span id="txt-total">0</span></div>
-            <button onclick="irAPagar()" class="bg-blue-600 px-12 py-4 rounded-2xl font-black text-sm uppercase shadow-lg shadow-blue-600/30">Continuar</button>
-        </div>
-    </div>
-
-    <script>
-        let seleccion = [];
-        const precioTicket = 5;
-
-        function generarSuerte(cantidad) {
-            seleccion = [];
-            const cont = document.getElementById('contenedor-num');
-            cont.innerHTML = '';
-            
-            for(let i=0; i<cantidad; i++) {
-                let n = Math.floor(Math.random() * 999).toString().padStart(3,'0');
-                seleccion.push(n);
-                let el = document.createElement('div');
-                el.className = 'ticket-animado';
-                el.innerText = '#' + n;
-                cont.appendChild(el);
-            }
-
-            document.getElementById('box-suerte').classList.remove('hidden');
-            document.getElementById('barra-checkout').classList.remove('hidden');
-            document.getElementById('txt-total').innerText = (seleccion.length * precioTicket).toFixed(2);
-            
-            if(window.navigator.vibrate) window.navigator.vibrate(100);
-        }
-
-        function irAPagar() {
-            document.getElementById('step-1').classList.add('hidden');
-            document.getElementById('barra-checkout').classList.add('hidden');
-            document.getElementById('step-2').classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
-
-        function volver() {
-            document.getElementById('step-2').classList.add('hidden');
-            document.getElementById('step-1').classList.remove('hidden');
-            document.getElementById('barra-checkout').classList.remove('hidden');
-        }
-
-        function finalizar(e) {
-            e.preventDefault();
-            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 }, colors: ['#2563eb', '#facc15', '#ffffff'] });
-            document.getElementById('step-2').classList.add('hidden');
-            document.getElementById('step-3').classList.remove('hidden');
-        }
-    </script>
-</body>
-</html>
+        <div class="w-24 h-24 bg-blue
