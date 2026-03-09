@@ -3,137 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorteos Express - ¡Tu Suerte es Hoy!</title>
+    <title>Sorteos VIP - ¡Gana Tu Moto!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        body { background: #000; color: white; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        body { background: #000; color: white; font-family: 'Outfit', sans-serif; }
         
-        .glow-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #000 80%);
-            z-index: -1;
+        .gradiente-oro {
+            background: linear-gradient(90deg, #facc15, #eab308, #fef08a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .bento-card { 
-            background: rgba(255, 255, 255, 0.05); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 28px; 
+            background: rgba(255, 255, 255, 0.07); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255,255,255,0.15); 
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        .step-hidden { display: none; }
-
-        .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes pop { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .btn-luck {
-            background: linear-gradient(90deg, #facc15, #f97316);
-            transition: 0.3s;
+        .btn-principal {
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            box-shadow: 0 10px 25px rgba(234, 179, 8, 0.4);
+            transition: all 0.3s ease;
         }
-        .btn-luck:active { transform: scale(0.95); }
+        .btn-principal:active { transform: scale(0.95); }
 
-        .number-tag {
-            background: rgba(250, 204, 21, 0.1);
-            border: 1px solid #facc15;
-            color: #facc15;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-weight: 900;
-            display: inline-block;
-            margin: 4px;
-            animation: pop 0.3s ease-out;
+        .ticket-animado {
+            animation: aparecer 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        .glow { position: fixed; top: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% -20%, #1e40af, #000); z-index: -1; }
     </style>
 </head>
-<body class="max-w-md mx-auto p-5 pb-32">
-    <div class="glow-bg"></div>
+<body class="max-w-md mx-auto p-5 pb-36">
+    <div class="glow"></div>
 
-    <div id="step-selection" class="animate-pop">
+    <div id="step-1">
         <header class="text-center py-10">
-            <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-400 to-orange-600 mb-4 shadow-2xl">
-                <img src="https://via.placeholder.com/150" class="w-24 h-24 rounded-full border-4 border-black object-cover">
+            <div class="relative inline-block p-1 rounded-full bg-gradient-to-tr from-yellow-400 to-blue-500 mb-6">
+                <img src="https://i.postimg.cc/mD3m9vH1/image.png" class="w-24 h-24 rounded-full border-4 border-black object-cover">
             </div>
-            <h1 class="text-4xl font-black tracking-tighter uppercase italic">Sorteo Express</h1>
-            <p class="text-zinc-400 font-bold text-xs tracking-widest uppercase mt-2">Sistema de Asignación Aleatoria</p>
+            <h1 class="text-4xl font-black tracking-tighter italic uppercase gradiente-oro">Mega Sorteos</h1>
+            <p class="text-white/60 font-bold text-[10px] tracking-[4px] uppercase mt-2">Asignación Automática</p>
         </header>
 
-        <div class="bento-card p-5 mb-8 border-white/5">
-            <h3 class="text-[10px] font-black mb-3 uppercase text-zinc-500 tracking-widest text-center">Consultar mi número</h3>
-            <div class="flex gap-2">
-                <input id="input-verify" type="number" placeholder="Ej: 085" class="flex-1 bg-black/50 border border-zinc-700 p-3 rounded-xl text-sm outline-none focus:border-yellow-500">
-                <button onclick="verificarTicket()" class="bg-zinc-800 text-white px-5 rounded-xl font-black text-xs uppercase">Revisar</button>
+        <div class="bento-card overflow-hidden mb-8">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1558981403-c5f91cbba527?auto=format&fit=crop&q=80&w=800" class="w-full h-56 object-cover">
+                <div class="absolute top-4 right-4 bg-yellow-400 text-black font-black px-4 py-1 rounded-full shadow-xl">
+                    $5.00
+                </div>
             </div>
-        </div>
-
-        <div class="bento-card overflow-hidden mb-8 border-yellow-500/20">
-            <img src="https://via.placeholder.com/600x350/111/fff?text=IMAGEN+DEL+SORTEO" class="w-full h-48 object-cover">
             <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-black tracking-tighter italic">MOTO 0KM</h2>
-                    <span class="bg-yellow-400 text-black text-xs px-3 py-1 rounded-full font-black">$5.00</span>
-                </div>
+                <h2 class="text-2xl font-black mb-1">MOTO BERA SBR 2026</h2>
+                <p class="text-blue-400 text-xs font-bold uppercase mb-6">Sorteo Avalado por CONALOT</p>
                 
-                <div class="space-y-4">
-                    <p class="text-xs text-zinc-500 text-center font-bold uppercase">¿Cuántos tickets quieres?</p>
-                    <div class="grid grid-cols-3 gap-3">
-                        <button onclick="generarTickets(1)" class="bg-zinc-900 border border-zinc-700 py-3 rounded-xl font-bold hover:border-yellow-500">1</button>
-                        <button onclick="generarTickets(3)" class="bg-zinc-900 border border-zinc-700 py-3 rounded-xl font-bold hover:border-yellow-500">3</button>
-                        <button onclick="generarTickets(5)" class="bg-zinc-900 border border-zinc-700 py-3 rounded-xl font-bold hover:border-yellow-500">5</button>
-                    </div>
-                    <button onclick="generarTickets(1)" class="btn-luck w-full py-5 rounded-2xl font-black text-black text-lg shadow-xl shadow-yellow-500/20 flex items-center justify-center gap-3 mt-4">
-                        <i class="fa-solid fa-dice text-2xl"></i> ¡DAME MI SUERTE!
-                    </button>
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <button onclick="generarTickets(1)" class="bg-white/5 border border-white/10 py-3 rounded-2xl font-black hover:bg-white/10">1</button>
+                    <button onclick="generarTickets(3)" class="bg-white/5 border border-white/10 py-3 rounded-2xl font-black hover:bg-white/10">3</button>
+                    <button onclick="generarTickets(5)" class="bg-white/5 border border-white/10 py-3 rounded-2xl font-black hover:bg-white/10">5</button>
                 </div>
-            </div>
-        </div>
 
-        <div id="selected-container" class="step-hidden text-center mb-10">
-            <h3 class="text-xs font-black text-zinc-500 mb-4 uppercase tracking-widest">Tus números asignados:</h3>
-            <div id="listado-numeros" class="flex flex-wrap justify-center"></div>
-        </div>
-
-        <div id="cart-bar" class="fixed bottom-0 left-0 w-full bg-black/95 p-6 border-t border-zinc-800 step-hidden z-50">
-            <div class="flex justify-between items-center max-w-md mx-auto">
-                <p class="text-2xl font-black text-white">Total: $<span id="monto-total">0</span></p>
-                <button onclick="irAPagar()" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black shadow-xl shadow-blue-500/30 active:scale-95 transition-transform">
-                    RESERVAR <i class="fa-solid fa-arrow-right ml-1"></i>
+                <button onclick="generarTickets(1)" class="btn-principal w-full py-5 rounded-2xl text-black font-black text-xl flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-dice text-2xl animate-bounce"></i> PROBAR MI SUERTE
                 </button>
             </div>
         </div>
+
+        <div id="resultado" class="hidden mb-10 text-center">
+            <h3 class="text-xs font-black text-zinc-500 mb-4 uppercase">Tus números asignados:</h3>
+            <div id="contenedor-tickets" class="flex flex-wrap justify-center gap-3"></div>
+        </div>
     </div>
 
-    <div id="step-payment" class="step-hidden animate-pop">
-        <button onclick="regresar()" class="mb-6 text-zinc-500 font-bold uppercase text-xs tracking-widest"><i class="fa-solid fa-chevron-left mr-1"></i> Regresar</button>
-        <h2 class="text-3xl font-black mb-8 italic uppercase text-center">Datos del Pago 💸</h2>
-        
-        <div class="bento-card p-6 mb-8 border-green-500/30">
-            <div class="space-y-4 font-bold text-sm">
-                <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-zinc-500 uppercase text-[10px]">Banco</span> <span>BANESCO</span></div>
-                <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-zinc-500 uppercase text-[10px]">Cédula</span> <span>V-00.000.000</span></div>
-                <div class="flex justify-between"><span class="text-zinc-500 uppercase text-[10px]">Teléfono</span> <span>0412-0000000</span></div>
+    <div id="step-2" class="hidden">
+        <button onclick="regresar()" class="mb-6 text-white/40 text-xs font-black uppercase tracking-widest"><i class="fa-solid fa-chevron-left"></i> Volver</button>
+        <div class="bento-card p-8 mb-8">
+            <h2 class="text-3xl font-black mb-6 italic">PAGO MÓVIL 💸</h2>
+            <div class="space-y-4 font-bold">
+                <div class="flex justify-between border-b border-white/5 pb-2 text-sm"><span class="text-zinc-500">BANCO</span> <span>BANESCO</span></div>
+                <div class="flex justify-between border-b border-white/5 pb-2 text-sm"><span class="text-zinc-500">CÉDULA</span> <span>V-12.345.678</span></div>
+                <div class="flex justify-between text-sm"><span class="text-zinc-500">TELÉFONO</span> <span>0412-1234567</span></div>
             </div>
         </div>
 
-        <form onsubmit="procesarPago(event)" class="space-y-6">
-            <input type="text" placeholder="Nombre completo" required class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-2xl outline-none focus:border-green-500 font-bold">
-            <div class="bento-card p-6 border-dashed border-zinc-700 text-center">
-                <label class="cursor-pointer">
-                    <i class="fa-solid fa-camera text-3xl text-yellow-500 mb-3"></i>
-                    <p id="file-text" class="text-[10px] font-black text-zinc-400 uppercase">Reportar capture de pago</p>
-                    <input type="file" accept="image/*" required class="hidden" onchange="document.getElementById('file-text').innerText = 'FOTO CARGADA ✓'; document.getElementById('file-text').classList.add('text-green-500')">
+        <form onsubmit="finalizar(event)" class="space-y-4">
+            <input type="text" placeholder="Tu Nombre Completo" required class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none focus:border-yellow-400 font-bold">
+            <div class="bento-card p-6 border-dashed border-white/20 text-center">
+                <label class="cursor-pointer block">
+                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-yellow-400 mb-2"></i>
+                    <p id="txt-archivo" class="text-[10px] font-black uppercase text-zinc-400 italic">Subir Comprobante</p>
+                    <input type="file" required class="hidden" onchange="document.getElementById('txt-archivo').innerText = '✓ CARGADO'; document.getElementById('txt-archivo').style.color = '#4ade80'">
                 </label>
             </div>
-            <button type="submit" class="w-full bg-green-600 py-5 rounded-3xl font-black text-xl shadow-2xl shadow-green-500/40 uppercase">Enviar Comprobante</button>
+            <button type="submit" class="w-full bg-green-500 py-6 rounded-3xl font-black text-2xl shadow-2xl shadow-green-500/20 uppercase tracking-tighter">Confirmar Pago</button>
         </form>
     </div>
 
-    <div id="step-success" class="step-hidden text-center py-20 animate-pop">
+    <div id="step-3" class="hidden text-center py-20">
         <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
             <i class="fa-solid fa-check text-5xl text-black"></i>
         </div>
-        <h2 class="text-4xl font-black mb-4 italic uppercase">¡PAGO ENVIADO!</h2>
-        <p class="text-zinc-400 px-8 mb-10 text-sm">Hemos recibido tus datos. En breve tus números aparecerán como pagados en el sistema.</p>
-        <button onclick="location.reload()" class="bg-zinc-900 px-12 py-4 rounded-2xl font-black border border-zinc-800">CERRAR</button>
+        <h2 class="text-4xl font-black mb-2 italic">¡RECIBIDO!</h2>
+        <p class="text-zinc-500 px-10 text-sm">Tu captura se cargó exitosamente. Te contactaremos pronto.</p>
+        <button onclick="location.reload()" class="mt-12 bg-white/10 px-10 py-4 rounded-full font-black text-xs uppercase border border-white/10">Aceptar</button>
+    </div>
+
+    <div id="carrito" class="fixed bottom-0 left-0 w-full p-6 bg-black/90 backdrop-blur-xl border-t border-white/10 hidden">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <p class="text-3xl font-black">$<span id="total-precio">0</span></p>
+            <button onclick="irAPagar()" class="bg-white text-black px-10 py-4 rounded-2xl font-black text-sm uppercase shadow-xl">RESERVAR AHORA</button>
+        </div>
+    </div>
+
+    <script>
+        let tickets = [];
+        const precio = 5;
+
+        function generarTickets(cantidad) {
+            tickets = []; // Reset
+            const contenedor = document.getElementById('contenedor-tickets');
+            contenedor.innerHTML = '';
+
+            for(let i=0; i<cantidad; i++){
+                let num = Math.floor(Math.random() * 999).toString().padStart(3,'0');
+                tickets.push(num);
+                let el = document.createElement('div');
+                el.className = 'bg-yellow-400 text-black font-black p-4 rounded-2xl ticket-animado text-xl shadow-lg';
+                el.innerText = '#' + num;
+                contenedor.appendChild(el);
+            }
+
+            document.getElementById('resultado').classList.remove('hidden');
+            document.getElementById('carrito').classList.remove('hidden');
+            document.getElementById('total-precio').innerText = tickets.length * precio;
+            
+            // Vibrar móvil
+            if(window.navigator.vibrate) window.navigator.vibrate(100);
+        }
+
+        function irAPagar() {
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('carrito').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function regresar() {
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-1').classList.remove('hidden');
+            document.getElementById('carrito').classList.remove('hidden');
+        }
+
+        function finalizar(e) {
+            e.preventDefault();
+            confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
