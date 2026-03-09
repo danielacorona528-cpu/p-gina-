@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brayan Lucena - Sorteos</title>
+    <title>Brayan Lucena - Coroto de la Suerte</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -38,16 +38,6 @@
             box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
         }
 
-        .img-container {
-            width: 100%;
-            height: 280px;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
         .hidden { display: none; }
     </style>
 </head>
@@ -56,18 +46,18 @@
 
     <div id="step-1">
         <header class="text-center mt-12 mb-10">
-            <div class="relative inline-block p-1 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400 shadow-2xl">
-                <img src="https://i.ibb.co/XfR0hW06/logo2.png" alt="Brayan Lucena" class="w-28 h-28 rounded-full border-4 border-black object-cover">
+            <div class="relative inline-block p-1 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400">
+                <img src="https://i.ibb.co/XfR0hW06/logo2.png" alt="Brayan Lucena Profile" class="w-28 h-28 rounded-full border-4 border-black object-cover bg-white">
             </div>
             <h1 class="text-4xl font-black mt-4 tracking-tighter uppercase italic">BRAYAN LUCENA</h1>
-            <div class="bg-blue-600/20 text-blue-400 text-[11px] px-6 py-2 rounded-full font-black mt-3 inline-block border border-blue-600/30 uppercase tracking-tighter">
-                <i class="fa-solid fa-circle-check mr-1 text-[9px]"></i> Sorteo Oficial Activo
-            </div>
+            <span class="bg-blue-600/20 text-blue-400 text-[10px] px-4 py-1.5 rounded-full font-black mt-2 inline-block border border-blue-600/30 uppercase tracking-widest">
+                Gran Sorteo Activo
+            </span>
         </header>
 
         <div class="bento-card overflow-hidden mb-8">
-            <div class="img-container">
-                <img src="https://i.ibb.co/3ykSycWp/j-Yn-RXm-Ht-VLBq-Gj-Kh-RB2-Zm-DEJZTp-MIGa-N2u4i-H1-Js.png" alt="Sorteo" class="max-w-full max-h-full object-contain p-4">
+            <div class="bg-white p-6 flex justify-center items-center">
+                <img src="https://i.ibb.co/3ykSycWp/j-Yn-RXm-Ht-VLBq-Gj-Kh-RB2-Zm-DEJZTp-MIGa-N2u4i-H1-Js.png" alt="Coroto de la Suerte" class="max-w-full h-auto">
             </div>
             
             <div class="p-8">
@@ -89,7 +79,7 @@
                 </div>
 
                 <button onclick="generarSuerte(1)" class="btn-luck w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
-                    <i class="fa-solid fa-dice text-2xl animate-spin-slow"></i> ¡OBTENER MI SUERTE!
+                    <i class="fa-solid fa-dice text-2xl"></i> ¡DAME MI SUERTE!
                 </button>
             </div>
         </div>
@@ -99,30 +89,30 @@
             <div id="contenedor-num" class="flex flex-wrap justify-center gap-4"></div>
         </div>
 
-        <div class="grid grid-cols-3 gap-8 items-center py-10 px-6 opacity-60">
-            <img src="https://i.ibb.co/5gpBvXvR/01-KB7-XJHRR2-TC2-YW06-D29-BSCCG.png" class="w-full h-auto grayscale brightness-200" alt="Conalot">
-            <img src="https://i.ibb.co/sdC8rF5Y/01-KB7-XKDXWKTAYQQYC8-HPJ96-Z9.png" class="w-full h-auto grayscale brightness-200" alt="Tachira">
-            <img src="https://i.ibb.co/v4m0f5fP/01-KB7-XK2-M5-FV6-NVX8-V9-X1-AK498.png" class="w-full h-auto grayscale brightness-200" alt="Super Gana">
+        <div class="grid grid-cols-3 gap-6 items-center py-10 px-6">
+            <img src="https://i.ibb.co/5gpBvXvR/01-KB7-XJHRR2-TC2-YW06-D29-BSCCG.png" class="w-full grayscale brightness-200 opacity-60" alt="Conalot">
+            <img src="https://i.ibb.co/sdC8rF5Y/01-KB7-XKDXWKTAYQQYC8-HPJ96-Z9.png" class="w-full grayscale brightness-200 opacity-60" alt="Lotería">
+            <img src="https://i.ibb.co/v4m0f5fP/01-KB7-XK2-M5-FV6-NVX8-V9-X1-AK498.png" class="w-full grayscale brightness-200 opacity-60" alt="Super Gana">
         </div>
     </div>
 
     <div id="step-2" class="hidden">
-        <button onclick="volver()" class="mb-8 text-zinc-500 font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Volver al sorteo</button>
+        <button onclick="volver()" class="mb-8 text-zinc-500 font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Volver</button>
         <div class="bento-card p-10">
-            <h2 class="text-3xl font-black mb-8 italic uppercase text-blue-500">Datos de Pago</h2>
+            <h2 class="text-3xl font-black mb-8 italic uppercase text-blue-500">Pago Móvil</h2>
             <div class="space-y-5 font-bold text-sm">
-                <div class="flex justify-between border-b border-white/10 pb-3"><span class="text-zinc-500 uppercase text-[10px]">Banco</span> <span>BANESCO</span></div>
-                <div class="flex justify-between border-b border-white/10 pb-3"><span class="text-zinc-500 uppercase text-[10px]">Cédula</span> <span>V-00.000.000</span></div>
-                <div class="flex justify-between pb-3"><span class="text-zinc-500 uppercase text-[10px]">Teléfono</span> <span>0412-0000000</span></div>
+                <div class="flex justify-between border-b border-white/10 pb-3"><span class="text-zinc-500">BANCO</span> <span>BANESCO</span></div>
+                <div class="flex justify-between border-b border-white/10 pb-3"><span class="text-zinc-500">CÉDULA</span> <span>V-00.000.000</span></div>
+                <div class="flex justify-between pb-3"><span class="text-zinc-500">TELÉFONO</span> <span>0412-0000000</span></div>
             </div>
 
             <form onsubmit="finalizar(event)" class="mt-10 space-y-5">
-                <input type="text" placeholder="Tu nombre y apellido" required class="w-full bg-white/5 border border-white/15 p-5 rounded-2xl outline-none focus:border-blue-500 font-bold transition-all">
-                <div class="bento-card p-8 border-dashed border-white/20 text-center hover:bg-white/5 transition-all">
+                <input type="text" placeholder="Tu nombre y apellido" required class="w-full bg-white/5 border border-white/15 p-5 rounded-2xl outline-none focus:border-blue-500 font-bold text-white">
+                <div class="bento-card p-8 border-dashed border-white/20 text-center">
                     <label class="cursor-pointer block">
                         <i class="fa-solid fa-cloud-arrow-up text-4xl text-blue-500 mb-4"></i>
                         <p id="txt-file" class="text-[10px] font-black uppercase text-zinc-500 italic">Adjuntar Comprobante</p>
-                        <input type="file" required class="hidden" onchange="document.getElementById('txt-file').innerText = 'ARCHIVO LISTO ✓'; document.getElementById('txt-file').style.color = '#4ade80'">
+                        <input type="file" required class="hidden" onchange="document.getElementById('txt-file').innerText = 'ARCHIVO CARGADO ✓'; document.getElementById('txt-file').style.color = '#4ade80'">
                     </label>
                 </div>
                 <button type="submit" class="w-full bg-green-600 py-6 rounded-3xl font-black text-2xl shadow-xl shadow-green-600/20 uppercase mt-4">Confirmar Reporte</button>
@@ -130,5 +120,53 @@
         </div>
     </div>
 
-    <div id="step-3" class="hidden text-center py-20">
-        <div class="w-28 h-28 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-blue
+    <div id="barra-checkout" class="fixed bottom-0 left-0 w-full p-8 bg-black/95 backdrop-blur-2xl border-t border-white/10 hidden z-50">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="text-3xl font-black text-white"><span id="txt-total">0</span> <span class="text-sm font-bold text-blue-500 italic">Bs</span></div>
+            <button onclick="irAPagar()" class="bg-blue-600 px-12 py-5 rounded-2xl font-black text-sm uppercase shadow-lg shadow-blue-600/30">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        let seleccion = [];
+        const precioTicket = 310;
+
+        function generarSuerte(cantidad) {
+            seleccion = [];
+            const cont = document.getElementById('contenedor-num');
+            cont.innerHTML = '';
+            for(let i=0; i<cantidad; i++) {
+                let n = Math.floor(Math.random() * 1000).toString().padStart(3,'0');
+                seleccion.push(n);
+                let el = document.createElement('div');
+                el.className = 'ticket-badge';
+                el.innerText = '#' + n;
+                cont.appendChild(el);
+            }
+            document.getElementById('box-suerte').classList.remove('hidden');
+            document.getElementById('barra-checkout').classList.remove('hidden');
+            document.getElementById('txt-total').innerText = (seleccion.length * precioTicket);
+        }
+
+        function irAPagar() {
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('barra-checkout').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function volver() {
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-1').classList.remove('hidden');
+            document.getElementById('barra-checkout').classList.remove('hidden');
+        }
+
+        function finalizar(e) {
+            e.preventDefault();
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 }, colors: ['#1e40af', '#3b82f6', '#ffffff'] });
+            alert("¡Reporte enviado con éxito! Suerte.");
+            location.reload();
+        }
+    </script>
+</body>
+</html>
