@@ -13,6 +13,7 @@
         .bento-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; backdrop-filter: blur(12px); }
         .btn-luck { background: linear-gradient(90deg, #1e40af, #3b82f6); box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4); }
         .ticket-badge { background: #facc15; color: black; font-weight: 900; padding: 10px 18px; border-radius: 14px; margin: 4px; display: inline-block; transform: rotate(-1deg); animation: pop 0.3s ease; }
+        .ticket-vendido { background: #3f3f46; color: #a1a1aa; text-decoration: line-through; }
         @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
         .progress-fill { transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1); }
     </style>
@@ -31,12 +32,12 @@
     <div class="bento-card p-6 mb-6">
         <div class="flex justify-between items-center mb-3">
             <span class="text-[10px] font-black uppercase text-zinc-400">Progreso del Sorteo</span>
-            <span class="text-blue-400 font-black text-sm" id="txt-porcentaje">78% Vendido</span>
+            <span class="text-blue-400 font-black text-sm" id="txt-porcentaje">0% Vendido</span>
         </div>
         <div class="w-full h-4 bg-white/10 rounded-full overflow-hidden border border-white/5 p-0.5">
             <div id="barra-progreso" class="progress-fill h-full bg-gradient-to-r from-blue-700 to-blue-400 rounded-full" style="width: 0%"></div>
         </div>
-        <p class="text-[9px] text-zinc-500 mt-3 text-center uppercase tracking-widest font-bold">¡Quedan pocos números disponibles!</p>
+        <p id="tickets-restantes" class="text-[9px] text-zinc-500 mt-3 text-center uppercase tracking-widest font-bold">Cargando disponibilidad...</p>
     </div>
 
     <div id="seccion-principal">
@@ -104,8 +105,8 @@
                 <svg class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4"><path d="M5 13l4 4L19 7" /></svg>
             </div>
             <h2 class="text-3xl font-black uppercase italic mb-2">¡RECIBIDO!</h2>
-            <p class="text-zinc-400 text-xs mb-6">Tu registro entró en validación. En breve aparecerá en el sistema de verificación.</p>
-            <button onclick="location.reload()" class="bg-white/10 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10">Volver</button>
+            <p class="text-zinc-400 text-xs mb-6">Tu registro entró en validación y los números han sido reservados a tu nombre.</p>
+            <button onclick="location.reload()" class="bg-white/10 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10">Volver al Inicio</button>
         </div>
     </div>
 
@@ -117,12 +118,24 @@
     </div>
 
     <script>
-        // Animación inicial de la barra
+        // CONFIGURACIÓN DEL SORTEO
+        const TOTAL_TICKETS = 1000;
+        let ticketsVendidos = JSON.parse(localStorage.getItem('tickets_vendidos')) || [];
+        let ticketsSeleccionadosTemporalmente = [];
+
+        // Inicializar la interfaz
         window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('barra-progreso').style.width = '78%';
-            }, 500);
+            actualizarInterfazProgreso();
         };
+
+        function actualizarInterfazProgreso() {
+            const numVendidos = ticketsVendidos.length;
+            const porcentaje = ((numVendidos / TOTAL_TICKETS) * 100).toFixed(0);
+            
+            document.getElementById('barra-progreso').style.width = porcentaje + '%';
+            document.getElementById('txt-porcentaje').innerText = porcentaje + '% Vendido';
+            document.getElementById('tickets-restantes').innerText = `Quedan ${TOTAL_TICKETS - numVendidos} números disponibles`;
+        }
 
         function pidoTickets(cant) {
             const container = document.getElementById('tickets-generados');
@@ -131,9 +144,23 @@
             const monto = document.getElementById('monto-final');
 
             container.innerHTML = '';
-            for(let i=0; i<cant; i++) {
-                let n = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-                container.innerHTML += `<div class="ticket-badge">#${n}</div>`;
+            ticketsSeleccionadosTemporalmente = [];
+
+            let intentos = 0;
+            while(ticketsSeleccionadosTemporalmente.length < cant && intentos < 2000) {
+                let n = Math.floor(Math.random() * TOTAL_TICKETS).toString().padStart(3, '0');
+                
+                // CONTROL REAL: Solo agregar si no está vendido y no está repetido en la selección actual
+                if (!ticketsVendidos.includes(n) && !ticketsSeleccionadosTemporalmente.includes(n)) {
+                    ticketsSeleccionadosTemporalmente.push(n);
+                    container.innerHTML += `<div class="ticket-badge">#${n}</div>`;
+                }
+                intentos++;
+            }
+
+            if (ticketsSeleccionadosTemporalmente.length < cant) {
+                alert("¡Lo sentimos! No quedan suficientes tickets disponibles.");
+                return;
             }
 
             box.classList.remove('hidden');
@@ -149,23 +176,26 @@
         }
 
         function verificarTicket() {
-            const val = document.getElementById('input-verificar').value;
+            const val = document.getElementById('input-verificar').value.padStart(3, '0');
             const res = document.getElementById('resultado-verificar');
             res.classList.remove('hidden');
             
-            if(val === "") {
+            if(document.getElementById('input-verificar').value === "") {
                 res.innerHTML = "INGRESA UN NÚMERO";
                 res.className = "mt-3 text-[10px] font-bold text-center text-zinc-500";
                 return;
             }
 
-            // Simulación de verificación
             res.innerHTML = `<span class="animate-pulse">CONSULTANDO BASE DE DATOS...</span>`;
             
             setTimeout(() => {
-                res.innerHTML = `EL TICKET #${val.padStart(3, '0')} ESTÁ <span class="text-green-500">LIBRE</span>. ¡PUEDE SER TUYO!`;
+                if (ticketsVendidos.includes(val)) {
+                    res.innerHTML = `EL TICKET #${val} YA ESTÁ <span class="text-red-500">VENDIDO</span>.`;
+                } else {
+                    res.innerHTML = `EL TICKET #${val} ESTÁ <span class="text-green-500">LIBRE</span>. ¡PUEDE SER TUYO!`;
+                }
                 res.className = "mt-3 text-[10px] font-bold text-center text-white bg-white/5 py-2 rounded-lg";
-            }, 1000);
+            }, 800);
         }
 
         function irAPagar() {
@@ -181,8 +211,16 @@
                 alert("Ingresa tu nombre para el registro.");
                 return;
             }
+
+            // GUARDADO REAL DE TICKETS
+            // Pasamos los temporales a la lista oficial de vendidos
+            ticketsVendidos = [...ticketsVendidos, ...ticketsSeleccionadosTemporalmente];
+            localStorage.setItem('tickets_vendidos', JSON.stringify(ticketsVendidos));
+
             document.getElementById('seccion-pago').classList.add('hidden');
             document.getElementById('seccion-exito').classList.remove('hidden');
+            
+            actualizarInterfazProgreso();
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.5 } });
         }
     </script>
