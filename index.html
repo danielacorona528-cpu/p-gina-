@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorteos Brayan Lucena</title>
+    <title>Brayan Lucena - Sorteos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,7 +26,7 @@
 
         .btn-luck {
             background: linear-gradient(90deg, #1e40af, #3b82f6);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
         }
 
         .ticket-badge {
@@ -35,12 +35,17 @@
             font-weight: 800;
             padding: 12px 20px;
             border-radius: 15px;
-            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
         }
 
-        @keyframes bounceIn {
-            from { opacity: 0; transform: scale(0.3); }
-            to { opacity: 1; transform: scale(1); }
+        .img-container {
+            width: 100%;
+            height: 280px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .hidden { display: none; }
@@ -50,15 +55,80 @@
     <div class="bg-glow"></div>
 
     <div id="step-1">
-        <header class="text-center mt-10 mb-8">
-            <div class="relative inline-block p-1 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400">
-                <img src="https://i.ibb.co/XfR0hW06/logo2.png" alt="Brayan Lucena" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
+        <header class="text-center mt-12 mb-10">
+            <div class="relative inline-block p-1 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400 shadow-2xl">
+                <img src="https://i.ibb.co/XfR0hW06/logo2.png" alt="Brayan Lucena" class="w-28 h-28 rounded-full border-4 border-black object-cover">
             </div>
-            <h1 class="text-3xl font-black mt-4 tracking-tighter uppercase italic">BRAYAN LUCENA</h1>
-            <span class="bg-blue-600/20 text-blue-400 text-[10px] px-4 py-1.5 rounded-full font-black mt-2 inline-block border border-blue-600/30 uppercase tracking-widest">
-                Gran Sorteo Activo
-            </span>
+            <h1 class="text-4xl font-black mt-4 tracking-tighter uppercase italic">BRAYAN LUCENA</h1>
+            <div class="bg-blue-600/20 text-blue-400 text-[11px] px-6 py-2 rounded-full font-black mt-3 inline-block border border-blue-600/30 uppercase tracking-tighter">
+                <i class="fa-solid fa-circle-check mr-1 text-[9px]"></i> Sorteo Oficial Activo
+            </div>
         </header>
 
-        <div class="bento-card overflow-hidden mb-6">
-            <img src="
+        <div class="bento-card overflow-hidden mb-8">
+            <div class="img-container">
+                <img src="https://i.ibb.co/3ykSycWp/j-Yn-RXm-Ht-VLBq-Gj-Kh-RB2-Zm-DEJZTp-MIGa-N2u4i-H1-Js.png" alt="Sorteo" class="max-w-full max-h-full object-contain p-4">
+            </div>
+            
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <h2 class="text-3xl font-black italic uppercase leading-none">Bera SBR 2024</h2>
+                        <p class="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-2 italic">Avalado por el estado venezolano</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-blue-500 font-black text-3xl">310</span>
+                        <span class="text-blue-500 font-bold text-sm block">Bs</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <button onclick="generarSuerte(1)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-sm hover:bg-white/10 transition-all">1 Ticket</button>
+                    <button onclick="generarSuerte(3)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-sm hover:bg-white/10 transition-all">3 Tickets</button>
+                    <button onclick="generarSuerte(5)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-sm hover:bg-white/10 transition-all">5 Tickets</button>
+                </div>
+
+                <button onclick="generarSuerte(1)" class="btn-luck w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                    <i class="fa-solid fa-dice text-2xl animate-spin-slow"></i> ¡OBTENER MI SUERTE!
+                </button>
+            </div>
+        </div>
+
+        <div id="box-suerte" class="hidden mb-12 text-center">
+            <p class="text-[10px] font-black text-zinc-500 mb-5 uppercase tracking-widest italic">Tus números asignados:</p>
+            <div id="contenedor-num" class="flex flex-wrap justify-center gap-4"></div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-8 items-center py-10 px-6 opacity-60">
+            <img src="https://i.ibb.co/5gpBvXvR/01-KB7-XJHRR2-TC2-YW06-D29-BSCCG.png" class="w-full h-auto grayscale brightness-200" alt="Conalot">
+            <img src="https://i.ibb.co/sdC8rF5Y/01-KB7-XKDXWKTAYQQYC8-HPJ96-Z9.png" class="w-full h-auto grayscale brightness-200" alt="Tachira">
+            <img src="https://i.ibb.co/v4m0f5fP/01-KB7-XK2-M5-FV6-NVX8-V9-X1-AK498.png" class="w-full h-auto grayscale brightness-200" alt="Super Gana">
+        </div>
+    </div>
+
+    <div id="step-2" class="hidden">
+        <button onclick="volver()" class="mb-8 text-zinc-500 font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Volver al sorteo</button>
+        <div class="bento-card p-10">
+            <h2 class="text-3xl font-black mb-8 italic uppercase text-blue-500">Datos de Pago</h2>
+            <div class="space-y-5 font-bold text-sm">
+                <div class="flex justify-between border-b border-white/10 pb-3"><span class="text-zinc-500 uppercase text-[10px]">Banco</span> <span>BANESCO</span></div>
+                <div class="flex justify-between border-b border-white/10 pb-3"><span class="text-zinc-500 uppercase text-[10px]">Cédula</span> <span>V-00.000.000</span></div>
+                <div class="flex justify-between pb-3"><span class="text-zinc-500 uppercase text-[10px]">Teléfono</span> <span>0412-0000000</span></div>
+            </div>
+
+            <form onsubmit="finalizar(event)" class="mt-10 space-y-5">
+                <input type="text" placeholder="Tu nombre y apellido" required class="w-full bg-white/5 border border-white/15 p-5 rounded-2xl outline-none focus:border-blue-500 font-bold transition-all">
+                <div class="bento-card p-8 border-dashed border-white/20 text-center hover:bg-white/5 transition-all">
+                    <label class="cursor-pointer block">
+                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-blue-500 mb-4"></i>
+                        <p id="txt-file" class="text-[10px] font-black uppercase text-zinc-500 italic">Adjuntar Comprobante</p>
+                        <input type="file" required class="hidden" onchange="document.getElementById('txt-file').innerText = 'ARCHIVO LISTO ✓'; document.getElementById('txt-file').style.color = '#4ade80'">
+                    </label>
+                </div>
+                <button type="submit" class="w-full bg-green-600 py-6 rounded-3xl font-black text-2xl shadow-xl shadow-green-600/20 uppercase mt-4">Confirmar Reporte</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="step-3" class="hidden text-center py-20">
+        <div class="w-28 h-28 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-blue
