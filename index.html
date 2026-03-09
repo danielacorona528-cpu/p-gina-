@@ -30,13 +30,13 @@
 
     <div class="bento-card p-6 mb-6">
         <div class="flex justify-between items-center mb-3">
-            <span class="text-[10px] font-black uppercase text-zinc-400">Disponibilidad Actual</span>
-            <span class="text-blue-400 font-black text-sm" id="txt-porcentaje">100% Disponible</span>
+            <span class="text-[10px] font-black uppercase text-zinc-400">Disponibilidad de Tickets</span>
+            <span class="text-blue-400 font-black text-sm" id="txt-porcentaje">100% Libres</span>
         </div>
         <div class="w-full h-4 bg-white/10 rounded-full overflow-hidden border border-white/5 p-0.5">
             <div id="barra-progreso" class="progress-fill h-full bg-gradient-to-r from-blue-700 to-blue-400 rounded-full" style="width: 100%"></div>
         </div>
-        <p id="tickets-restantes" class="text-[9px] text-zinc-500 mt-3 text-center uppercase tracking-widest font-bold">Calculando tickets...</p>
+        <p id="tickets-restantes" class="text-[9px] text-zinc-500 mt-3 text-center uppercase tracking-widest font-bold">Cargando...</p>
     </div>
 
     <div id="seccion-principal">
@@ -57,22 +57,22 @@
                 </div>
 
                 <div class="grid grid-cols-3 gap-3 mb-6">
-                    <button onclick="pidoTickets(1)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-xs hover:bg-white/10 active:scale-95 transition-all uppercase">1 Ticket</button>
-                    <button onclick="pidoTickets(3)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-xs hover:bg-white/10 active:scale-95 transition-all uppercase">3 Tickets</button>
-                    <button onclick="pidoTickets(5)" class="bg-blue-600/20 border border-blue-600/30 py-4 rounded-2xl font-black text-xs hover:bg-blue-600/40 active:scale-95 transition-all uppercase text-blue-400">5 Tickets</button>
+                    <button type="button" onclick="pidoTickets(1)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-xs hover:bg-white/10 active:scale-95 transition-all uppercase">1 Ticket</button>
+                    <button type="button" onclick="pidoTickets(3)" class="bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-xs hover:bg-white/10 active:scale-95 transition-all uppercase">3 Tickets</button>
+                    <button type="button" onclick="pidoTickets(5)" class="bg-blue-600/20 border border-blue-600/30 py-4 rounded-2xl font-black text-xs hover:bg-blue-600/40 active:scale-95 transition-all uppercase text-blue-400">5 Tickets</button>
                 </div>
 
-                <button onclick="pidoTickets(1)" class="btn-luck w-full py-5 rounded-3xl font-black text-lg flex items-center justify-center gap-3 active:scale-95 text-white uppercase italic">
+                <button type="button" onclick="pidoTickets(1)" class="btn-luck w-full py-5 rounded-3xl font-black text-lg flex items-center justify-center gap-3 active:scale-95 text-white uppercase italic">
                     ¡DAME MI SUERTE!
                 </button>
             </div>
         </div>
 
         <div class="bento-card p-6 mb-6 border-blue-500/20 bg-blue-500/5">
-            <h3 class="text-sm font-black uppercase mb-4 text-center tracking-widest italic">¿Ya compraste? Verifica aquí</h3>
+            <h3 class="text-sm font-black uppercase mb-4 text-center tracking-widest italic">Verificador Real</h3>
             <div class="flex gap-2">
-                <input type="number" id="input-verificar" placeholder="Ej: 5420" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none">
-                <button onclick="verificarTicket()" class="bg-white text-black font-black px-4 rounded-xl text-[10px] uppercase active:scale-95 transition-all">Consultar</button>
+                <input type="number" id="input-verificar" placeholder="Ej: 0524" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none">
+                <button type="button" onclick="verificarTicket()" class="bg-white text-black font-black px-4 rounded-xl text-[10px] uppercase">Consultar</button>
             </div>
             <div id="resultado-verificar" class="mt-3 text-[10px] font-bold text-center hidden"></div>
         </div>
@@ -91,20 +91,15 @@
                 <div class="flex justify-between"><span>Cédula:</span> <strong>27.123.456</strong></div>
                 <div class="flex justify-between"><span>Teléfono:</span> <strong>0412-1234567</strong></div>
             </div>
-            <input type="text" id="nombre-cliente" placeholder="Nombre Completo" class="w-full bg-white/10 p-4 rounded-2xl mb-4 outline-none border border-white/10 focus:border-blue-500">
-            <label class="block text-[10px] font-black text-zinc-500 mb-2 ml-2 uppercase">Comprobante de Pago</label>
-            <input type="file" class="w-full bg-white/5 p-3 rounded-2xl mb-8 text-xs text-zinc-400">
-            <button onclick="finalizarTodo()" class="btn-luck w-full py-5 rounded-3xl font-black uppercase text-white shadow-lg">Confirmar Reporte</button>
+            <input type="text" id="nombre-cliente" placeholder="Nombre Completo" class="w-full bg-white/10 p-4 rounded-2xl mb-4 outline-none border border-white/10">
+            <button type="button" onclick="finalizarTodo()" class="btn-luck w-full py-5 rounded-3xl font-black uppercase text-white">Confirmar Reporte</button>
         </div>
     </div>
 
     <div id="seccion-exito" class="hidden text-center">
         <div class="bento-card p-10 border-green-500/30">
-            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-green-500/20 shadow-xl">
-                <svg class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4"><path d="M5 13l4 4L19 7" /></svg>
-            </div>
             <h2 class="text-3xl font-black uppercase italic mb-2">¡RECIBIDO!</h2>
-            <p class="text-zinc-400 text-xs mb-6">Registro en validación. Tus números han sido bloqueados para ti.</p>
+            <p class="text-zinc-400 text-xs mb-6">Tus números han sido registrados y retirados de la venta.</p>
             <button onclick="location.reload()" class="bg-white/10 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10">Volver</button>
         </div>
     </div>
@@ -112,14 +107,14 @@
     <div id="barra-footer" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 border-t border-white/10 hidden z-50 backdrop-blur-md">
         <div class="flex justify-between items-center max-w-md mx-auto">
             <div class="text-2xl font-black text-white"><span id="monto-final">0</span> <span class="text-xs text-blue-500 italic">Bs</span></div>
-            <button onclick="irAPagar()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black uppercase text-sm text-white active:scale-95 transition-all">Continuar</button>
+            <button type="button" onclick="irAPagar()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black uppercase text-sm text-white">Continuar</button>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURACIÓN PARA 10,000 TICKETS ---
         const TOTAL_TICKETS = 10000;
-        let ticketsVendidos = JSON.parse(localStorage.getItem('luck_tickets_sold')) || [];
+        // Cargamos los tickets vendidos del localStorage
+        let ticketsVendidos = JSON.parse(localStorage.getItem('luck_v3_sold')) || [];
         let seleccionActual = [];
 
         window.onload = () => {
@@ -127,14 +122,12 @@
         };
 
         function actualizarProgreso() {
-            const vendidos = ticketsVendidos.length;
-            const disponibles = TOTAL_TICKETS - vendidos;
+            const disponibles = TOTAL_TICKETS - ticketsVendidos.length;
             const porcLibre = ((disponibles / TOTAL_TICKETS) * 100).toFixed(1);
             
-            // Actualizar interfaz
             document.getElementById('barra-progreso').style.width = porcLibre + '%';
             document.getElementById('txt-porcentaje').innerText = porcLibre + '% Quedan Libres';
-            document.getElementById('tickets-restantes').innerText = `Quedan ${disponibles.toLocaleString()} tickets de ${TOTAL_TICKETS.toLocaleString()}`;
+            document.getElementById('tickets-restantes').innerText = `Quedan ${disponibles.toLocaleString()} de ${TOTAL_TICKETS.toLocaleString()} tickets`;
         }
 
         function pidoTickets(cant) {
@@ -143,53 +136,73 @@
             const barra = document.getElementById('barra-footer');
             const monto = document.getElementById('monto-final');
 
+            // Limpiamos previos
             container.innerHTML = '';
             seleccionActual = [];
 
-            while(seleccionActual.length < cant) {
-                // Genera número entre 0000 y 9999
-                let n = Math.floor(Math.random() * TOTAL_TICKETS).toString().padStart(4, '0');
+            // Generamos números válidos
+            for (let i = 0; i < cant; i++) {
+                let n;
+                let seguro = 0;
+                do {
+                    n = Math.floor(Math.random() * TOTAL_TICKETS).toString().padStart(4, '0');
+                    seguro++;
+                } while ((ticketsVendidos.includes(n) || seleccionActual.includes(n)) && seguro < 100);
                 
-                // CONTROL: No vendido y no repetido en la selección
-                if (!ticketsVendidos.includes(n) && !seleccionActual.includes(n)) {
-                    seleccionActual.push(n);
-                    container.innerHTML += `<div class="ticket-badge">#${n}</div>`;
-                }
-                
-                // Seguridad por si se agotan
-                if(ticketsVendidos.length >= TOTAL_TICKETS) break;
+                seleccionActual.push(n);
+                container.innerHTML += `<div class="ticket-badge">#${n}</div>`;
             }
 
             box.classList.remove('hidden');
             barra.classList.remove('hidden');
             monto.innerText = cant * 310;
             
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 }, colors: ['#3b82f6', '#facc15'] });
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
         }
 
         function verificarTicket() {
-            const val = document.getElementById('input-verificar').value.padStart(4, '0');
+            const valInput = document.getElementById('input-verificar').value;
+            if(!valInput) return;
+            
+            const val = valInput.padStart(4, '0');
             const res = document.getElementById('resultado-verificar');
             res.classList.remove('hidden');
-            
-            if(document.getElementById('input-verificar').value === "") {
-                res.innerHTML = "INGRESA UN NÚMERO";
-                return;
-            }
+            res.innerHTML = "VERIFICANDO...";
 
-            res.innerHTML = "BUSCANDO...";
             setTimeout(() => {
                 if (ticketsVendidos.includes(val)) {
-                    res.innerHTML = `TICKET #${val} ❌ YA ESTÁ VENDIDO`;
-                    res.className = "mt-3 text-[10px] font-bold text-center text-red-400 bg-red-500/10 py-2 rounded-lg border border-red-500/20";
+                    res.innerHTML = `EL TICKET #${val} ❌ YA ESTÁ VENDIDO`;
+                    res.className = "mt-3 text-[10px] font-bold text-red-400 bg-red-500/10 py-2 rounded-lg";
                 } else {
-                    res.innerHTML = `TICKET #${val} ✅ SIGUE DISPONIBLE`;
-                    res.className = "mt-3 text-[10px] font-bold text-center text-green-400 bg-green-500/10 py-2 rounded-lg border border-green-500/20";
+                    res.innerHTML = `EL TICKET #${val} ✅ DISPONIBLE`;
+                    res.className = "mt-3 text-[10px] font-bold text-green-400 bg-green-500/10 py-2 rounded-lg";
                 }
-            }, 600);
+            }, 400);
         }
 
         function irAPagar() {
             document.getElementById('seccion-principal').classList.add('hidden');
             document.getElementById('barra-footer').classList.add('hidden');
-            document
+            document.getElementById('seccion-pago').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function finalizarTodo() {
+            const nombre = document.getElementById('nombre-cliente').value;
+            if(nombre.length < 3) {
+                alert("Por favor ingresa tu nombre.");
+                return;
+            }
+
+            // GUARDAR EN EL STORAGE REAL
+            ticketsVendidos = [...ticketsVendidos, ...seleccionActual];
+            localStorage.setItem('luck_v3_sold', JSON.stringify(ticketsVendidos));
+
+            document.getElementById('seccion-pago').classList.add('hidden');
+            document.getElementById('seccion-exito').classList.remove('hidden');
+            actualizarProgreso();
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.5 } });
+        }
+    </script>
+</body>
+</html>
