@@ -8,137 +8,112 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; }
+        body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; }
         .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 0%, #001f3f 0%, #050505 85%); z-index: -1; }
         .bento-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; backdrop-filter: blur(12px); overflow: hidden; }
-        .btn-luck { background: linear-gradient(90deg, #1e40af, #3b82f6); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); border: none; cursor: pointer; }
-        .ticket-badge { background: #facc15; color: black; font-weight: 800; padding: 12px 20px; border-radius: 15px; margin: 5px; }
+        .btn-luck { background: linear-gradient(90deg, #1e40af, #3b82f6); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+        .ticket-badge { background: #facc15; color: black; font-weight: 800; padding: 12px 20px; border-radius: 15px; margin: 5px; display: inline-block; }
     </style>
 </head>
 <body class="max-w-md mx-auto p-4 pb-32">
     <div class="bg-glow"></div>
 
     <header class="text-center mt-10 mb-8">
-        <div class="relative inline-block p-1 rounded-full bg-blue-500 shadow-lg">
-            <img src="logo2 (1).png" alt="Perfil" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
+        <div class="relative inline-block p-1 rounded-full bg-blue-500">
+            <img src="logo2%20(1).png" alt="Perfil" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
         </div>
         <h1 class="text-3xl font-black mt-4 uppercase italic tracking-tighter">BRAYAN LUCENA</h1>
-        <span class="bg-blue-600/20 text-blue-400 text-[10px] px-4 py-1.5 rounded-full font-black mt-2 inline-block border border-blue-600/30 uppercase tracking-widest">Sorteo Activo</span>
     </header>
 
-    <div id="pantalla-sorteo">
-        <div class="bento-card mb-8">
-            <div class="bg-white p-6 flex justify-center">
-                <img src="jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Producto" class="max-w-full h-auto">
+    <div id="seccion-principal">
+        <div class="bento-card mb-8 text-center">
+            <div class="bg-white p-6">
+                <img src="jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Moto" class="mx-auto max-h-48">
             </div>
             <div class="p-8">
-                <h3 class="text-blue-400 font-bold text-center mb-4 uppercase tracking-widest text-[10px] italic">¡QUÉRETE COROTO!</h3>
-                
-                <div class="flex justify-between items-center mb-8">
-                    <div>
-                        <h2 class="text-2xl font-black italic uppercase">Bera SBR 2024</h2>
-                        <p class="text-zinc-500 text-[10px] font-bold uppercase mt-1 tracking-widest">Sorteo Autorizado</p>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-blue-500 font-black text-3xl">310</span>
-                        <span class="text-blue-500 font-bold text-sm block italic">Bs</span>
-                    </div>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold uppercase italic text-left text-white">Bera SBR 2024</h2>
+                    <span class="text-blue-500 font-black text-2xl uppercase">310 Bs</span>
                 </div>
                 
                 <div class="grid grid-cols-3 gap-3 mb-6">
-                    <button type="button" onclick="generarTickets(1)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white">1 Ticket</button>
-                    <button type="button" onclick="generarTickets(3)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white">3 Tickets</button>
-                    <button type="button" onclick="generarTickets(5)" class="bg-white/10 border border-white/20 py-4 rounded-2xl font-black text-sm text-white">5 Tickets</button>
+                    <button class="btn-generar bg-white/10 py-4 rounded-2xl font-black" data-tickets="1">1 Ticket</button>
+                    <button class="btn-generar bg-white/10 py-4 rounded-2xl font-black" data-tickets="3">3 Tickets</button>
+                    <button class="btn-generar bg-white/10 py-4 rounded-2xl font-black" data-tickets="5">5 Tickets</button>
                 </div>
-
-                <button type="button" onclick="generarTickets(1)" class="btn-luck w-full py-6 rounded-3xl font-black text-xl text-white uppercase">
-                    ¡DAME MI SUERTE!
-                </button>
+                
+                <button class="btn-generar btn-luck w-full py-5 rounded-3xl font-black text-xl text-white uppercase" data-tickets="1">¡Dame mi suerte!</button>
             </div>
         </div>
 
-        <div class="flex justify-around items-center bg-white/5 p-6 rounded-[28px] border border-white/10 mb-8 grayscale opacity-50">
-            <img src="conalot.png" class="h-8" alt="Logo 1">
-            <img src="supergana.png" class="h-8" alt="Logo 2">
-            <img src="tachira.png" class="h-8" alt="Logo 3">
+        <div class="flex justify-around items-center bg-white/5 p-4 rounded-3xl mb-8 grayscale">
+            <img src="conalot.png" class="h-6" onerror="this.style.display='none'">
+            <img src="supergana.png" class="h-6" onerror="this.style.display='none'">
+            <img src="tachira.png" class="h-6" onerror="this.style.display='none'">
         </div>
 
-        <div class="text-center px-4 mb-10">
-            <p class="text-[9px] text-zinc-500 uppercase font-bold tracking-widest">Sorteo Avalado por la Conalot bajo el Runlot:</p>
-            <p class="text-[9px] text-blue-500 font-black tracking-widest">CNL-ORF-2025-000661</p>
-        </div>
-
-        <div id="box-suerte" class="hidden mb-12 text-center">
-            <div id="contenedor-num" class="flex flex-wrap justify-center"></div>
+        <div id="resultado-suerte" class="hidden text-center mb-10">
+            <div id="lista-tickets"></div>
         </div>
     </div>
 
-    <div id="pantalla-pago" class="hidden">
-        <div class="bento-card p-8 text-center">
-            <h2 class="text-2xl font-black italic uppercase mb-6 text-blue-400">PAGO MÓVIL</h2>
-            <div class="bg-blue-600/10 border border-blue-600/30 rounded-2xl p-4 mb-8 text-sm">
-                <p class="flex justify-between mb-2"><span>Banco:</span> <strong>Banesco</strong></p>
-                <p class="flex justify-between mb-2"><span>Cédula:</span> <strong>27.123.456</strong></p>
-                <p class="flex justify-between mb-2"><span>Teléfono:</span> <strong>0412-1234567</strong></p>
+    <div id="seccion-pago" class="hidden">
+        <div class="bento-card p-8">
+            <h2 class="text-2xl font-black text-blue-400 mb-6 uppercase text-center">Pago Móvil</h2>
+            <div class="bg-blue-600/10 p-4 rounded-2xl mb-6 text-sm">
+                <p>Banco: <b>Banesco</b></p>
+                <p>Cédula: <b>27.123.456</b></p>
+                <p>Teléfono: <b>0412-1234567</b></p>
             </div>
-            <div class="space-y-4">
-                <input type="text" id="nombre-usuario" placeholder="Nombre Completo" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
-                <input type="file" id="file-pago" class="w-full bg-white/5 border border-white/10 p-3 rounded-2xl text-xs text-zinc-400">
-            </div>
-            <button type="button" onclick="confirmar()" class="btn-luck w-full py-5 rounded-3xl font-black text-lg mt-8 text-white uppercase">Finalizar Registro</button>
+            <input type="text" id="nombre" placeholder="Nombre Completo" class="w-full bg-white/10 p-4 rounded-2xl mb-4 outline-none">
+            <input type="file" id="foto" class="w-full bg-white/10 p-3 rounded-2xl mb-6 text-xs">
+            <button id="finalizar" class="btn-luck w-full py-5 rounded-3xl font-black uppercase text-white">Confirmar Pago</button>
         </div>
     </div>
 
-    <div id="pantalla-exito" class="hidden text-center">
-        <div class="bento-card p-10">
-            <h2 class="text-3xl font-black uppercase italic mb-2 text-green-500">¡LISTO!</h2>
-            <p class="text-zinc-400 text-sm mb-6">Registro completado. Verificaremos tu pago en breve.</p>
-            <span class="bg-green-500/20 text-green-400 px-4 py-1 rounded-full text-xs font-bold border border-green-500/30 uppercase">Pendiente</span>
-        </div>
-        <button onclick="location.reload()" class="mt-8 text-blue-400 font-bold uppercase text-[10px] underline">Volver al inicio</button>
-    </div>
-
-    <div id="barra-pago" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 border-t border-white/10 hidden z-50">
-        <div class="max-w-md mx-auto flex justify-between items-center">
-            <div class="text-2xl font-black text-white"><span id="monto-total">0</span> <span class="text-xs">Bs</span></div>
-            <button type="button" onclick="irAlPago()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black text-sm uppercase text-white shadow-lg">Continuar</button>
+    <div id="barra-footer" class="fixed bottom-0 left-0 w-full p-6 bg-black/90 border-t border-white/10 hidden">
+        <div class="flex justify-between items-center max-w-md mx-auto">
+            <div class="text-2xl font-black"><span id="monto">0</span> Bs</div>
+            <button id="btn-continuar" class="bg-blue-600 px-8 py-4 rounded-2xl font-black uppercase text-sm">Continuar</button>
         </div>
     </div>
 
     <script>
-        // Función principal de tickets
-        function generarTickets(cantidad) {
-            const contenedor = document.getElementById('contenedor-num');
-            const cajaSuerte = document.getElementById('box-suerte');
-            const barra = document.getElementById('barra-pago');
-            const visorMonto = document.getElementById('monto-total');
+        // Lógica de generación de tickets
+        document.querySelectorAll('.btn-generar').forEach(boton => {
+            boton.addEventListener('click', () => {
+                const cantidad = parseInt(boton.getAttribute('data-tickets'));
+                const lista = document.getElementById('lista-tickets');
+                lista.innerHTML = '';
+                
+                for(let i=0; i < cantidad; i++) {
+                    const num = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                    lista.innerHTML += `<div class="ticket-badge">#${num}</div>`;
+                }
+                
+                document.getElementById('resultado-suerte').classList.remove('hidden');
+                document.getElementById('barra-footer').classList.remove('hidden');
+                document.getElementById('monto').innerText = cantidad * 310;
+                
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
+            });
+        });
 
-            contenedor.innerHTML = '';
-            
-            for(let i = 0; i < cantidad; i++) {
-                let ranz = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-                contenedor.innerHTML += `<div class="ticket-badge">#${ranz}</div>`;
-            }
+        // Cambio de pantalla
+        document.getElementById('btn-continuar').addEventListener('click', () => {
+            document.getElementById('seccion-principal').classList.add('hidden');
+            document.getElementById('barra-footer').classList.add('hidden');
+            document.getElementById('seccion-pago').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        });
 
-            cajaSuerte.classList.remove('hidden');
-            barra.classList.remove('hidden');
-            visorMonto.innerText = cantidad * 310;
-            
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
-        }
-
-        // Navegación
-        function irAlPago() {
-            document.getElementById('pantalla-sorteo').classList.add('hidden');
-            document.getElementById('barra-pago').classList.add('hidden');
-            document.getElementById('pantalla-pago').classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
-
-        // Confirmación final
-        function confirmar() {
-            const nom = document.getElementById('nombre-usuario').value;
-            if(nom.trim() === "") { alert("Escribe tu nombre"); return; }
-            document.getElementById('pantalla-pago').classList.add('hidden');
-            document.getElementById('pantalla-exito').classList.remove('hidden');
-            confetti({ particleCount: 150, spread: 100 });
+        // Finalizar
+        document.getElementById('finalizar').addEventListener('click', () => {
+            const nombre = document.getElementById('nombre').value;
+            if(!nombre) return alert("Escribe tu nombre");
+            alert("¡Registro recibido! Verificaremos tu pago.");
+            location.reload();
+        });
+    </script>
+</body>
+</html>
