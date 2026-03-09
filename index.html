@@ -3,148 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bera SBR 2026 - Brayan Lucena</title>
+    <title>Brayan Lucena - Bera SBR 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        body { background: #050505; color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; }
-        .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 0%, #002d5a 0%, #050505 80%); z-index: -1; }
-        .bento { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; backdrop-filter: blur(10px); }
         
-        /* BOTONES - CORRECCIÓN DE ERROR */
-        .btn-action { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px; font-weight: 900; font-size: 11px; cursor: pointer; display: block; width: 100%; color: white; text-align: center; }
-        .btn-luck { background: linear-gradient(90deg, #1e40af, #3b82f6); border: none; border-radius: 18px; padding: 18px; font-weight: 900; text-transform: uppercase; font-style: italic; width: 100%; cursor: pointer; color: white; font-size: 16px; }
+        body { 
+            background-color: #050505; 
+            color: white; 
+            font-family: 'Outfit', sans-serif; 
+            margin: 0; 
+            padding: 0;
+            overflow-x: hidden;
+        }
         
-        /* ESTILO RECIBO /COMPRA/323 */
-        .check-circle { width: 60px; height: 60px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; }
-        .row-info { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
-        .row-label { color: #64748b; font-size: 10px; font-weight: 900; text-transform: uppercase; }
-        .row-value { font-weight: 700; text-transform: uppercase; }
-        .t-badge { background: #facc15; color: black; font-weight: 900; padding: 8px 12px; border-radius: 8px; margin: 4px; display: inline-block; font-size: 13px; transform: rotate(-1deg); }
-        .t-mini { background: #2563eb; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 900; font-size: 10px; margin-left: 4px; }
+        .main-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 0%, #002d5a 0%, #050505 80%);
+            z-index: -1;
+        }
+
+        .bento { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 32px; 
+            backdrop-filter: blur(15px); 
+        }
+        
+        /* Botones de Selección */
+        .btn-select { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 18px; 
+            padding: 16px; 
+            font-weight: 900; 
+            font-size: 11px; 
+            color: white;
+            transition: all 0.2s;
+        }
+        .btn-select:active { background: rgba(37, 99, 235, 0.3); transform: scale(0.95); }
+
+        /* Botón Principal */
+        .btn-luck { 
+            background: linear-gradient(135deg, #1e40af, #3b82f6); 
+            border-radius: 24px; 
+            padding: 20px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            font-style: italic; 
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); 
+            width: 100%; 
+            border: none;
+            color: white;
+            font-size: 16px;
+        }
+
+        .ticket-badge { 
+            background: #facc15; 
+            color: #000; 
+            font-weight: 900; 
+            padding: 10px 18px; 
+            border-radius: 12px; 
+            margin: 5px; 
+            display: inline-block; 
+            transform: rotate(-1.5deg); 
+            box-shadow: 0 6px 15px rgba(250, 204, 21, 0.3);
+        }
+
+        /* DISEÑO RECIBO /COMPRA/323 */
+        .check-circle { 
+            width: 80px; height: 80px; 
+            background: #2563eb; 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 24px; 
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
+        }
+        .receipt-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .receipt-label { color: #64748b; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; }
+        .receipt-value { color: #fff; font-weight: 700; font-size: 15px; text-transform: uppercase; }
+        .ticket-pill { background: #2563eb; color: #fff; padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 12px; margin-left: 6px; font-style: italic; }
+
+        .admin-item { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
-<body class="max-w-md mx-auto p-4 pb-20">
-    <div class="bg-gradient"></div>
+<body class="max-w-md mx-auto p-5 pb-28">
+    <div class="main-bg"></div>
 
-    <header class="text-center my-6">
-        <div class="inline-block p-1 bg-blue-600 rounded-full mb-3" ondblclick="abrirAdmin()">
-            <img src="logo2 (1).png" alt="Logo" class="w-20 h-20 rounded-full border-4 border-black object-cover bg-white">
+    <header class="text-center my-10">
+        <div class="relative inline-block p-1 bg-blue-600 rounded-full mb-5" ondblclick="abrirAdmin()">
+            <img src="logo2 (1).png" alt="Logo" class="w-28 h-28 rounded-full border-4 border-black object-cover bg-white shadow-2xl">
         </div>
-        <h1 class="text-2xl font-black italic uppercase tracking-tighter">BRAYAN LUCENA</h1>
-        <p class="text-blue-500 text-[10px] font-black tracking-[0.3em] uppercase">Coroto de la Suerte</p>
+        <h1 class="text-4xl font-black italic tracking-tighter uppercase leading-none">BRAYAN LUCENA</h1>
+        <p class="text-blue-500 text-[11px] font-black tracking-[0.4em] uppercase mt-2">Coroto de la Suerte</p>
     </header>
 
-    <div class="bento p-5 mb-5">
-        <div class="flex justify-between items-center mb-2">
-            <span class="text-[9px] font-black uppercase text-zinc-500">Disponibilidad</span>
-            <span id="porcentaje-txt" class="text-blue-400 font-black text-xs">100% Libres</span>
+    <div class="bento p-7 mb-8">
+        <div class="flex justify-between items-center mb-3">
+            <span class="text-[11px] font-black uppercase text-zinc-500 tracking-widest">Disponibilidad</span>
+            <span id="porc-texto" class="text-blue-400 font-black text-sm italic">100% LIBRES</span>
         </div>
-        <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-            <div id="barra-fill" class="h-full bg-blue-600 transition-all duration-700" style="width: 100%"></div>
+        <div class="w-full h-3 bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/5">
+            <div id="porc-barra" class="h-full bg-blue-600 rounded-full transition-all duration-1000" style="width: 100%"></div>
         </div>
     </div>
 
     <div id="view-home">
-        <div class="bento overflow-hidden mb-5">
-            <div class="bg-white p-3 flex justify-center">
+        <div class="bento overflow-hidden mb-8 shadow-2xl">
+            <div class="bg-white p-5 flex justify-center">
                 <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" class="w-full h-auto">
             </div>
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-5">
-                    <h2 class="text-xl font-black uppercase italic">Bera SBR 2026</h2>
-                    <div class="text-right"><span class="text-2xl font-black">310</span><span class="text-blue-500 text-[10px] block font-bold">Bs</span></div>
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <h2 class="text-2xl font-black italic uppercase leading-none">Bera SBR<br><span class="text-blue-500">2026</span></h2>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-4xl font-black text-white">310</span>
+                        <span class="text-blue-500 text-[10px] font-black block uppercase italic">Bs / Ticket</span>
+                    </div>
                 </div>
                 
-                <div class="grid grid-cols-3 gap-2 mb-4">
-                    <button type="button" onclick="sacarTickets(1)" class="btn-action">1 TKT</button>
-                    <button type="button" onclick="sacarTickets(3)" class="btn-action">3 TKTS</button>
-                    <button type="button" onclick="sacarTickets(5)" class="btn-action text-blue-400">5 TKTS</button>
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <button onclick="generarSuerte(1)" class="btn-select">1 TICKET</button>
+                    <button onclick="generarSuerte(3)" class="btn-select">3 TICKETS</button>
+                    <button onclick="generarSuerte(5)" class="btn-select text-blue-400">5 TICKETS</button>
                 </div>
                 
-                <button type="button" onclick="sacarTickets(1)" class="btn-luck">¡QUIERO MI SUERTE!</button>
+                <button onclick="generarSuerte(1)" class="btn-luck">¡OBTENER NÚMEROS!</button>
             </div>
         </div>
-        <div id="area-tickets" class="hidden text-center mb-8">
+
+        <div id="area-suerte" class="hidden text-center mb-10">
+            <p class="text-[10px] font-black text-blue-400 uppercase mb-3 italic tracking-widest">Tus números asignados:</p>
             <div id="lista-tickets"></div>
         </div>
     </div>
 
     <div id="view-pago" class="hidden">
-        <div class="bento p-6">
-            <h2 class="text-center font-black text-blue-500 uppercase mb-5 italic">Reportar Pago Móvil</h2>
-            <div class="bg-white/5 p-4 rounded-xl mb-5 text-xs space-y-2">
-                <div class="flex justify-between"><span>Banco:</span> <strong>Banesco</strong></div>
-                <div class="flex justify-between"><span>Cédula:</span> <strong>27.123.456</strong></div>
-                <div class="flex justify-between"><span>Teléfono:</span> <strong>0412-1234567</strong></div>
+        <div class="bento p-8">
+            <h2 class="text-2xl font-black uppercase text-blue-500 text-center mb-8 italic">Reportar Pago</h2>
+            <div class="bg-black/40 p-6 rounded-3xl mb-8 border border-white/5 space-y-4">
+                <div class="flex justify-between text-sm"><span class="receipt-label">Banco</span><strong>BANESCO</strong></div>
+                <div class="flex justify-between text-sm"><span class="receipt-label">Cédula</span><strong>27.123.456</strong></div>
+                <div class="flex justify-between text-sm"><span class="receipt-label">Teléfono</span><strong>0412-1234567</strong></div>
             </div>
-            <input type="text" id="nombre-input" placeholder="Nombre Completo" class="w-full bg-white/10 p-4 rounded-xl mb-4 border border-white/10 outline-none text-white font-bold">
-            <input type="file" id="file-input" class="w-full bg-white/5 p-3 rounded-xl mb-6 text-[10px] border border-white/10">
-            <button type="button" onclick="procesar()" class="btn-luck">Finalizar Registro</button>
+            
+            <input type="text" id="nombre-cliente" placeholder="Nombre y Apellido" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 outline-none text-white font-bold mb-4">
+            <input type="file" id="file-capture" class="w-full bg-white/5 p-4 rounded-2xl text-xs text-zinc-500 border border-white/10 mb-8">
+            
+            <button onclick="procesarVenta()" class="btn-luck">Finalizar Registro</button>
         </div>
     </div>
 
     <div id="view-exito" class="hidden">
         <div class="check-circle">
-            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
         </div>
-        <h2 class="text-2xl font-black uppercase italic text-center mb-1">¡Recibido!</h2>
-        <p id="res-fecha" class="text-center text-zinc-500 text-[9px] font-bold uppercase mb-8"></p>
+        <h2 class="text-3xl font-black uppercase italic text-center tracking-tighter mb-1">¡Registro Exitoso!</h2>
+        <p id="res-fecha" class="text-center text-zinc-500 text-[10px] font-black uppercase mb-10 tracking-widest"></p>
         
-        <div class="bento p-5">
-            <div class="row-info"><span class="row-label">Comprador</span><span id="res-nombre" class="row-value"></span></div>
-            <div class="row-info"><span class="row-label">Sorteo</span><span class="row-value">Bera SBR 2026</span></div>
-            <div class="row-info border-none"><span class="row-label">Tickets</span><div id="res-tkts" class="flex flex-wrap justify-end"></div></div>
+        <div class="bento p-8">
+            <div class="receipt-row">
+                <span class="receipt-label">Comprador</span>
+                <span id="res-nombre" class="receipt-value"></span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-label">Sorteo</span>
+                <span class="receipt-value">Bera SBR 2026</span>
+            </div>
+            <div class="receipt-row border-none flex-col items-start gap-4">
+                <span class="receipt-label">Tus Números</span>
+                <div id="res-tickets" class="flex flex-wrap gap-2"></div>
+            </div>
         </div>
-        <button onclick="location.reload()" class="w-full mt-8 py-4 text-zinc-500 font-black uppercase text-[10px]">Cerrar</button>
+        <button onclick="location.reload()" class="w-full mt-10 py-5 bg-white/5 rounded-3xl text-zinc-500 font-black uppercase text-[11px] tracking-widest">Cerrar</button>
     </div>
 
-    <div id="view-admin" class="fixed inset-0 bg-black z-[100] hidden p-5 overflow-y-auto">
-        <div class="flex justify-between mb-6"><h2 class="font-black text-blue-500">ADMIN</h2><button onclick="cerrarAdmin()" class="text-xs">Cerrar</button></div>
-        <div class="grid grid-cols-2 gap-2 mb-6">
-            <button onclick="descargar()" class="bg-green-600 p-3 rounded-xl text-[10px] font-black">EXCEL (CSV)</button>
-            <button onclick="resetear()" class="bg-red-600 p-3 rounded-xl text-[10px] font-black">RESET</button>
+    <div id="view-admin" class="fixed inset-0 bg-black/98 z-[100] hidden p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-5">
+            <h2 class="text-2xl font-black uppercase text-blue-500">Panel Ventas</h2>
+            <button onclick="cerrarAdmin()" class="bg-white/10 px-6 py-2 rounded-full text-[10px] font-black">CERRAR</button>
         </div>
-        <div id="admin-ventas"></div>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <button onclick="exportarExcel()" class="bg-green-600 py-5 rounded-2xl font-black text-[10px] uppercase">Descargar Excel</button>
+            <button onclick="resetearSistema()" class="bg-red-600 py-5 rounded-2xl font-black text-[10px] uppercase">Resetear Todo</button>
+        </div>
+        <div id="lista-admin"></div>
     </div>
 
-    <div id="footer-pago" class="fixed bottom-0 left-0 w-full p-4 bg-black/90 border-t border-white/10 hidden">
+    <div id="footer-pago" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 border-t border-white/10 hidden z-50">
         <div class="flex justify-between items-center max-w-md mx-auto">
-            <div class="text-2xl font-black"><span id="monto-total">0</span> <span class="text-xs text-blue-500 italic">Bs</span></div>
-            <button type="button" onclick="irAPagar()" class="bg-blue-600 px-8 py-3 rounded-xl font-black uppercase text-xs">Continuar</button>
+            <div class="text-3xl font-black text-white"><span id="footer-monto">0</span> <span class="text-xs text-blue-500 italic">Bs</span></div>
+            <button onclick="irAPagar()" class="bg-blue-600 px-12 py-5 rounded-2xl font-black uppercase text-sm">Continuar</button>
         </div>
     </div>
 
     <script>
-        const MAX = 10000;
-        let db = JSON.parse(localStorage.getItem('sorteo_final_db')) || { ventas: [], vendidos: [] };
-        let temp = [];
+        const TOTAL = 10000;
+        let db = JSON.parse(localStorage.getItem('bera_final_db')) || { ventas: [], usados: [] };
+        let seleccion = [];
 
-        window.onload = function() {
-            const porc = (((MAX - db.vendidos.length) / MAX) * 100).toFixed(1);
-            document.getElementById('barra-fill').style.width = porc + '%';
-            document.getElementById('porcentaje-txt').innerText = porc + '% Libres';
-        };
+        window.onload = actualizarUI;
 
-        function sacarTickets(cant) {
-            temp = [];
-            const div = document.getElementById('lista-tickets');
-            div.innerHTML = '';
+        function actualizarUI() {
+            const disp = TOTAL - db.usados.length;
+            const porc = ((disp / TOTAL) * 100).toFixed(1);
+            document.getElementById('porc-barra').style.width = porc + '%';
+            document.getElementById('porc-texto').innerText = porc + '% LIBRES';
+        }
+
+        function generarSuerte(cant) {
+            seleccion = [];
+            const container = document.getElementById('lista-tickets');
+            container.innerHTML = '';
             for(let i=0; i<cant; i++) {
                 let n;
-                do { n = Math.floor(Math.random()*MAX).toString().padStart(4, '0'); } 
-                while(db.vendidos.includes(n) || temp.includes(n));
-                temp.push(n);
-                div.innerHTML += `<div class="t-badge">#${n}</div>`;
+                do { n = Math.floor(Math.random()*TOTAL).toString().padStart(4, '0'); } 
+                while(db.usados.includes(n) || seleccion.includes(n));
+                seleccion.push(n);
+                container.innerHTML += `<div class="ticket-badge">#${n}</div>`;
             }
-            document.getElementById('area-tickets').classList.remove('hidden');
+            document.getElementById('area-suerte').classList.remove('hidden');
             document.getElementById('footer-pago').classList.remove('hidden');
-            document.getElementById('monto-total').innerText = cant * 310;
-            confetti({ particleCount: 40, spread: 50 });
+            document.getElementById('footer-monto').innerText = (cant * 310);
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
         }
 
         function irAPagar() {
             document.getElementById('view-home').classList.add('hidden');
             document.getElementById('footer-pago').classList.add('hidden');
-            document.getElementById('view-pago').classList.remove('hidden
+            document.getElementById('view-pago').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function procesarVenta() {
+            const nom = document.getElementById('nombre-cliente').value;
+            if(!nom || !document.getElementById('file-capture').value) return alert("Completa los datos");
+            
+            const fecha = new Date().toLocaleString();
+            db.ventas.push({ nombre: nom, tickets: [...seleccion], fecha: fecha });
+            db.usados = [...db.usados, ...seleccion];
+            localStorage.setItem('bera_final_db', JSON.stringify(db));
+
+            document.getElementById('res-nombre').innerText = nom;
+            document.getElementById('res-fecha').innerText = fecha;
+            const resT = document.getElementById('res-tickets');
+            resT.innerHTML = '';
+            seleccion.forEach(t => resT.innerHTML += `<span class="ticket-pill">#${t}</span>`);
+
+            document.getElementById('view-pago').classList.add('hidden');
+            document.getElementById('view-exito').classList.remove('hidden');
+            actualizarUI();
+            confetti({ particleCount: 150 });
+        }
+
+        function abrirAdmin() {
+            if(prompt("Clave:") === "2026") {
+                document.getElementById('view-admin').classList.remove('hidden');
+                const list = document.getElementById('lista-admin');
+                list.innerHTML = '';
+                [...db.ventas].reverse().forEach(v => {
+                    list.innerHTML += `<div class="admin-item"><div class="flex justify-between text-[10px] font-bold"><span>${v.nombre}</span><span>${v.fecha}</span></div><div class="text-blue-500 font-black mt-2">${v.tickets.join(' - ')}</div></div>`;
+                });
+            }
+        }
+        function cerrarAdmin() { document.getElementById('view-admin').classList.add('hidden'); }
+        function exportarExcel() {
+            let csv = "Fecha,Nombre,Tickets\n";
+            db.ventas.forEach(v => csv += `${v.fecha},${v.nombre},"${v.tickets.join('-')}"\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'ventas.csv'; a.click();
+        }
+        function resetearSistema() { if(confirm("¿BORRAR TODO?")) { localStorage.clear(); location.reload(); } }
+    </script>
+</body>
+</html>
