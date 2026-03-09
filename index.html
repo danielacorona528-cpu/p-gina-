@@ -3,145 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorteos Pro - Brayan Lucena Style</title>
+    <title>Sistema de Sorteos - Confirmación de Pago</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background: #050505; color: white; font-family: 'Poppins', sans-serif; }
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { background: #000; color: white; font-family: 'Inter', sans-serif; }
         .ticket {
-            aspect-ratio: 1/1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            cursor: pointer;
-            border: 1px solid #222;
-            background: #111;
-            transition: all 0.2s;
+            aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center;
+            border-radius: 10px; font-weight: bold; cursor: pointer;
+            border: 1px solid #222; background: #111; transition: 0.2s;
         }
-        .ticket.selected {
-            background: #2563eb;
-            border-color: #60a5fa;
-            transform: scale(0.9);
-            box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
-        }
-        .ticket.sold {
-            background: #1a1a1a;
-            color: #333;
-            cursor: not-allowed;
-            border: none;
-        }
-        .sticky-cart {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid #333;
-            padding: 20px;
-            display: none; /* Se muestra al seleccionar */
-            z-index: 50;
-        }
+        .ticket.selected { background: #2563eb; border-color: #60a5fa; box-shadow: 0 0 15px rgba(37,99,235,0.5); }
+        .hidden { display: none; }
+        .step-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 24px; }
     </style>
 </head>
-<body class="pb-32">
+<body class="max-w-md mx-auto p-4 pb-20">
 
-    <div class="p-6 text-center">
-        <div class="w-20 h-20 rounded-full border-2 border-blue-500 mx-auto p-1">
-            <img src="https://via.placeholder.com/100" class="rounded-full w-full h-full object-cover">
-        </div>
-        <h1 class="text-xl font-extrabold mt-4">BRAYAN LUCENA</h1>
-        <div class="text-[10px] bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full inline-block mt-2 font-bold tracking-widest">
-            SORTEO ACTIVO
-        </div>
-    </div>
+    <div id="step1">
+        <header class="text-center py-6">
+            <h1 class="text-2xl font-black">SORTEO ACTIVO</h1>
+            <p class="text-zinc-500 text-sm">Elige tus números de la suerte</p>
+        </header>
 
-    <div class="px-6 mb-6">
-        <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800">
-            <img src="https://via.placeholder.com/600x300/111/fff?text=TU+PREMIO+AQUÍ" class="w-full h-40 object-cover">
-            <div class="p-4 text-center">
-                <h2 class="text-lg font-bold uppercase">MOTO 0KM + $500</h2>
-                <p class="text-green-500 font-bold text-xl mt-1">$5.00 <span class="text-xs text-zinc-500 font-normal">por ticket</span></p>
+        <div class="grid grid-cols-5 gap-2 mb-8" id="grid-tickets"></div>
+
+        <div id="cart-bar" class="fixed bottom-0 left-0 w-full bg-zinc-900 p-4 border-t border-zinc-800 hidden">
+            <div class="flex justify-between items-center max-w-md mx-auto">
+                <div>
+                    <p class="text-xs text-zinc-400">Seleccionados: <span id="count" class="text-white">0</span></p>
+                    <p class="text-xl font-black">$<span id="total">0</span></p>
+                </div>
+                <button onclick="irAPagar()" class="bg-blue-600 px-6 py-3 rounded-xl font-bold">SIGUIENTE</button>
             </div>
         </div>
     </div>
 
-    <div class="px-6">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-sm">ELIGE TUS NÚMEROS:</h3>
-            <span class="text-xs text-zinc-500">Quedan 450 disp.</span>
-        </div>
+    <div id="step2" class="hidden animate-fade-in">
+        <button onclick="volver()" class="mb-4 text-zinc-500 text-sm"><i class="fa-solid fa-arrow-left"></i> Volver</button>
         
-        <div class="grid grid-cols-5 gap-2" id="grid-tickets">
-            </div>
-    </div>
+        <h2 class="text-xl font-black mb-6">FINALIZAR COMPRA</h2>
 
-    <div id="cart" class="sticky-cart shadow-2xl">
-        <div class="max-w-md mx-auto flex items-center justify-between">
-            <div>
-                <p class="text-xs text-zinc-400">Tickets: <span id="count" class="text-white font-bold">0</span></p>
-                <p class="text-lg font-black text-white">TOTAL: $<span id="total">0</span></p>
+        <div class="step-card p-6 mb-6">
+            <h3 class="text-blue-500 font-bold mb-4 uppercase text-xs tracking-widest">Datos de Pago Móvil</h3>
+            <div class="space-y-2 text-sm">
+                <p><span class="text-zinc-500">Banco:</span> Banesco (o tu banco)</p>
+                <p><span class="text-zinc-500">Cédula:</span> V-00.000.000</p>
+                <p><span class="text-zinc-500">Teléfono:</span> 0412-0000000</p>
             </div>
-            <button onclick="enviarPedido()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
-                PAGAR AHORA <i class="fa-solid fa-chevron-right"></i>
-            </button>
         </div>
+
+        <form action="https://formspree.io/f/TU_ID_AQUI" method="POST" enctype="multipart/form-data" class="space-y-4">
+            <input type="hidden" name="Tickets" id="input-tickets">
+            <input type="hidden" name="MontoTotal" id="input-total">
+
+            <div>
+                <label class="text-xs text-zinc-500 mb-2 block">Nombre Completo</label>
+                <input type="text" name="Nombre" required class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl focus:border-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="text-xs text-zinc-500 mb-2 block">Sube tu Comprobante (Captura)</label>
+                <input type="file" name="Comprobante" accept="image/*" required class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-sm">
+            </div>
+
+            <button type="submit" class="w-full bg-green-600 py-4 rounded-xl font-black shadow-lg shadow-green-900/20">
+                CONFIRMAR PAGO
+            </button>
+        </form>
     </div>
 
     <script>
-        const pricePerTicket = 5;
-        let selectedTickets = [];
+        const price = 5;
+        let selected = [];
         const grid = document.getElementById('grid-tickets');
 
-        // Generar 100 números (puedes poner 500 si quieres)
-        for (let i = 1; i <= 100; i++) {
-            const num = i.toString().padStart(3, '0');
-            const div = document.createElement('div');
-            div.className = 'ticket';
-            div.innerText = num;
-            
-            // Simular algunos vendidos
-            if([5, 12, 45, 88].includes(i)) {
-                div.classList.add('sold');
-            } else {
-                div.onclick = () => toggleTicket(num, div);
-            }
-            grid.appendChild(div);
+        // Generar números
+        for(let i=1; i<=100; i++){
+            let n = i.toString().padStart(3,'0');
+            let d = document.createElement('div');
+            d.className = 'ticket'; d.innerText = n;
+            d.onclick = () => {
+                if(selected.includes(n)) { selected = selected.filter(x=>x!==n); d.classList.remove('selected'); }
+                else { selected.push(n); d.classList.add('selected'); }
+                update();
+            };
+            grid.appendChild(d);
         }
 
-        function toggleTicket(num, element) {
-            if (selectedTickets.includes(num)) {
-                selectedTickets = selectedTickets.filter(t => t !== num);
-                element.classList.remove('selected');
-            } else {
-                selectedTickets.push(num);
-                element.classList.add('selected');
-            }
-            updateCart();
+        function update() {
+            document.getElementById('cart-bar').style.display = selected.length ? 'block' : 'none';
+            document.getElementById('count').innerText = selected.length;
+            document.getElementById('total').innerText = selected.length * price;
         }
 
-        function updateCart() {
-            const cart = document.getElementById('cart');
-            const count = document.getElementById('count');
-            const total = document.getElementById('total');
-            
-            if (selectedTickets.length > 0) {
-                cart.style.display = 'block';
-                count.innerText = selectedTickets.length;
-                total.innerText = (selectedTickets.length * pricePerTicket).toFixed(2);
-            } else {
-                cart.style.display = 'none';
-            }
+        function irAPagar() {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('input-tickets').value = selected.join(', ');
+            document.getElementById('input-total').value = selected.length * price;
+            window.scrollTo(0,0);
         }
 
-        function enviarPedido() {
-            const numList = selectedTickets.join(', ');
-            const mensaje = `Hola Brayan, quiero comprar los tickets: ${numList}. Total: $${(selectedTickets.length * pricePerTicket)}`;
-            const url = `https://wa.me/tu-numero-aqui?text=${encodeURIComponent(mensaje)}`;
-            window.open(url, '_blank');
+        function volver() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
         }
     </script>
 </body>
