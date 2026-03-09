@@ -26,7 +26,6 @@
             background: #facc15; border-color: #fff; color: #000;
             transform: scale(1.1); box-shadow: 0 0 20px #facc15;
         }
-        .ticket.sold { background: #1a1a1a; color: #333; cursor: not-allowed; border: none; }
 
         .bento-card { 
             background: rgba(255, 255, 255, 0.05); 
@@ -39,6 +38,14 @@
 
         .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        /* Estilo para el botón de azar */
+        .btn-random {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-random:active { transform: scale(0.9); }
     </style>
 </head>
 <body class="max-w-md mx-auto p-4 pb-32">
@@ -46,44 +53,37 @@
 
     <div id="step-selection" class="animate-pop">
         <header class="text-center py-8">
-            <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-400 to-blue-600 mb-4">
-                <img src="https://via.placeholder.com/150" class="w-20 h-20 rounded-full border-4 border-black object-cover" id="mi-foto">
+            <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-400 to-blue-600 mb-4 shadow-xl">
+                <img src="https://via.placeholder.com/150" class="w-20 h-20 rounded-full border-4 border-black object-cover">
             </div>
             <h1 class="text-3xl font-black tracking-tighter uppercase italic">Gran Sorteo Pro</h1>
-            <p class="text-yellow-400 font-bold text-xs tracking-widest uppercase">Escoge tus números de la suerte</p>
+            <p class="text-yellow-400 font-bold text-xs tracking-widest uppercase">¡Tu suerte empieza aquí!</p>
         </header>
 
-        <div class="bento-card p-5 mb-8 border-white/5">
+        <div class="bento-card p-5 mb-6">
             <h3 class="text-[10px] font-black mb-3 uppercase text-zinc-500 tracking-widest">Verificar mis números</h3>
             <div class="flex gap-2">
                 <input id="input-verify" type="number" placeholder="Ej: 085" class="flex-1 bg-black/50 border border-zinc-700 p-3 rounded-xl text-sm outline-none focus:border-yellow-500">
-                <button onclick="verificarTicket()" class="bg-yellow-400 text-black px-5 rounded-xl font-black text-xs uppercase">Revisar</button>
+                <button onclick="verificarTicket()" class="bg-white text-black px-5 rounded-xl font-bold text-xs uppercase tracking-tighter">Revisar</button>
             </div>
         </div>
 
-        <div class="bento-card overflow-hidden mb-8 border-yellow-500/20">
-            <img src="https://via.placeholder.com/600x350/111/fff?text=IMAGEN+DEL+SORTEO" class="w-full h-48 object-cover">
-            <div class="p-5">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-black">MOTO 0KM + BONO</h2>
-                        <p class="text-xs text-zinc-500">Sorteo avalado por CONALOT</p>
-                    </div>
-                    <span class="bg-yellow-400/10 text-yellow-400 text-sm px-3 py-1 rounded-full font-black border border-yellow-400/20">$5.00</span>
-                </div>
-            </div>
+        <div class="mb-8">
+            <button onclick="seleccionarAlAzar()" class="btn-random w-full py-4 rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-3 shadow-lg shadow-blue-500/20">
+                <i class="fa-solid fa-dice text-xl"></i> ¡DAME UN NÚMERO AL AZAR!
+            </button>
         </div>
 
-        <h3 class="text-xs font-black mb-4 uppercase tracking-widest text-zinc-500 ml-2">Selecciona tus cupos:</h3>
+        <h3 class="text-xs font-black mb-4 uppercase tracking-widest text-zinc-500 ml-2 italic">O elige manualmente:</h3>
         <div class="grid grid-cols-5 gap-3" id="grid-tickets"></div>
 
         <div id="cart-bar" class="fixed bottom-0 left-0 w-full bg-black/95 p-6 border-t border-zinc-800 step-hidden z-50">
             <div class="flex justify-between items-center max-w-md mx-auto">
                 <div>
-                    <p class="text-[10px] uppercase font-black text-yellow-500">Seleccionados: <span id="cant-tickets" class="text-white">0</span></p>
+                    <p class="text-[10px] uppercase font-black text-yellow-500">Elegidos: <span id="cant-tickets" class="text-white">0</span></p>
                     <p class="text-2xl font-black">Total: $<span id="monto-total">0</span></p>
                 </div>
-                <button onclick="irAPagar()" class="bg-yellow-400 text-black px-10 py-4 rounded-2xl font-black shadow-xl shadow-yellow-500/30 active:scale-95 transition-transform">
+                <button onclick="irAPagar()" class="bg-yellow-400 text-black px-10 py-4 rounded-2xl font-black shadow-xl shadow-yellow-500/30">
                     SIGUIENTE <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </div>
@@ -92,14 +92,9 @@
 
     <div id="step-payment" class="step-hidden animate-pop">
         <button onclick="irASeleccion()" class="mb-6 text-zinc-500 font-bold uppercase text-xs tracking-widest"><i class="fa-solid fa-chevron-left mr-1"></i> Cambiar números</button>
+        <h2 class="text-3xl font-black mb-2 uppercase italic">PAGO MÓVIL 💸</h2>
         
-        <h2 class="text-3xl font-black mb-2 uppercase italic">Finalizar Pago 💸</h2>
-        <p class="text-zinc-500 text-sm mb-8">Transfiere vía Pago Móvil y reporta tu captura aquí mismo.</p>
-
         <div class="bento-card p-6 mb-8 border-green-500/30">
-            <h3 class="text-green-500 font-black mb-4 uppercase text-xs tracking-widest flex items-center gap-2">
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Datos de Pago Móvil
-            </h3>
             <div class="space-y-4 font-bold text-sm">
                 <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-zinc-500">Banco</span> <span>BANESCO</span></div>
                 <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-zinc-500">Cédula</span> <span>V-00.000.000</span></div>
@@ -107,102 +102,13 @@
             </div>
         </div>
 
-        <form id="form-final" onsubmit="procesarPago(event)" class="space-y-6">
-            <div class="space-y-4">
-                <div class="bento-card p-2 border-white/10">
-                    <input type="text" placeholder="Nombre completo del pagador" required class="w-full bg-transparent p-4 outline-none font-bold">
-                </div>
-                
-                <div class="bento-card p-6 border-dashed border-zinc-700 text-center">
-                    <label class="cursor-pointer">
-                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-yellow-500 mb-3"></i>
-                        <p class="text-xs font-bold text-zinc-400 uppercase">Subir captura de pago</p>
-                        <input type="file" accept="image/*" required class="hidden" id="file-input" onchange="mostrarCheck()">
-                        <div id="file-status" class="mt-2 text-green-500 text-[10px] font-black hidden uppercase">¡Imagen cargada!</div>
-                    </label>
-                </div>
+        <form onsubmit="procesarPago(event)" class="space-y-6">
+            <input type="text" placeholder="Nombre completo" required class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-2xl outline-none focus:border-green-500 font-bold">
+            <div class="bento-card p-6 border-dashed border-zinc-700 text-center">
+                <label class="cursor-pointer">
+                    <i class="fa-solid fa-camera text-2xl text-yellow-500 mb-2"></i>
+                    <p class="text-[10px] font-black text-zinc-400 uppercase">Subir capture de pago</p>
+                    <input type="file" accept="image/*" required class="hidden" onchange="this.parentElement.querySelector('p').innerText = '¡LISTO PARA ENVIAR!'">
+                </label>
             </div>
-            
-            <button type="submit" class="w-full bg-green-500 py-5 rounded-3xl font-black text-xl shadow-2xl shadow-green-500/40 uppercase tracking-tighter">
-                Confirmar mi Sorteo ✅
-            </button>
-        </form>
-    </div>
-
-    <div id="step-success" class="step-hidden text-center py-20 animate-pop">
-        <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-green-500/50">
-            <i class="fa-solid fa-check text-5xl text-black"></i>
-        </div>
-        <h2 class="text-4xl font-black mb-4 uppercase italic">¡Cargado con éxito!</h2>
-        <p class="text-zinc-400 px-8 leading-relaxed mb-10">Tu comprobante ha sido recibido. Verificaremos en el banco y activaremos tus números en unos minutos.</p>
-        <button onclick="location.reload()" class="bg-zinc-900 px-12 py-4 rounded-2xl font-black border border-zinc-800 uppercase tracking-widest text-xs">Aceptar</button>
-    </div>
-
-    <script>
-        let selected = [];
-        const price = 5;
-        const grid = document.getElementById('grid-tickets');
-
-        // 1. GENERAR CUADRÍCULA
-        for(let i=1; i<=100; i++){
-            let n = i.toString().padStart(3,'0');
-            let div = document.createElement('div');
-            div.className = 'ticket'; div.innerText = n;
-            div.onclick = () => {
-                if(selected.includes(n)) {
-                    selected = selected.filter(x => x !== n);
-                    div.classList.remove('selected');
-                } else {
-                    selected.push(n);
-                    div.classList.add('selected');
-                }
-                actualizarBarra();
-            }
-            grid.appendChild(div);
-        }
-
-        // 2. LÓGICA DE INTERFAZ
-        function actualizarBarra() {
-            const barra = document.getElementById('cart-bar');
-            barra.style.display = selected.length ? 'block' : 'none';
-            document.getElementById('cant-tickets').innerText = selected.length;
-            document.getElementById('monto-total').innerText = (selected.length * price).toFixed(2);
-        }
-
-        function irAPagar() {
-            document.getElementById('step-selection').classList.add('step-hidden');
-            document.getElementById('step-payment').classList.remove('step-hidden');
-            window.scrollTo(0,0);
-        }
-
-        function irASeleccion() {
-            document.getElementById('step-payment').classList.add('step-hidden');
-            document.getElementById('step-selection').classList.remove('step-hidden');
-        }
-
-        function mostrarCheck() {
-            document.getElementById('file-status').classList.remove('hidden');
-        }
-
-        function verificarTicket() {
-            let n = document.getElementById('input-verify').value;
-            if(!n) return alert("Escribe un número");
-            alert("Número " + n + ": RECIBIDO. Estamos validando el pago móvil correspondiente. ¡Mucha suerte!");
-        }
-
-        function procesarPago(e) {
-            e.preventDefault();
-            // Confeti de celebración
-            confetti({
-                particleCount: 200,
-                spread: 80,
-                origin: { y: 0.6 },
-                colors: ['#facc15', '#22c55e', '#ffffff', '#3b82f6']
-            });
-            
-            document.getElementById('step-payment').classList.add('step-hidden');
-            document.getElementById('step-success').classList.remove('step-hidden');
-        }
-    </script>
-</body>
-</html>
+            <button type="submit" class="w-full bg-green-500 py-5 rounded-3xl font-black text-xl shadow-2xl shadow-green-500/40 uppercase">Confirmar mi Pago</button>
