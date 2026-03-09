@@ -3,104 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Brayan Lucena | Bera SBR 2026</title>
+    <title>Brayan Lucena - Bera SBR 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
         
-        :root {
-            --accent: #2563eb;
-            --bg: #050505;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.08);
+        body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; }
+        
+        /* Fondo con degradado real */
+        .main-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 0%, #003366 0%, #050505 70%);
+            z-index: -1;
         }
 
-        body { 
-            background-color: var(--bg); 
-            color: white; 
-            font-family: 'Outfit', sans-serif; 
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+        .bento { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; backdrop-filter: blur(10px); }
+        
+        /* Botones de selección */
+        .btn-select { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 15px; font-weight: 900; font-size: 12px; transition: all 0.2s; }
+        .btn-select:active { background: rgba(59, 130, 246, 0.2); transform: scale(0.95); }
 
-        /* Fondo dinámico */
-        .bg-glow { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle at 50% 0%, #002d5a 0%, #050505 85%); 
-            z-index: -1; 
-        }
+        /* Botón de Suerte */
+        .btn-luck { background: linear-gradient(90deg, #1e40af, #3b82f6); border-radius: 20px; padding: 18px; font-weight: 900; text-transform: uppercase; font-style: italic; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); width: 100%; }
 
-        /* Bento Cards */
-        .bento-card { 
-            background: var(--card-bg); 
-            border: 1px solid var(--card-border); 
-            border-radius: 32px; 
-            backdrop-filter: blur(20px);
-            transition: transform 0.3s ease;
-        }
+        /* Estilo Ticket Badge */
+        .ticket { background: #facc15; color: #000; font-weight: 900; padding: 8px 15px; border-radius: 10px; margin: 4px; display: inline-block; transform: rotate(-2deg); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-        /* Botones Premium */
-        .btn-luck { 
-            background: linear-gradient(135deg, #1e40af, #3b82f6); 
-            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            color: white;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-style: italic;
-        }
-        .btn-luck:active { transform: scale(0.96); opacity: 0.9; }
+        /* RECIBO ESTILO /COMPRA/323 */
+        .check-circle { width: 70px; height: 70px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .receipt-line { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .label { color: #64748b; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .value { color: #fff; font-weight: 700; font-size: 14px; }
+        .ticket-mini { background: #2563eb; color: #fff; padding: 3px 8px; border-radius: 5px; font-weight: 900; font-size: 11px; margin-left: 4px; }
 
-        .btn-ghost {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            transition: all 0.2s;
-        }
-        .btn-ghost:active { background: rgba(255, 255, 255, 0.1); transform: scale(0.95); }
-
-        /* Estilo Tickets */
-        .ticket-badge { 
-            background: #facc15; color: black; font-weight: 900; 
-            padding: 12px 20px; border-radius: 16px; margin: 6px; 
-            display: inline-block; transform: rotate(-1.5deg); 
-            box-shadow: 0 8px 20px rgba(250, 204, 21, 0.3);
-            animation: ticketPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-        }
-        @keyframes ticketPop { from { transform: scale(0) rotate(10deg); opacity: 0; } to { transform: scale(1) rotate(-1.5deg); opacity: 1; } }
-
-        /* Barra de Progreso */
-        .progress-container { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); border-radius: 50px; padding: 4px; }
-        .progress-fill { height: 10px; border-radius: 50px; background: linear-gradient(90deg, #1e40af, #3b82f6); transition: width 1.5s cubic-bezier(0.65, 0, 0.35, 1); }
-
-        /* VISTA ÉXITO ESTILO /COMPRA/323 */
-        .check-icon-container {
-            width: 80px; height: 80px; background: var(--accent); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 24px; box-shadow: 0 20px 40px rgba(37, 99, 235, 0.4);
-        }
-        .receipt-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .receipt-label { color: #64748b; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
-        .receipt-value { font-weight: 700; color: #f8fafc; font-size: 14px; text-transform: uppercase; }
-        .ticket-pill { background: #2563eb; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 900; font-style: italic; font-size: 12px; }
-
-        /* Ocultar scrollbars */
-        ::-webkit-scrollbar { display: none; }
+        /* Panel Admin */
+        .admin-box { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #2563eb; }
     </style>
 </head>
-<body class="max-w-md mx-auto p-4 pb-36">
-    <div class="bg-glow"></div>
+<body class="max-w-md mx-auto p-4 pb-24">
+    <div class="main-bg"></div>
 
-    <header class="text-center mt-8 mb-10">
-        <div class="relative inline-block p-1.5 rounded-full bg-blue-600 shadow-2xl mb-5 cursor-pointer active:scale-95 transition-transform" ondblclick="toggleAdmin()">
-            <img src="logo2 (1).png" alt="Brayan Lucena" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
-            <div class="absolute -bottom-1 -right-1 bg-green-500 w-6 h-6 rounded-full border-4 border-black"></div>
+    <header class="text-center my-8">
+        <div class="relative inline-block p-1 bg-blue-600 rounded-full mb-4 cursor-pointer" ondblclick="verAdmin()">
+            <img src="logo2 (1).png" alt="Logo" class="w-24 h-24 rounded-full border-4 border-black object-cover bg-white">
         </div>
-        <h1 class="text-4xl font-black italic tracking-tighter uppercase leading-none">BRAYAN LUCENA</h1>
-        <div class="flex items-center justify-center gap-2 mt-2">
-            <span class="h-px w-8
+        <h1 class="text-3xl font-black italic tracking-tighter uppercase">BRAYAN LUCENA</h1>
+        <p class="text-blue-500 text-[10px] font-black tracking-[0.3em] uppercase">Coroto de la Suerte</p>
+    </header>
+
+    <div class="bento p-6 mb-6">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] font-black uppercase text-zinc-500">Disponibilidad</span>
+            <span id="porcentaje-txt" class="text-blue-400 font-black text-sm">100% Libres</span>
+        </div>
+        <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+            <div id="barra" class="h-full bg-blue-600 transition-all duration-1000" style="width: 100%"></div>
+        </div>
+    </div>
+
+    <div id="home">
+        <div class="bento overflow-hidden mb-6">
+            <div class="bg-white p-4">
+                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" class="w-full h-auto">
+            </div>
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-black italic uppercase">Bera SBR 2026</h2>
+                    <div class="text-right">
+                        <span class="text-3xl font-black">310</span><span class="text-blue-500 text-xs font-bold block">Bs</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <button onclick="generar(1)" class="btn-select">1 TICKET</button>
+                    <button onclick="generar(3)" class="btn-select">3 TICKETS</button>
+                    <button onclick="generar(5)" class="btn-select text-blue-400">5 TICKETS</button>
+                </div>
+                <button onclick="generar(1)" class="btn-luck">¡PROBAR SUERTE!</button>
+            </div>
+        </div>
+
+        <div id="area-numeros" class="hidden text-center mb-10">
+            <p class="text-[10px] font-black text-yellow-500 uppercase mb-2">Tus números asignados:</p>
+            <div id="lista-tickets"></div>
+        </div>
+    </div>
+
+    <div id="pago" class="hidden">
+        <div class="bento p-8">
+            <h2 class="text-xl font-black uppercase text-blue-500 text-center mb-6 italic">Confirmar Pago Móvil</h2>
+            <div class="bg-white/5 p-4 rounded-2xl mb-6 text-sm">
+                <p class="flex justify-between mb-2"><span class="text-zinc-500">Banco:</span> <strong>Banesco</strong></p>
+                <p class="flex justify-between mb-2"><span class="text-zinc-500">Cédula:</span> <strong>27.123.456</strong></p>
+                <p class="flex justify-between"><span class="text-zinc-500">Teléfono:</span> <strong>0412-1234567</strong></p>
+            </div>
+            <input type="text" id="nombre" placeholder="Tu Nombre Completo" class="w-full bg-white/10 p-4 rounded-xl mb-4 border border-white/10 outline-none focus:border-blue-500 font-bold">
+            <p class="text-[10px] font-black text-zinc-500 mb-2 uppercase ml-2">Adjuntar Comprobante</p>
+            <input type="file" id="capture" class="w-full bg-white/5 p-3 rounded-xl mb-8 text-xs border border-white/10">
+            <button onclick="procesar()" class="btn-luck">Finalizar Compra</button>
+        </div>
+    </div>
+
+    <div id="exito" class="hidden">
+        <div class="check-circle">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h2 class="text-3xl font-black uppercase italic text-center tracking-tighter mb-1">¡Compra Exitosa!</h2>
+        <p id="res-fecha" class="text-center text-zinc-500 text-[10px] font-bold uppercase tracking-widest mb-10"></p>
+        
+        <div class="bento p-6">
+            <div class="receipt-line">
+                <span class="label">Comprador</span>
+                <span id="res-nombre" class="value uppercase"></span>
+            </div>
+            <div class="receipt-line">
+                <span class="label">Sorteo</span>
+                <span class="value uppercase">Bera SBR 2026</span>
+            </div>
+            <div class="receipt-line border-none">
+                <span class="label">Tickets</span>
+                <div id="res-tkts" class="flex flex-wrap justify-end max-w-[60%]"></div>
+            </div>
+        </div>
+        
+        <div class="mt-8 p-4 bg-blue-600/10 rounded-2xl border border-blue-500/20 text-center">
+            <p class="text-[10px] text-blue-400 font-black uppercase">Tu pago está en proceso de verificación</p>
+        </div>
+        <button onclick="location.reload()" class="w-full mt-10 py-4 text-zinc-500 font-black uppercase text-[10px] tracking-widest">Volver al inicio</button>
+    </div>
+
+    <div id="admin" class="fixed inset-0 bg-black z-[100] hidden p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+            <h2 class="text-xl font-black uppercase text-blue-500">Panel de Control</h2>
+            <button onclick="cerrarAdmin()" class="bg-white/10 px-4 py-2 rounded-lg text-[10px] font-black">CERRAR</button>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <button onclick="descargar()" class="bg-green-600 p-4 rounded-xl font-black text-[10px] uppercase">Descargar CSV</button>
+            <button onclick="resetear()" class="bg-red-600 p-4 rounded-xl font-black text-[10px] uppercase">Reiniciar Todo</button>
+        </div>
+        <div id="lista-ventas"></div>
+    </div>
+
+    <div id="footer" class="fixed bottom-0 left-0 w-full p-6 bg-black/90 border-t border-white/10 hidden backdrop-blur-md">
+        <div class="flex justify-between items-center max-w-md mx-auto">
+            <div class="text-3xl font-black"><span id="total">0</span> <span class="text-xs text-blue-500 italic">Bs</span></div>
+            <button onclick="irAPagar()" class="bg-blue-600 px-10 py-4 rounded-xl font-black uppercase text-sm">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        const MAX = 10000;
+        let db = JSON.parse(localStorage.getItem('sorteo_db')) || { ventas: [], vendidos: [] };
+        let seleccionados = [];
+
+        window.onload = actualizar;
+
+        function actualizar() {
+            const disp = MAX - db.vendidos.length;
+            const porc = ((disp / MAX) * 100).toFixed(1);
+            document.getElementById('barra').style.width = porc + '%';
+            document.getElementById('porcentaje-txt').innerText = porc + '% Libres';
+        }
+
+        function generar(cant) {
+            seleccionados = [];
+            const div = document.getElementById('lista-tickets');
+            div.innerHTML = '';
+            for(let i=0; i<cant; i++) {
+                let n;
+                do { n = Math.floor(Math.random()*MAX).toString().padStart(4, '0'); } 
+                while(db.vendidos.includes(n) || seleccionados.includes(n));
+                seleccionados.push(n);
+                div.innerHTML += `<div class="ticket">#${n}</div>`;
+            }
+            document.getElementById('area-numeros').classList.remove('hidden');
+            document.getElementById('footer').classList.remove('hidden');
+            document.getElementById('total').innerText = cant * 310;
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+        }
+
+        function irAPagar() {
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('footer').classList.add('hidden');
+            document.getElementById('pago').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function procesar() {
+            const nom = document.getElementById('nombre').value;
+            if(nom.length < 3 || !document.getElementById('capture').value) return alert("Completa los datos y el capture");
+
+            const fecha = new Date().toLocaleString();
+            const venta = { cliente: nom, tickets: [...seleccionados], fecha: fecha };
+            
+            db.ventas.push(venta);
+            db.vendidos = [...db.vendidos, ...seleccionados];
+            localStorage.setItem('sorteo_db', JSON.stringify(db));
+
+            document.getElementById('res-nombre').innerText = nom;
+            document.getElementById('res-fecha').innerText = fecha;
+            const tktsDiv = document.getElementById('res-tkts');
+            tktsDiv.innerHTML = '';
+            seleccionados.forEach(t => tktsDiv.innerHTML += `<span class="ticket-mini">#${t}</span>`);
+
+            document.getElementById('pago').classList.add('hidden');
+            document.getElementById('exito').classList.remove('hidden');
+            actualizar();
+            confetti({ particleCount: 150 });
+        }
+
+        function verAdmin() {
+            if(prompt("Clave:") === "2026") {
+                document.getElementById('admin').classList.remove('hidden');
+                const div = document.getElementById('lista-ventas');
+                div.innerHTML = '';
+                [...db.ventas].reverse().forEach(v => {
+                    div.innerHTML += `<div class="admin-box"><div class="flex justify-between text-[10px] font-bold mb-1 uppercase"><span>${v.cliente}</span><span class="text-zinc-500">${v.fecha}</span></div><div class="text-blue-400 font-black">${v.tickets.join(' - ')}</div></div>`;
+                });
+            }
+        }
+        function cerrarAdmin() { document.getElementById('admin').classList.add('hidden'); }
+        function descargar() {
+            let csv = "Fecha,Cliente,Tickets\n";
+            db.ventas.forEach(v => csv += `${v.fecha},${v.cliente},${v.tickets.join('-')}\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'ventas.csv'; a.click();
+        }
+        function resetear() { if(confirm("¿BORRAR TODO?")) { localStorage.clear(); location.reload(); } }
+    </script>
+</body>
+</html>
