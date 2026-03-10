@@ -4,143 +4,247 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Brayan Lucena - Bera SBR 2026</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
-        .main-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 0%, #002d5a 0%, #050505 85%); z-index: -1; }
-        .bento { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 32px; backdrop-filter: blur(15px); }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
         
-        /* Botones corregidos */
-        .btn-select { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 16px; font-weight: 900; font-size: 10px; cursor: pointer; transition: all 0.2s; }
-        .btn-select:active { transform: scale(0.95); background: rgba(37, 99, 235, 0.2); }
-        .btn-select.active { border-color: #3b82f6; background: rgba(37, 99, 235, 0.2); color: #3b82f6; }
+        :root {
+            --primary: #3b82f6;
+            --accent: #facc15;
+            --bg-dark: #050505;
+        }
 
-        .btn-luck { background: linear-gradient(135deg, #1e40af, #3b82f6); border-radius: 24px; padding: 20px; font-weight: 900; text-transform: uppercase; font-style: italic; width: 100%; border: none; color: white; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
-        .btn-luck:active { transform: scale(0.98); opacity: 0.9; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: white; 
+            font-family: 'Outfit', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        .ticket-badge { background: #facc15; color: #000; font-weight: 900; padding: 10px 18px; border-radius: 12px; margin: 5px; display: inline-block; transform: rotate(-1.5deg); box-shadow: 0 5px 15px rgba(250, 204, 21, 0.3); }
-        .ticket-mini { background: #2563eb; color: #fff; padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 11px; margin: 2px; }
+        .main-bg { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle at 50% 0%, #001d3d 0%, #050505 100%); 
+            z-index: -1; 
+        }
+
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 24px; 
+            backdrop-filter: blur(20px); 
+        }
+
+        .btn-select { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 16px; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        .btn-select.active { 
+            border-color: var(--primary); 
+            background: rgba(59, 130, 246, 0.2); 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .ticket-glow {
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Ocultar scrollbar */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+        .admin-panel {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 100; padding: 20px;
+            display: none; overflow-y: auto;
+        }
     </style>
 </head>
-<body class="max-w-md mx-auto p-5 pb-28">
+<body class="max-w-md mx-auto p-4 pb-32">
     <div class="main-bg"></div>
 
-    <header class="text-center my-10">
-        <div class="relative inline-block p-1 bg-blue-600 rounded-full mb-5 cursor-pointer" ondblclick="abrirAdmin()">
-            <div class="w-28 h-28 rounded-full border-4 border-black bg-white overflow-hidden flex items-center justify-center">
-                <img src="logo2 (1).png" alt="Logo" onerror="this.src='https://ui-avatars.com/api/?name=BL&background=0D8ABC&color=fff'" class="w-full h-full object-cover">
+    <div id="admin-panel" class="admin-panel">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-black italic">PANEL CONTROL</h2>
+            <button onclick="cerrarAdmin()" class="text-red-500 font-bold">CERRAR</button>
+        </div>
+        <div id="stats-admin" class="grid grid-cols-2 gap-4 mb-6"></div>
+        <div id="ventas-list" class="space-y-4"></div>
+        <button onclick="resetDatos()" class="w-full mt-10 p-4 bg-red-900/30 text-red-500 rounded-xl text-xs font-bold border border-red-500/20">BORRAR TODA LA BASE DE DATOS</button>
+    </div>
+
+    <header class="text-center mt-8 mb-10">
+        <div class="relative inline-block group" ondblclick="solicitarAccesoAdmin()">
+            <div class="w-24 h-24 rounded-full border-4 border-blue-600/30 p-1 mb-4 mx-auto transition-transform group-hover:scale-105">
+                <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center">
+                    <img src="logo2 (1).png" alt="Logo" onerror="this.src='https://ui-avatars.com/api/?name=BL&background=0D8ABC&color=fff'" class="w-full h-full object-cover">
+                </div>
             </div>
-            <div class="absolute bottom-1 right-2 w-6 h-6 bg-green-500 border-4 border-black rounded-full"></div>
+            <div class="absolute bottom-4 right-0 w-6 h-6 bg-green-500 border-4 border-[#050505] rounded-full"></div>
         </div>
         <h1 class="text-4xl font-black italic tracking-tighter uppercase leading-none">BRAYAN LUCENA</h1>
-        <p class="text-blue-500 text-[11px] font-black tracking-[0.4em] uppercase mt-2">Coroto de la Suerte</p>
+        <p class="text-blue-500 text-[10px] font-black tracking-[0.5em] uppercase mt-2 opacity-80">Coroto de la Suerte</p>
     </header>
 
-    <div class="bento p-7 mb-8">
-        <div class="flex justify-between items-center mb-3">
-            <span class="text-[11px] font-black uppercase text-zinc-500">Disponibilidad</span>
-            <span id="porc-txt" class="text-blue-400 font-black text-sm italic">Cargando...</span>
+    <div class="glass-card p-5 mb-6">
+        <div class="flex justify-between items-end mb-2">
+            <span class="text-[10px] font-black uppercase text-zinc-500">Estado del Sorteo</span>
+            <span id="porc-txt" class="text-blue-400 font-black text-xs italic">Calculando...</span>
         </div>
-        <div class="w-full h-3 bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/5">
-            <div id="porc-bar" class="h-full bg-blue-600 rounded-full transition-all duration-1000" style="width: 0%"></div>
+        <div class="w-full h-2.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
+            <div id="porc-bar" class="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
         </div>
     </div>
 
-    <div id="view-home">
-        <div class="bento overflow-hidden mb-8">
-            <div class="bg-white p-5">
-                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" class="w-full h-auto">
+    <main id="view-home" class="space-y-6">
+        <div class="glass-card overflow-hidden">
+            <div class="bg-white p-2">
+                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Bera SBR" class="w-full h-48 object-contain">
             </div>
-            <div class="p-8">
-                <div class="flex justify-between items-start mb-8">
-                    <h2 class="text-2xl font-black italic uppercase">Bera SBR<br><span class="text-blue-500">2026</span></h2>
-                    <div class="text-right"><span class="text-4xl font-black">310</span><span class="text-blue-500 text-[10px] font-black block italic">Bs</span></div>
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black italic uppercase leading-none">Bera SBR</h2>
+                        <span class="text-blue-500 font-black text-3xl italic">2026</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-bold text-zinc-500 block uppercase">Precio</span>
+                        <span class="text-3xl font-black">310<span class="text-blue-500 text-sm ml-1 italic">Bs</span></span>
+                    </div>
                 </div>
                 
                 <div class="grid grid-cols-3 gap-3 mb-6">
-                    <button onclick="seleccionarCant(1, this)" class="btn-select active">1 TICKET</button>
-                    <button onclick="seleccionarCant(3, this)" class="btn-select">3 TICKETS</button>
-                    <button onclick="seleccionarCant(5, this)" class="btn-select">5 TICKETS</button>
+                    <button onclick="seleccionarCant(1, this)" class="btn-select active py-4 text-[10px] font-black">1 TICKET</button>
+                    <button onclick="seleccionarCant(3, this)" class="btn-select py-4 text-[10px] font-black">3 TICKETS</button>
+                    <button onclick="seleccionarCant(5, this)" class="btn-select py-4 text-[10px] font-black">5 TICKETS</button>
                 </div>
                 
-                <button onclick="generarSuerte()" class="btn-luck">¡OBTENER NÚMEROS!</button>
+                <button onclick="generarSuerte()" class="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black italic uppercase tracking-wider transition-all active:scale-95 shadow-lg shadow-blue-900/20">
+                    ¡OBTENER NÚMEROS!
+                </button>
             </div>
         </div>
 
-        <div class="bento p-6 mb-8">
-            <h3 class="text-[10px] font-black uppercase text-zinc-500 mb-4 text-center">Consultar mis números</h3>
+        <div class="glass-card p-6">
+            <h3 class="text-[10px] font-black uppercase text-zinc-500 mb-4 text-center tracking-widest">Verificar mis números</h3>
             <div class="flex gap-2">
-                <input type="text" id="input-busqueda" placeholder="Tu nombre..." class="flex-1 bg-white/5 p-3 rounded-xl border border-white/10 text-xs text-white outline-none">
-                <button onclick="buscarTickets()" class="bg-blue-600 px-5 rounded-xl text-[10px] font-black uppercase">Buscar</button>
+                <input type="text" id="input-busqueda" placeholder="Escribe tu nombre..." class="flex-1 bg-white/5 p-4 rounded-xl border border-white/10 text-xs focus:border-blue-500 outline-none transition-all">
+                <button onclick="buscarTickets()" class="bg-zinc-800 hover:bg-zinc-700 px-6 rounded-xl text-[10px] font-black uppercase transition-colors">Buscar</button>
             </div>
-            <div id="res-busqueda" class="mt-4 flex flex-wrap justify-center gap-1"></div>
+            <div id="res-busqueda" class="mt-4 flex flex-wrap justify-center gap-2"></div>
         </div>
 
-        <div id="area-tickets" class="hidden text-center mb-10">
-            <div id="lista-tickets"></div>
+        <div id="area-tickets" class="hidden animate-bounce-in">
+            <div class="text-center py-4">
+                <p class="text-[10px] font-black text-blue-500 uppercase mb-3">Tus números asignados:</p>
+                <div id="lista-tickets" class="flex flex-wrap justify-center gap-3"></div>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <div id="view-pago" class="hidden bento p-8 animate-fadeIn">
-        <h2 class="text-2xl font-black uppercase text-blue-500 text-center mb-8 italic">Reportar Pago</h2>
-        <div class="bg-black/40 p-6 rounded-3xl mb-8 border border-white/5 space-y-4 text-sm">
-            <div class="flex justify-between"><span class="text-zinc-500 font-bold uppercase text-[10px]">Banco</span><strong>BANESCO</strong></div>
-            <div class="flex justify-between"><span class="text-zinc-500 font-bold uppercase text-[10px]">Pago Móvil</span><strong>0412-1234567</strong></div>
-        </div>
-        <input type="text" id="form-nombre" placeholder="Nombre completo" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 mb-4 font-bold outline-none text-white">
-        <input type="file" id="form-file" class="w-full bg-white/5 p-4 rounded-2xl text-xs text-zinc-500 mb-8 border border-white/10">
-        <button onclick="procesarVenta()" class="btn-luck">Confirmar Registro</button>
-    </div>
+    <section id="view-pago" class="hidden animate-fadeIn">
+        <div class="glass-card p-6">
+            <button onclick="cancelarPago()" class="text-zinc-500 text-[10px] font-bold uppercase mb-6 flex items-center">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg> Volver atrás
+            </button>
+            <h2 class="text-2xl font-black uppercase text-blue-500 mb-8 italic">Paso Final</h2>
+            
+            <div class="bg-blue-600/10 p-5 rounded-2xl mb-6 border border-blue-500/20">
+                <p class="text-[10px] font-bold text-blue-400 uppercase mb-4 tracking-widest text-center">Datos de Pago</p>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-sm"><span class="text-zinc-400">Banco:</span><strong class="text-white">BANESCO</strong></div>
+                    <div class="flex justify-between text-sm"><span class="text-zinc-400">Pago Móvil:</span><strong class="text-white">0412-1234567</strong></div>
+                    <div class="flex justify-between text-sm"><span class="text-zinc-400">C.I.:</span><strong class="text-white">V-12.345.678</strong></div>
+                </div>
+            </div>
 
-    <div id="view-exito" class="hidden text-center">
-        <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] font-black text-zinc-500 uppercase ml-2">Nombre del titular</label>
+                    <input type="text" id="form-nombre" placeholder="Ej: Juan Pérez" class="w-full bg-white/5 p-4 rounded-xl border border-white/10 font-bold outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-zinc-500 uppercase ml-2">Comprobante (Opcional)</label>
+                    <input type="file" id="form-file" class="w-full bg-white/5 p-4 rounded-xl border border-white/10 text-xs">
+                </div>
+                <button onclick="procesarVenta()" class="w-full py-5 bg-green-600 text-white rounded-2xl font-black uppercase italic mt-4 shadow-lg shadow-green-900/20">
+                    CONFIRMAR PAGO
+                </button>
+            </div>
         </div>
-        <h2 class="text-3xl font-black uppercase italic mb-8">¡Registro Exitoso!</h2>
-        <div class="bento p-8 text-left mb-8">
-            <p class="text-[10px] font-black text-zinc-500 uppercase mb-2">Tus Números:</p>
+    </section>
+
+    <section id="view-exito" class="hidden text-center animate-scale-up">
+        <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-green-500/20">
+            <svg class="w-10 h-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h2 class="text-3xl font-black uppercase italic mb-4">¡LISTO PARA GANAR!</h2>
+        <p class="text-zinc-400 text-sm mb-8">Tu registro ha sido procesado correctamente.</p>
+        
+        <div class="glass-card p-6 text-left mb-8">
+            <p class="text-[10px] font-black text-zinc-500 uppercase mb-4">Tus Números de la Suerte:</p>
             <div id="fin-tickets" class="flex flex-wrap gap-2"></div>
         </div>
-        <button onclick="location.reload()" class="w-full py-5 bg-white/5 rounded-3xl text-zinc-500 font-black uppercase text-[11px]">Volver</button>
-    </div>
+        
+        <button onclick="window.location.reload()" class="w-full py-4 bg-white/5 border border-white/10 rounded-2xl text-zinc-400 font-black uppercase text-xs">
+            Finalizar
+        </button>
+    </section>
 
-    <footer class="mt-12 mb-20 text-center space-y-8">
-        <div class="bento p-8 space-y-6">
-            <h3 class="text-orange-500 font-black text-xl uppercase italic">Esta es tu oportunidad</h3>
-            <p class="text-white font-bold text-sm uppercase">¡QUERETE COROTO!!!</p>
-            <div class="flex justify-center items-center gap-6 opacity-70">
-                <img src="https://conalot.gob.ve/wp-content/uploads/2021/05/logo-conalot-2.png" class="h-8">
-                <img src="https://supergana.com.ve/img/logo.png" class="h-10">
-                <img src="https://loteriadeltachira.com/img/logo.png" class="h-8">
-            </div>
-        </div>
-        <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-tighter">Avalado por la Conalot bajo el Runlot: <br><span class="text-white">CNL-ORF-2025-000661</span></p>
-    </footer>
-
-    <div id="footer-pago" class="fixed bottom-0 left-0 w-full p-6 bg-black/95 border-t border-white/10 hidden z-50">
+    <div id="footer-pago" class="fixed bottom-0 left-0 w-full p-6 bg-black/80 backdrop-blur-xl border-t border-white/10 hidden transform translate-y-0 transition-transform duration-300">
         <div class="flex justify-between items-center max-w-md mx-auto">
-            <div class="text-3xl font-black text-white"><span id="monto-footer">310</span> <span class="text-xs text-blue-500 italic">Bs</span></div>
-            <button onclick="irAPagar()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black uppercase text-xs">Continuar</button>
+            <div>
+                <p class="text-[10px] font-bold text-zinc-500 uppercase">Total a pagar</p>
+                <div class="text-2xl font-black text-white"><span id="monto-footer">310</span> <span class="text-xs text-blue-500 italic">Bs</span></div>
+            </div>
+            <button onclick="irAPagar()" class="bg-blue-600 px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest active:scale-95 transition-all">
+                Pagar Ahora
+            </button>
         </div>
     </div>
 
     <script>
         const TOTAL_NUMEROS = 10000;
-        let db = JSON.parse(localStorage.getItem('bera_final_db')) || { ventas: [], usados: [] };
+        const ADMIN_KEY = "2026";
+        
+        // Manejo de Base de Datos con Error Catching
+        let db;
+        try {
+            db = JSON.parse(localStorage.getItem('bera_final_v2')) || { ventas: [], usados: [] };
+        } catch(e) {
+            db = { ventas: [], usados: [] };
+        }
+
         let cantidadActual = 1;
         let seleccionTemporal = [];
 
-        // Iniciar página
-        window.onload = function() {
+        window.onload = () => {
             actualizarProgreso();
+            console.log("Sistema Inicializado");
         };
 
         function actualizarProgreso() {
-            const porc = (((TOTAL_NUMEROS - db.usados.length) / TOTAL_NUMEROS) * 100).toFixed(1);
-            document.getElementById('porc-bar').style.width = porc + '%';
-            document.getElementById('porc-txt').innerText = porc + '% LIBRES';
+            const disponibles = TOTAL_NUMEROS - db.usados.length;
+            const porc = ((disponibles / TOTAL_NUMEROS) * 100).toFixed(1);
+            const bar = document.getElementById('porc-bar');
+            
+            bar.style.width = porc + '%';
+            document.getElementById('porc-txt').innerText = `${porc}% DISPONIBLE`;
+            
+            // Cambio de color según disponibilidad
+            if(porc < 20) bar.classList.replace('from-blue-600', 'from-red-600');
         }
 
         function seleccionarCant(n, btn) {
@@ -148,6 +252,9 @@
             document.querySelectorAll('.btn-select').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('monto-footer').innerText = (n * 310);
+            
+            // Si ya había generado números, los regenero para la nueva cantidad
+            if(seleccionTemporal.length > 0) generarSuerte();
         }
 
         function generarSuerte() {
@@ -155,66 +262,19 @@
             const area = document.getElementById('lista-tickets');
             area.innerHTML = '';
             
-            for(let i=0; i < cantidadActual; i++) {
-                let n;
-                do {
-                    n = Math.floor(Math.random() * TOTAL_NUMEROS).toString().padStart(4, '0');
-                } while (db.usados.includes(n) || seleccionTemporal.includes(n));
-                
-                seleccionTemporal.push(n);
-                area.innerHTML += `<div class="ticket-badge">#${n}</div>`;
+            // Algoritmo de selección sin duplicados
+            while(seleccionTemporal.length < cantidadActual) {
+                let n = Math.floor(Math.random() * TOTAL_NUMEROS).toString().padStart(4, '0');
+                if (!db.usados.includes(n) && !seleccionTemporal.includes(n)) {
+                    seleccionTemporal.push(n);
+                }
             }
 
-            document.getElementById('area-tickets').classList.remove('hidden');
-            document.getElementById('footer-pago').classList.remove('hidden');
-            confetti({ particleCount: 60, spread: 50, origin: { y: 0.8 } });
-        }
+            seleccionTemporal.forEach(n => {
+                const badge = document.createElement('div');
+                badge.className = "bg-yellow-400 text-black font-black py-2 px-4 rounded-lg text-lg italic ticket-glow transform rotate-[-2deg]";
+                badge.innerText = `#${n}`;
+                area.appendChild(badge);
+            });
 
-        function irAPagar() {
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('footer-pago').classList.add('hidden');
-            document.getElementById('view-pago').classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
-
-        function procesarVenta() {
-            const nom = document.getElementById('form-nombre').value.trim();
-            if(!nom) return alert("Por favor ingresa tu nombre");
-            
-            db.ventas.push({ nombre: nom, tickets: [...seleccionTemporal], fecha: new Date().toLocaleString() });
-            db.usados = [...db.usados, ...seleccionTemporal];
-            localStorage.setItem('bera_final_db', JSON.stringify(db));
-
-            const finTkts = document.getElementById('fin-tickets');
-            finTkts.innerHTML = '';
-            seleccionTemporal.forEach(t => finTkts.innerHTML += `<span class="ticket-mini">#${t}</span>`);
-
-            document.getElementById('view-pago').classList.add('hidden');
-            document.getElementById('view-exito').classList.remove('hidden');
-            actualizarProgreso();
-            confetti({ particleCount: 150 });
-        }
-
-        function buscarTickets() {
-            const q = document.getElementById('input-busqueda').value.toLowerCase().trim();
-            const res = document.getElementById('res-busqueda');
-            res.innerHTML = '';
-            if(!q) return;
-            
-            const filtrados = db.ventas.filter(v => v.nombre.toLowerCase().includes(q));
-            if(filtrados.length) {
-                filtrados.forEach(v => v.tickets.forEach(t => res.innerHTML += `<span class="ticket-mini">#${t}</span>`));
-            } else {
-                res.innerHTML = '<span class="text-red-500 text-[10px] font-bold uppercase tracking-widest">Sin registros</span>';
-            }
-        }
-
-        function abrirAdmin() {
-            if(prompt("Clave Admin:") === "2026") {
-                alert("Total de tickets vendidos: " + db.usados.length);
-                console.log(db.ventas);
-            }
-        }
-    </script>
-</body>
-</html>
+            document.getElementById
