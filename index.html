@@ -69,12 +69,18 @@
         .fade-up { animation: fadeUp 0.5s ease-out; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Animación para alerta de pocos tickets */
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .low-stock { color: #ef4444; animation: pulse-red 1s infinite; }
+
         #admin-panel {
             display: none; position: fixed; inset: 0; background: #020617; 
             z-index: 9999; overflow-y: auto; padding: 25px;
         }
 
-        /* Estilo para el input de archivo */
         input[type="file"]::-webkit-file-upload-button {
             background: #2563eb;
             color: white;
@@ -107,7 +113,7 @@
 
     <div class="card-pro fade-up mb-8 shadow-2xl">
         <div class="bg-white p-10 flex justify-center items-center">
-             <svg viewBox="0 0 24 24" class="w-48 h-48 text-blue-600" fill="currentColor">
+            <svg viewBox="0 0 24 24" class="w-48 h-48 text-blue-600" fill="currentColor">
                 <path d="M21,11C21,11 21,11 21,11C21,11 21,11 21,11M19.5,13.5A1.5,1.5 0 0,1 18,12A1.5,1.5 0 0,1 19.5,10.5A1.5,1.5 0 0,1 21,12A1.5,1.5 0 0,1 19.5,13.5M19.5,9A3,3 0 0,0 16.5,12C16.5,13.66 17.84,15 19.5,15C21.16,15 22.5,13.66 22.5,12A3,3 0 0,0 19.5,9M11,12V10H14V7H11V5H10V7H7V10H10V12H7V15H10V17H11V15H14V12H11M2.5,13.5A1.5,1.5 0 0,1 1,12A1.5,1.5 0 0,1 2.5,10.5A1.5,1.5 0 0,1 4,12A1.5,1.5 0 0,1 2.5,13.5M2.5,9A3,3 0 0,0 -0.5,12C-0.5,13.66 0.84,15 2.5,15C4.16,15 5.5,13.66 5.5,12A3,3 0 0,0 2.5,9Z" />
             </svg>
         </div>
@@ -151,11 +157,13 @@
 
     <div id="consulta" class="card-pro p-8 mb-12 border-dashed">
         <h3 class="text-center font-black uppercase text-[10px] text-zinc-500 tracking-[0.4em] mb-6">Verificar mis números</h3>
-        <div class="flex gap-2">
+        <div class="flex gap-2 mb-4">
             <input type="text" id="search-input" placeholder="Tu nombre completo..." class="flex-1 bg-black/30 p-4 rounded-xl border border-white/10 outline-none focus:border-blue-500">
             <button onclick="searchDB()" class="bg-zinc-800 px-6 rounded-xl font-black uppercase text-[10px]">Buscar</button>
         </div>
-        <div id="search-results" class="mt-6 flex flex-wrap justify-center gap-2"></div>
+        
+        <div id="search-results" class="mt-2 flex flex-wrap justify-center gap-2">
+            </div>
     </div>
 
     <div id="footer-pay" class="fixed bottom-0 left-0 w-full p-6 bg-slate-900/90 backdrop-blur-xl border-t border-white/10 hidden z-50">
@@ -179,13 +187,12 @@
             </div>
             
             <div class="space-y-4">
-                <label class="block text-[10px] font-black uppercase text-zinc-500 ml-2">Datos Personales</label>
                 <input type="text" id="reg-name" placeholder="Nombre Completo" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none focus:border-blue-500">
                 <input type="tel" id="reg-phone" placeholder="Número Telefónico" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none focus:border-blue-500">
                 
                 <label class="block text-[10px] font-black uppercase text-zinc-500 ml-2 mt-6">Soporte de Pago</label>
                 <div class="w-full bg-white/5 p-5 rounded-2xl border border-dashed border-white/20">
-                    <p class="text-[10px] mb-3 opacity-50">Sube el Capture de tu Pago Móvil o Transferencia:</p>
+                    <p class="text-[10px] mb-3 opacity-50">Sube el Capture del Pago Móvil:</p>
                     <input type="file" id="reg-capture" accept="image/*" class="text-xs text-zinc-400">
                 </div>
 
@@ -210,6 +217,25 @@
         let currentQty = 1;
         let currentTickets = [];
 
+        // Función para mostrar PORCENTAJE de disponibilidad
+        function showAvailability() {
+            const res = document.getElementById('search-results');
+            const totalPossible = 10000;
+            const available = totalPossible - db.used.length;
+            const percentage = (available / totalPossible) * 100;
+            
+            // Clase de urgencia si queda menos del 10%
+            const urgencyClass = percentage <= 10 ? 'low-stock' : 'text-blue-500';
+
+            res.innerHTML = `
+                <div class="text-center">
+                    <p class="${urgencyClass} font-black text-3xl italic">${percentage.toFixed(1)}%</p>
+                    <p class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Disponibilidad de Números</p>
+                </div>
+            `;
+        }
+        window.onload = showAvailability;
+
         function setQty(n) {
             currentQty = n;
             document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
@@ -222,6 +248,8 @@
             currentTickets = [];
             const list = document.getElementById('tickets-list');
             list.innerHTML = '';
+
+            if(db.used.length >= 10000) return alert("Sorteo agotado");
 
             while(currentTickets.length < currentQty) {
                 let n = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
@@ -249,9 +277,7 @@
             const phone = document.getElementById('reg-phone').value.trim();
             const capture = document.getElementById('reg-capture').files[0];
 
-            if(!name || !phone || !capture) {
-                return alert("⚠️ Debes completar Nombre, Teléfono y adjuntar el Capture de Pago.");
-            }
+            if(!name || !phone || !capture) return alert("Completa todos los datos y adjunta el capture.");
 
             const sale = {
                 id: Date.now(),
@@ -259,7 +285,7 @@
                 phone: phone,
                 tickets: [...currentTickets],
                 total: currentQty * 310,
-                capture_name: capture.name, // Guardamos el nombre del archivo para referencia
+                capture_name: capture.name,
                 date: new Date().toLocaleString()
             };
 
@@ -267,17 +293,22 @@
             db.used.push(...currentTickets);
             localStorage.setItem('bera_final_2026', JSON.stringify(db));
 
-            alert("✅ Registro exitoso. Tu participación ha sido guardada.");
+            alert("✅ ¡Registro enviado! Tu número está asegurado.");
             location.reload();
         }
 
         function searchDB() {
             const q = document.getElementById('search-input').value.toLowerCase().trim();
             const res = document.getElementById('search-results');
-            res.innerHTML = '';
-            if(!q) return;
+            
+            if(!q) {
+                showAvailability();
+                return;
+            }
 
             const found = db.sales.filter(s => s.name.toLowerCase().includes(q) || s.tickets.includes(q));
+            res.innerHTML = '';
+            
             if(found.length > 0) {
                 found.forEach(s => {
                     s.tickets.forEach(t => {
@@ -285,7 +316,7 @@
                     });
                 });
             } else {
-                res.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Sin registros</p>';
+                showAvailability();
             }
         }
 
@@ -293,25 +324,16 @@
             if(prompt("Clave Admin:") === "2026") {
                 const panel = document.getElementById('admin-panel');
                 panel.style.display = 'block';
-                
                 const income = db.sales.reduce((acc, s) => acc + s.total, 0);
                 document.getElementById('admin-stats').innerHTML = `
-                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">TICKETS VENDIDOS</p><p class="text-2xl font-black">${db.used.length}</p></div>
-                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">RECAUDACIÓN</p><p class="text-2xl font-black text-green-500">${income} Bs</p></div>
+                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">VENDIDOS</p><p class="text-2xl font-black">${db.used.length}</p></div>
+                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">CAJA</p><p class="text-2xl font-black text-green-500">${income}Bs</p></div>
                 `;
-
                 document.getElementById('admin-list').innerHTML = db.sales.map(s => `
                     <div class="card-pro p-4 text-[11px]">
-                        <div class="flex justify-between font-black text-blue-400 mb-1">
-                            <span>👤 ${s.name}</span>
-                            <span class="text-green-500">${s.total} Bs</span>
-                        </div>
-                        <div class="text-zinc-500 font-bold mb-2">🎟️ ${s.tickets.join(' - ')}</div>
-                        <div class="flex justify-between items-center opacity-50 mt-2 border-t border-white/5 pt-2">
-                            <span>📞 ${s.phone}</span>
-                            <span>📎 ${s.capture_name ? 'Capture Adjunto' : 'Sin Capture'}</span>
-                        </div>
-                        <div class="opacity-20 text-[8px] mt-1">${s.date}</div>
+                        <div class="flex justify-between font-black text-blue-400"><span>${s.name}</span><span>${s.total} Bs</span></div>
+                        <div class="text-zinc-500 font-bold">🎟️ ${s.tickets.join(', ')}</div>
+                        <div class="text-[9px] opacity-30 mt-1 italic">${s.phone} | Soporte: ${s.capture_name}</div>
                     </div>
                 `).reverse().join('');
             }
