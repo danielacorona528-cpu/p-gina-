@@ -3,252 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bera SBR 2026 - Brayan Lucena</title>
+    <title>Sorteo Bera SBR 2026 | Brayan Lucena</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        body { background-color: #050505; color: white; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 24px; }
-        
-        /* Botones de selección */
-        .btn-select { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px; font-weight: 900; font-size: 11px; cursor: pointer; transition: 0.2s; color: #71717a; text-align: center; }
-        .btn-select.active { border-color: #3b82f6; background: rgba(37, 99, 235, 0.2); color: #3b82f6; transform: scale(1.05); }
-        
-        .btn-main { background: linear-gradient(135deg, #1e40af, #3b82f6); border-radius: 20px; padding: 18px; font-weight: 900; text-transform: uppercase; width: 100%; border: none; color: white; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
-        .btn-main:active { transform: scale(0.96); }
 
-        .ticket-card { background: #facc15; color: #000; font-weight: 900; padding: 10px 18px; border-radius: 12px; margin: 5px; display: inline-block; transform: rotate(-1.5deg); box-shadow: 0 5px 15px rgba(250, 204, 21, 0.4); font-size: 1.2rem; }
-        
-        #admin-view { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; padding: 20px; overflow-y: auto; }
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --primary: #2563eb; --accent: #fbbf24; --bg: #0f172a; }
+        body { background-color: var(--bg); color: #f8fafc; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
+        .main-glow { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; height: 100%; background: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #0f172a 70%); z-index: -1; }
+        .card-pro { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; overflow: hidden; }
+        .qty-btn { background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; transition: all 0.3s ease; cursor: pointer; }
+        .qty-btn.active { border-color: var(--primary); background: rgba(37, 99, 235, 0.15); transform: scale(1.05); }
+        .ticket-pro { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #000; font-weight: 900; padding: 10px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4); font-size: 1.2rem; display: inline-block; margin: 5px; }
+        #admin-panel { display: none; position: fixed; inset: 0; background: #020617; z-index: 9999; overflow-y: auto; padding: 25px; }
+        input[type="file"]::-webkit-file-upload-button { background: #1e293b; color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-right: 10px; }
     </style>
 </head>
-<body class="max-w-md mx-auto p-4 pb-28">
+<body class="max-w-xl mx-auto px-4 pb-24">
+    <div class="main-glow"></div>
 
-    <div id="admin-view">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-black italic text-blue-500 uppercase">Control de Ventas</h2>
-            <button onclick="document.getElementById('admin-view').style.display='none'" class="text-red-500 font-bold bg-red-500/10 px-4 py-2 rounded-lg">CERRAR</button>
-        </div>
-        <div id="admin-stats" class="grid grid-cols-2 gap-4 mb-8 text-center"></div>
-        <div id="admin-list" class="space-y-4"></div>
-        <button onclick="if(confirm('¿BORRAR TODA LA DATA?')) { localStorage.clear(); location.reload(); }" class="w-full mt-12 p-4 border border-red-900 text-red-900 text-[10px] font-black uppercase tracking-widest">Borrar base de datos local</button>
-    </div>
-
-    <header class="text-center my-8">
-        <div class="inline-block p-1 bg-blue-600 rounded-full mb-4 cursor-pointer" ondblclick="entrarAdmin()">
-            <div class="w-24 h-24 rounded-full border-4 border-black bg-white overflow-hidden flex items-center justify-center shadow-lg">
-                <img src="https://www.brayanlucena.com/img/logo.png" alt="Logo" onerror="this.src='https://ui-avatars.com/api/?name=BL&background=2563EB&color=fff'" class="w-full h-full object-cover">
+    <nav class="flex justify-between items-center py-8 mb-4">
+        <div class="flex items-center gap-3 cursor-pointer" ondblclick="checkAdmin()">
+            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center border-2 border-blue-600 overflow-hidden shadow-lg">
+                <img src="https://www.brayanlucena.com/img/logo.png" alt="BL" onerror="this.src='https://ui-avatars.com/api/?name=BL&background=2563EB&color=fff'">
+            </div>
+            <div>
+                <h1 class="font-black text-lg uppercase leading-none tracking-tighter">Brayan Lucena</h1>
+                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-[0.3em]">Sorteo Oficial</p>
             </div>
         </div>
-        <h1 class="text-4xl font-black italic tracking-tighter uppercase leading-none">BRAYAN LUCENA</h1>
-        <p class="text-blue-500 text-[11px] font-black tracking-[0.5em] uppercase mt-2">Coroto de la Suerte</p>
-    </header>
+        <button onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})" class="text-[10px] font-black bg-white/5 border border-white/10 px-4 py-2 rounded-full uppercase">Mis Tickets</button>
+    </nav>
 
-    <div class="glass p-5 mb-6">
-        <div class="flex justify-between items-center mb-2">
-            <span class="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Cupos Disponibles</span>
-            <span id="porc-txt" class="text-blue-400 font-black text-xs italic">Calculando...</span>
-        </div>
-        <div class="w-full h-2.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
-            <div id="porc-bar" class="h-full bg-blue-600 transition-all duration-1000 shadow-[0_0_10px_#2563eb]" style="width: 0%"></div>
-        </div>
-    </div>
-
-    <div id="view-home">
-        <div class="glass overflow-hidden mb-6 shadow-2xl">
-            <div class="bg-white p-6 flex justify-center border-b border-white/5">
-                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Bera SBR 2026" class="h-44 object-contain drop-shadow-2xl">
+    <div id="main-view">
+        <div class="card-pro mb-8 shadow-2xl">
+            <div class="bg-white p-10 flex justify-center items-center">
+                <img src="https://brayanlucena2.vercel.app/jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Bera SBR 2026" class="h-48 object-contain drop-shadow-2xl">
             </div>
             <div class="p-8">
                 <div class="flex justify-between items-start mb-8">
                     <div>
-                        <h2 class="text-xl font-black italic uppercase leading-none text-zinc-500">Bera SBR</h2>
-                        <span class="text-white text-4xl font-black italic leading-none">2026</span>
+                        <h2 class="text-3xl font-black italic uppercase">Bera SBR <span class="text-blue-500">2026</span></h2>
+                        <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Edición Especial</span>
                     </div>
-                    <div class="text-right">
-                        <span class="text-5xl font-black italic">310</span>
-                        <span class="text-blue-500 text-[10px] font-black block italic uppercase">Bolívares</span>
-                    </div>
+                    <div class="text-right"><p class="text-4xl font-black italic">310<span class="text-blue-500 text-sm">Bs</span></p></div>
                 </div>
-                
                 <div class="grid grid-cols-3 gap-3 mb-8">
-                    <button id="btn-1" onclick="cambiarCantidad(1)" class="btn-select active">1 TICKET</button>
-                    <button id="btn-3" onclick="cambiarCantidad(3)" class="btn-select">3 TICKETS</button>
-                    <button id="btn-5" onclick="cambiarCantidad(5)" class="btn-select">5 TICKETS</button>
+                    <div id="q1" onclick="setQty(1)" class="qty-btn active text-center"><p class="text-2xl font-black">1</p><p class="text-[9px] font-bold uppercase opacity-50">Ticket</p></div>
+                    <div id="q3" onclick="setQty(3)" class="qty-btn text-center"><p class="text-2xl font-black">3</p><p class="text-[9px] font-bold uppercase opacity-50">Tickets</p></div>
+                    <div id="q5" onclick="setQty(5)" class="qty-btn text-center"><p class="text-2xl font-black">5</p><p class="text-[9px] font-bold uppercase opacity-50">Tickets</p></div>
                 </div>
-                
-                <button onclick="darSuerte()" class="btn-main">¡Obtener mis Números!</button>
+                <button onclick="getTickets()" class="w-full bg-blue-600 hover:bg-blue-700 py-5 rounded-2xl font-black text-xl italic uppercase shadow-xl transition-all active:scale-95">¡Obtener Números!</button>
             </div>
         </div>
 
-        <div class="glass p-8 mb-6 border-dashed border-white/10">
-            <h3 class="text-[10px] font-black uppercase text-zinc-500 mb-5 text-center tracking-[0.3em]">Consulta de Tickets Real</h3>
+        <div id="tickets-area" class="hidden text-center mb-12"><p class="text-blue-500 font-black text-[10px] uppercase mb-4 tracking-widest">Tus números asignados:</p><div id="tickets-list"></div></div>
+
+        <div id="consulta" class="card-pro p-8 mb-12 border-dashed">
+            <h3 class="text-center font-black uppercase text-[10px] text-zinc-500 tracking-[0.4em] mb-6">Verificar mis números</h3>
             <div class="flex gap-2">
-                <input type="text" id="input-busqueda" placeholder="Tu nombre completo..." class="flex-1 bg-black/40 p-4 rounded-xl text-sm text-white outline-none border border-white/10 focus:border-blue-500 transition-all font-bold">
-                <button onclick="buscar()" class="bg-blue-600 px-6 rounded-xl text-[10px] font-black uppercase">Buscar</button>
+                <input type="text" id="search-input" placeholder="Tu nombre..." class="flex-1 bg-black/30 p-4 rounded-xl border border-white/10 outline-none text-white">
+                <button onclick="searchDB()" class="bg-zinc-800 px-6 rounded-xl font-black uppercase text-[10px]">Buscar</button>
             </div>
-            <div id="res-busqueda" class="mt-6 flex flex-wrap justify-center gap-2"></div>
-        </div>
-
-        <div id="area-suerte" class="hidden text-center pb-12">
-            <div id="lista-suerte" class="mb-6"></div>
+            <div id="search-results" class="mt-6 flex flex-wrap justify-center gap-2"></div>
         </div>
     </div>
 
-    <div id="view-pago" class="hidden glass p-8 animate-pulse">
-        <h2 class="text-3xl font-black uppercase text-blue-500 text-center mb-8 italic tracking-tighter">Confirmar Registro</h2>
-        <div class="bg-black/40 p-6 rounded-2xl mb-8 border border-white/10 space-y-4 text-sm">
-            <div class="flex justify-between"><span class="text-zinc-500 font-bold uppercase text-[10px]">Banco</span><strong>BANESCO</strong></div>
-            <div class="flex justify-between"><span class="text-zinc-500 font-bold uppercase text-[10px]">Pago Móvil</span><strong>0412-1234567</strong></div>
-            <div class="flex justify-between"><span class="text-zinc-500 font-bold uppercase text-[10px]">Cédula</span><strong>V-12.345.678</strong></div>
+    <div id="footer-pay" class="fixed bottom-0 left-0 w-full p-6 bg-slate-900/90 backdrop-blur-xl border-t border-white/10 hidden z-50">
+        <div class="max-w-xl mx-auto flex justify-between items-center">
+            <div><p class="text-[10px] text-zinc-500 font-bold uppercase">Total</p><p class="text-3xl font-black"><span id="total-price">310</span> <span class="text-blue-500 text-xs italic">Bs</span></p></div>
+            <button onclick="openRegister()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black uppercase text-sm">Continuar</button>
         </div>
-        <input type="text" id="nombre-pago" placeholder="Escribe tu Nombre y Apellido" class="w-full bg-white/5 p-5 rounded-xl border border-white/10 mb-6 font-bold outline-none text-white focus:border-blue-500">
-        <button onclick="finalizar()" class="btn-main">REPORTAR PAGO AHORA</button>
-        <button onclick="location.reload()" class="w-full mt-4 text-[10px] text-zinc-600 font-black uppercase tracking-widest">Cancelar Proceso</button>
     </div>
 
-    <div id="view-exito" class="hidden text-center">
-        <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-600/30">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
+    <div id="modal-reg" class="fixed inset-0 bg-black/95 z-[100] hidden p-6 overflow-y-auto">
+        <div class="max-w-md mx-auto pb-10">
+            <h2 class="text-3xl font-black uppercase italic mb-8 text-blue-500">Reportar Pago</h2>
+            <div class="card-pro p-6 mb-6 space-y-3 text-sm">
+                <div class="flex justify-between border-b border-white/5 pb-2"><span>Pago Móvil</span><strong>0412-1234567</strong></div>
+                <div class="flex justify-between"><span>RIF/CI</span><strong>V-12345678</strong></div>
+            </div>
+            <div class="space-y-4">
+                <input type="text" id="reg-name" placeholder="Nombre y Apellido" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none text-white">
+                <input type="tel" id="reg-phone" placeholder="Teléfono" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none text-white">
+                
+                <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+                    <p class="text-[10px] font-black uppercase text-blue-400 mb-3 tracking-widest">Subir Captura de Pago</p>
+                    <input type="file" id="reg-image" accept="image/*" class="text-xs text-zinc-500 w-full">
+                </div>
+
+                <button onclick="finishSale()" class="w-full bg-green-600 py-5 rounded-2xl font-black uppercase text-lg">Confirmar y Enviar</button>
+                <button onclick="document.getElementById('modal-reg').classList.add('hidden')" class="w-full py-4 text-zinc-500 font-bold uppercase text-[10px]">Volver</button>
+            </div>
         </div>
-        <h2 class="text-3xl font-black uppercase italic mb-6 leading-none">¡TUS NÚMEROS HAN SIDO GUARDADOS!</h2>
-        <div class="glass p-8 text-left mb-8">
-            <p class="text-[10px] font-black text-zinc-500 uppercase mb-4 tracking-widest">Resumen de tu registro:</p>
-            <div id="tks-finales" class="flex flex-wrap gap-2"></div>
-        </div>
-        <button onclick="location.reload()" class="btn-main">FINALIZAR Y SALIR</button>
     </div>
 
-    <div id="footer-bar" class="fixed bottom-0 left-0 w-full p-6 bg-black/90 backdrop-blur-md border-t border-white/10 hidden z-50">
-        <div class="flex justify-between items-center max-w-md mx-auto">
-            <div class="text-3xl font-black text-white"><span id="monto-txt">310</span> <span class="text-[10px] text-blue-500 italic">Bs</span></div>
-            <button onclick="irAPagar()" class="bg-blue-600 px-12 py-4 rounded-xl font-black uppercase text-xs shadow-lg">Continuar</button>
+    <div id="admin-panel">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-black italic text-blue-500">CONTROL DE VENTAS</h2>
+            <button onclick="document.getElementById('admin-panel').style.display='none'" class="text-red-500 font-black">CERRAR</button>
         </div>
+        <div id="admin-stats" class="grid grid-cols-2 gap-4 mb-8"></div>
+        <div id="admin-list" class="space-y-4"></div>
+        <button onclick="if(confirm('¿Borrar base de datos?')){localStorage.clear();location.reload();}" class="w-full mt-20 border border-red-900 p-4 text-red-900 font-black text-[10px]">RESET TOTAL</button>
     </div>
 
     <script>
-        const TOTAL = 10000;
-        let db = JSON.parse(localStorage.getItem('bera_db_v2')) || { ventas: [], usados: [] };
-        let cantidadSeleccionada = 1;
-        let tempTickets = [];
+        let db = JSON.parse(localStorage.getItem('bera_final_v3')) || { sales: [], used: [] };
+        let currentQty = 1;
+        let currentTickets = [];
 
-        window.onload = () => updateProgreso();
-
-        function updateProgreso() {
-            const vendidos = db.usados.length;
-            const libres = TOTAL - vendidos;
-            const porc = ((libres / TOTAL) * 100).toFixed(1);
-            document.getElementById('porc-bar').style.width = porc + '%';
-            document.getElementById('porc-txt').innerText = porc + '% LIBRES';
+        function setQty(n) {
+            currentQty = n;
+            document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('q' + n).classList.add('active');
+            document.getElementById('tickets-area').classList.add('hidden');
+            document.getElementById('footer-pay').classList.add('hidden');
         }
 
-        function cambiarCantidad(n) {
-            cantidadSeleccionada = n;
-            document.querySelectorAll('.btn-select').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-' + n).classList.add('active');
-            document.getElementById('area-suerte').classList.add('hidden');
-            document.getElementById('footer-bar').classList.add('hidden');
-            tempTickets = [];
-        }
-
-        function darSuerte() {
-            tempTickets = [];
-            const container = document.getElementById('lista-suerte');
-            container.innerHTML = '<p class="text-[11px] font-black text-blue-500 mb-5 uppercase tracking-[0.2em]">Tus números asignados:</p>';
-            
-            while(tempTickets.length < cantidadSeleccionada) {
-                let n = Math.floor(Math.random() * TOTAL).toString().padStart(4, '0');
-                if (!db.usados.includes(n) && !tempTickets.includes(n)) {
-                    tempTickets.push(n);
-                    container.innerHTML += `<div class="ticket-card animate__animated animate__zoomIn">#${n}</div>`;
-                }
+        function getTickets() {
+            currentTickets = [];
+            const list = document.getElementById('tickets-list');
+            list.innerHTML = '';
+            while(currentTickets.length < currentQty) {
+                let n = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+                if(!db.used.includes(n) && !currentTickets.includes(n)) currentTickets.push(n);
             }
-
-            document.getElementById('area-suerte').classList.remove('hidden');
-            document.getElementById('footer-bar').classList.remove('hidden');
-            document.getElementById('monto-txt').innerText = cantidadSeleccionada * 310;
-            
+            currentTickets.forEach(t => list.innerHTML += `<div class="ticket-pro">#${t}</div>`);
+            document.getElementById('tickets-area').classList.remove('hidden');
+            document.getElementById('footer-pay').classList.remove('hidden');
+            document.getElementById('total-price').innerText = currentQty * 310;
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             confetti({ particleCount: 60, spread: 70, origin: { y: 0.9 } });
         }
 
-        function irAPagar() {
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('footer-bar').classList.add('hidden');
-            document.getElementById('view-pago').classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
+        function openRegister() { document.getElementById('modal-reg').classList.remove('hidden'); }
 
-        function finalizar() {
-            const nom = document.getElementById('nombre-pago').value.trim();
-            if(!nom || nom.length < 3) return alert("Por favor, ingresa tu nombre completo.");
+        function finishSale() {
+            const name = document.getElementById('reg-name').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const fileInput = document.getElementById('reg-image');
 
-            // GUARDAR EN DB REAL (LOCAL)
-            const nuevaVenta = { 
-                nombre: nom, 
-                tks: [...tempTickets], 
-                monto: cantidadSeleccionada * 310,
-                fecha: new Date().toLocaleString() 
-            };
+            if(!name || !phone) return alert("Llena tus datos.");
             
-            db.ventas.push(nuevaVenta);
-            db.usados.push(...tempTickets);
-            localStorage.setItem('bera_db_v2', JSON.stringify(db));
-
-            // MOSTRAR ÉXITO
-            const divFinal = document.getElementById('tks-finales');
-            divFinal.innerHTML = '';
-            tempTickets.forEach(t => divFinal.innerHTML += `<span class="bg-blue-600/20 text-blue-400 border border-blue-500/20 px-4 py-2 rounded-lg font-black text-sm">#${t}</span>`);
-
-            document.getElementById('view-pago').classList.add('hidden');
-            document.getElementById('view-exito').classList.remove('hidden');
-            updateProgreso();
-            confetti({ particleCount: 150, spread: 80 });
-        }
-
-        function buscar() {
-            const q = document.getElementById('input-busqueda').value.toLowerCase().trim();
-            const res = document.getElementById('res-busqueda');
-            res.innerHTML = '';
-            if(!q) return;
-
-            // BUSQUEDA TRANSPARENTE EN LA DB REAL
-            const encontrados = db.ventas.filter(v => 
-                v.nombre.toLowerCase().includes(q) || v.tks.includes(q)
-            );
-            
-            if(encontrados.length > 0) {
-                encontrados.forEach(v => {
-                    v.tks.forEach(t => {
-                        res.innerHTML += `<span class="bg-zinc-800 text-white px-4 py-2 rounded-xl text-xs font-black border border-white/5 shadow-lg">#${t}</span>`;
-                    });
-                });
+            // Procesar imagen a Base64 para guardarla en el navegador
+            let screenshot = "";
+            if(fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveToDB(name, phone, e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
             } else {
-                res.innerHTML = '<span class="text-red-500 text-[10px] font-black uppercase tracking-widest italic">Ticket no encontrado en registros</span>';
+                saveToDB(name, phone, "");
             }
         }
 
-        // PANEL ADMINISTRADOR
-        function entrarAdmin() {
-            if(prompt("Clave Maestro:") === "2026") {
-                const modal = document.getElementById('admin-view');
-                modal.style.display = 'block';
-                
-                const recaudo = db.ventas.reduce((acc, v) => acc + v.monto, 0);
-                document.getElementById('admin-stats').innerHTML = `
-                    <div class="glass p-6"><p class="text-[10px] text-zinc-500 font-black uppercase mb-1">Total Vendidos</p><p class="text-3xl font-black">${db.usados.length}</p></div>
-                    <div class="glass p-6"><p class="text-[10px] text-zinc-500 font-black uppercase mb-1">Recaudado (Bs)</p><p class="text-3xl font-black text-green-500">${recaudo}</p></div>
-                `;
+        function saveToDB(name, phone, imgData) {
+            const sale = {
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                tickets: [...currentTickets],
+                total: currentQty * 310,
+                img: imgData,
+                date: new Date().toLocaleString()
+            };
+            db.sales.push(sale);
+            db.used.push(...currentTickets);
+            localStorage.setItem('bera_final_v3', JSON.stringify(db));
+            alert("¡Pago reportado con éxito!");
+            location.reload();
+        }
 
-                document.getElementById('admin-list').innerHTML = db.ventas.map(v => `
-                    <div class="glass p-5 text-[11px] border-l-4 border-blue-600">
-                        <div class="flex justify-between font-black text-blue-400 mb-2 uppercase"><span>${v.nombre}</span><span>${v.monto} Bs</span></div>
-                        <div class="text-zinc-500 font-bold mb-2">${v.tks.join(' - ')}</div>
-                        <div class="text-[9px] opacity-40 uppercase">${v.fecha}</div>
+        function searchDB() {
+            const q = document.getElementById('search-input').value.toLowerCase().trim();
+            const res = document.getElementById('search-results');
+            res.innerHTML = '';
+            if(!q) return;
+            const found = db.sales.filter(s => s.name.toLowerCase().includes(q) || s.tickets.includes(q));
+            if(found.length > 0) {
+                found.forEach(s => s.tickets.forEach(t => res.innerHTML += `<span class="bg-blue-600 px-3 py-1 rounded-md text-xs font-black">#${t}</span>`));
+            } else { res.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Sin registros</p>'; }
+        }
+
+        function checkAdmin() {
+            if(prompt("Clave Admin:") === "2026") {
+                document.getElementById('admin-panel').style.display = 'block';
+                const income = db.sales.reduce((acc, s) => acc + s.total, 0);
+                document.getElementById('admin-stats').innerHTML = `
+                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50 uppercase">Tickets</p><p class="text-2xl font-black">${db.used.length}</p></div>
+                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50 uppercase">Total Bs</p><p class="text-2xl font-black text-green-500">${income}</p></div>
+                `;
+                document.getElementById('admin-list').innerHTML = db.sales.map(s => `
+                    <div class="card-pro p-4 text-[11px] mb-3 border-l-4 border-blue-600">
+                        <div class="flex justify-between font-black text-blue-400 mb-1 uppercase"><span>${s.name}</span><span>${s.total} Bs</span></div>
+                        <div class="text-zinc-300 font-bold mb-2">${s.tickets.join(' - ')}</div>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="opacity-30 text-[9px]">${s.phone} | ${s.date}</span>
+                            ${s.img ? `<button onclick="showImg('${s.img}')" class="bg-blue-600 px-3 py-1 rounded font-black text-[9px]">VER PAGO</button>` : '<span class="text-red-500 text-[9px]">SIN CAPTURA</span>'}
+                        </div>
                     </div>
                 `).reverse().join('');
             }
+        }
+
+        function showImg(data) {
+            const w = window.open("");
+            w.document.write(`<img src="${data}" style="max-width:100%">`);
         }
     </script>
 </body>
