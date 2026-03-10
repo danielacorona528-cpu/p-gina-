@@ -18,7 +18,6 @@
         .qty-btn.active { border-color: var(--primary); background: rgba(37, 99, 235, 0.15); transform: scale(1.05); }
         .ticket-pro { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #000; font-weight: 900; padding: 10px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4); font-size: 1.2rem; display: inline-block; margin: 5px; }
         #admin-panel { display: none; position: fixed; inset: 0; background: #020617; z-index: 9999; overflow-y: auto; padding: 25px; }
-        input[type="file"]::file-selector-button { background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body class="max-w-xl mx-auto px-4 pb-24">
@@ -49,7 +48,7 @@
                 <div id="q3" onclick="setQty(3)" class="qty-btn text-center"><p class="text-2xl font-black">3</p><p class="text-[9px] uppercase opacity-50">Tickets</p></div>
                 <div id="q5" onclick="setQty(5)" class="qty-btn text-center"><p class="text-2xl font-black">5</p><p class="text-[9px] uppercase opacity-50">Tickets</p></div>
             </div>
-            <button onclick="getTickets()" class="w-full bg-blue-600 py-5 rounded-2xl font-black text-xl italic uppercase shadow-xl transition-all active:scale-95">¡Obtener Números!</button>
+            <button id="btn-get" onclick="getTickets()" class="w-full bg-blue-600 py-5 rounded-2xl font-black text-xl italic uppercase shadow-xl active:scale-95 transition-all">¡Obtener Números!</button>
         </div>
     </div>
 
@@ -61,7 +60,7 @@
     <div id="consulta" class="card-pro p-8 mb-12 border-dashed border-2 border-white/5">
         <h3 class="text-center font-black uppercase text-[10px] text-blue-500 tracking-[0.4em] mb-6">Verificador de Tickets</h3>
         <div class="flex gap-2 mb-4">
-            <input type="text" id="search-input" placeholder="Nombre o número de ticket..." class="flex-1 bg-black/30 p-4 rounded-xl border border-white/10 outline-none focus:border-blue-500 text-white font-bold">
+            <input type="text" id="search-input" placeholder="Nombre o ticket..." class="flex-1 bg-black/30 p-4 rounded-xl border border-white/10 outline-none text-white font-bold">
             <button onclick="searchDB()" class="bg-blue-600 px-6 rounded-xl font-black uppercase text-[10px]">Buscar</button>
         </div>
         <div id="search-results" class="space-y-4"></div>
@@ -78,15 +77,14 @@
         <div class="max-w-md mx-auto">
             <h2 class="text-3xl font-black uppercase italic mb-8 text-blue-500">Completar Registro</h2>
             <div class="card-pro p-6 mb-8 space-y-4">
-                <p class="text-[10px] font-black uppercase text-zinc-500">Datos Bancarios</p>
                 <div class="flex justify-between border-b border-white/5 pb-2 text-sm"><span>Pago Móvil</span><strong>0412-1234567</strong></div>
                 <div class="flex justify-between text-sm"><span>Cédula</span><strong>V-12345678</strong></div>
             </div>
             <div class="space-y-4 pb-10">
-                <input type="text" id="reg-name" placeholder="Nombre completo" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none text-white">
-                <input type="tel" id="reg-phone" placeholder="Teléfono" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none text-white">
+                <input type="text" id="reg-name" placeholder="Nombre completo" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold text-white outline-none">
+                <input type="tel" id="reg-phone" placeholder="Teléfono" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold text-white outline-none">
                 <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
-                    <p class="text-[10px] font-black uppercase text-zinc-500 mb-2">Captura de Pago</p>
+                    <p class="text-[10px] font-black uppercase text-zinc-500 mb-2">Subir Captura</p>
                     <input type="file" id="reg-image" accept="image/*" class="text-xs text-white">
                 </div>
                 <button onclick="finishSale()" class="w-full bg-green-600 py-5 rounded-2xl font-black uppercase text-lg">Confirmar Registro</button>
@@ -97,40 +95,52 @@
 
     <div id="admin-panel">
         <div class="flex justify-between items-center mb-10">
-            <h2 class="text-2xl font-black italic text-blue-500 tracking-tighter">CONTROL DE VENTAS</h2>
+            <h2 class="text-2xl font-black italic text-blue-500 uppercase">Admin Control</h2>
             <button onclick="document.getElementById('admin-panel').style.display='none'" class="text-red-500 font-black">CERRAR</button>
         </div>
         <div id="admin-stats" class="grid grid-cols-2 gap-4 mb-8"></div>
         <div id="admin-list" class="space-y-4"></div>
-        <button onclick="if(confirm('¿Borrar base de datos?')){localStorage.clear();location.reload();}" class="w-full mt-20 border border-red-900/30 p-4 text-red-900 font-black text-[10px] rounded-xl">RESET TOTAL</button>
+        <button onclick="if(confirm('¿Borrar base de datos?')){localStorage.clear();location.reload();}" class="w-full mt-20 border border-red-900/30 p-4 text-red-900 font-black text-[10px]">RESETEAR SISTEMA</button>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('bera_final_real')) || { sales: [], used: [] };
-        let currentQty = 1, currentTickets = [];
+        // Inicialización de DB
+        let db = JSON.parse(localStorage.getItem('bera_final_v5')) || { sales: [], used: [] };
+        let currentQty = 1;
+        let currentTickets = [];
 
+        // Función para cambiar cantidad
         function setQty(n) {
             currentQty = n;
             document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('q'+n).classList.add('active');
+            document.getElementById('q' + n).classList.add('active');
             document.getElementById('tickets-area').classList.add('hidden');
             document.getElementById('footer-pay').classList.add('hidden');
         }
 
+        // Función para obtener números
         function getTickets() {
             currentTickets = [];
             const list = document.getElementById('tickets-list');
             list.innerHTML = '';
+            
             while(currentTickets.length < currentQty) {
                 let n = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-                if(!db.used.includes(n) && !currentTickets.includes(n)) currentTickets.push(n);
+                if(!db.used.includes(n) && !currentTickets.includes(n)) {
+                    currentTickets.push(n);
+                }
             }
-            currentTickets.forEach(t => { list.innerHTML += `<div class="ticket-pro">#${t}</div>`; });
+
+            currentTickets.forEach(t => {
+                list.innerHTML += `<div class="ticket-pro">#${t}</div>`;
+            });
+
             document.getElementById('tickets-area').classList.remove('hidden');
             document.getElementById('footer-pay').classList.remove('hidden');
             document.getElementById('total-price').innerText = currentQty * 310;
+            
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            confetti({ particleCount: 60, spread: 70, origin: { y: 0.9 } });
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
         }
 
         function openRegister() { document.getElementById('modal-reg').classList.remove('hidden'); }
@@ -139,25 +149,34 @@
             const name = document.getElementById('reg-name').value.trim();
             const phone = document.getElementById('reg-phone').value.trim();
             const fileInput = document.getElementById('reg-image');
-            if(!name || !phone) return alert("Completa los datos.");
+            
+            if(!name || !phone) { alert("Llena tus datos"); return; }
 
-            const process = (img) => {
-                const sale = { id: Date.now(), name: name, phone: phone, tickets: [...currentTickets], total: currentQty * 310, img: img, date: new Date().toLocaleDateString() };
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const sale = {
+                    id: Date.now(),
+                    name: name,
+                    phone: phone,
+                    tickets: [...currentTickets],
+                    total: currentQty * 310,
+                    img: e.target.result || "",
+                    date: new Date().toLocaleDateString()
+                };
                 db.sales.push(sale);
                 db.used.push(...currentTickets);
-                localStorage.setItem('bera_final_real', JSON.stringify(db));
-                alert("¡Registro exitoso!");
+                localStorage.setItem('bera_final_v5', JSON.stringify(db));
+                alert("¡Registro guardado!");
                 location.reload();
             };
 
             if(fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => process(e.target.result);
                 reader.readAsDataURL(fileInput.files[0]);
-            } else { process(""); }
+            } else {
+                reader.onload({ target: { result: "" } });
+            }
         }
 
-        // BUSQUEDA REAL MEJORADA
         function searchDB() {
             const q = document.getElementById('search-input').value.toLowerCase().trim();
             const res = document.getElementById('search-results');
@@ -165,45 +184,43 @@
             if(!q) return;
 
             const found = db.sales.filter(s => s.name.toLowerCase().includes(q) || s.tickets.some(t => t.includes(q)));
-
+            
             if(found.length > 0) {
                 found.forEach(s => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white/5 border border-white/10 p-5 rounded-2xl fade-up";
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <p class="text-[10px] text-blue-500 font-black uppercase tracking-widest">Titular</p>
-                                <p class="font-bold text-lg">${s.name}</p>
+                    res.innerHTML += `
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                            <p class="text-[10px] text-blue-500 font-black uppercase">${s.name}</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                ${s.tickets.map(t => `<span class="bg-blue-600 px-2 py-1 rounded-md text-[10px] font-black italic">#${t}</span>`).join('')}
                             </div>
-                            <div class="text-right">
-                                <p class="text-[10px] text-zinc-500 uppercase">Fecha</p>
-                                <p class="text-xs font-bold">${s.date}</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            ${s.tickets.map(t => `<span class="bg-blue-600 px-3 py-1 rounded-lg text-xs font-black italic shadow-lg shadow-blue-600/20">#${t}</span>`).join('')}
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-white/5 flex justify-between items-center">
-                            <span class="text-[9px] text-zinc-500 uppercase font-black">Estado: <span class="text-green-500">Confirmado</span></span>
-                            <span class="text-[9px] text-zinc-500 font-bold">${s.phone}</span>
-                        </div>
-                    `;
-                    res.appendChild(card);
+                        </div>`;
                 });
             } else {
-                res.innerHTML = `<div class="text-center py-6"><p class="text-red-500 text-xs font-black uppercase">❌ No se encontraron registros</p></div>`;
+                res.innerHTML = '<p class="text-red-500 text-center text-xs font-black uppercase">Sin resultados</p>';
             }
         }
 
         function checkAdmin() {
-            if(prompt("Clave Admin:") === "2026") {
+            if(prompt("Clave:") === "2026") {
                 document.getElementById('admin-panel').style.display = 'block';
                 const income = db.sales.reduce((acc, s) => acc + s.total, 0);
                 document.getElementById('admin-stats').innerHTML = `
-                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50 uppercase">Tickets</p><p class="text-2xl font-black">${db.used.length}</p></div>
-                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50 uppercase">Total Bs</p><p class="text-2xl font-black text-green-500">${income}</p></div>
+                    <div class="card-pro p-4 text-center"><p class="text-[10px]">TICKETS</p><p class="text-xl font-black">${db.used.length}</p></div>
+                    <div class="card-pro p-4 text-center"><p class="text-[10px]">TOTAL BS</p><p class="text-xl font-black text-green-500">${income}</p></div>
                 `;
                 document.getElementById('admin-list').innerHTML = db.sales.map(s => `
-                    <div class="card-pro p-4 text-[11px] mb-3 border-l-4 border-blue-600">
-                        <div class="flex justify-between font-black text-blue-40
+                    <div class="card-pro p-4 text-[10px] mb-2">
+                        <div class="flex justify-between font-black text-blue-400"><span>${s.name}</span><span>${s.total} Bs</span></div>
+                        <div class="mt-1">${s.tickets.join(' - ')}</div>
+                        <div class="mt-2 flex justify-between items-center opacity-50">
+                            <span>${s.phone} | ${s.date}</span>
+                            ${s.img ? `<button onclick="showImg('${s.img}')" class="bg-blue-600 px-2 py-1 rounded text-white font-black text-[8px]">VER CAPTURA</button>` : ''}
+                        </div>
+                    </div>
+                `).reverse().join('');
+            }
+        }
+        function showImg(d){ const w=window.open(""); w.document.write(`<body style="margin:0;background:#000;display:flex;justify-content:center;align-items:center;"><img src="${d}" style="max-width:100%;max-height:100vh;"></body>`); }
+    </script>
+</body>
+</html>
