@@ -10,51 +10,104 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        :root { --primary: #2563eb; --bg: #0f172a; }
-        body { background-color: var(--bg); color: #f8fafc; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
-        .main-glow { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; height: 100%; background: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #0f172a 70%); z-index: -1; }
-        .card-pro { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; overflow: hidden; }
-        .qty-btn { background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; transition: 0.3s; cursor: pointer; }
-        .qty-btn.active { border-color: var(--primary); background: rgba(37, 99, 235, 0.15); transform: scale(1.05); }
-        .ticket-pro { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #000; font-weight: 900; padding: 10px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4); font-size: 1.2rem; display: inline-block; margin: 5px; }
-        #admin-panel { display: none; position: fixed; inset: 0; background: #020617; z-index: 9999; overflow-y: auto; padding: 25px; }
         
-        /* Animación suave para las imágenes */
-        img { user-drag: none; -webkit-user-drag: none; }
+        :root {
+            --primary: #2563eb;
+            --accent: #fbbf24;
+            --bg: #0f172a;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: #f8fafc; 
+            font-family: 'Inter', sans-serif;
+            margin: 0; padding: 0;
+            user-select: none;
+        }
+
+        /* Efecto de fondo premium */
+        .main-glow {
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 500px; height: 100%;
+            background: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #0f172a 70%);
+            z-index: -1;
+        }
+
+        .card-pro {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            overflow: hidden;
+        }
+
+        /* Botón de Cantidad Estilo Brayan Lucena */
+        .qty-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .qty-btn.active {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.15);
+            transform: scale(1.05);
+        }
+
+        /* Ticket Dorado */
+        .ticket-pro {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: #000;
+            font-weight: 900;
+            padding: 10px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+            font-size: 1.2rem;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        /* Animaciones */
+        .fade-up { animation: fadeUp 0.5s ease-out; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estilo Admin */
+        #admin-panel {
+            display: none; position: fixed; inset: 0; background: #020617; 
+            z-index: 9999; overflow-y: auto; padding: 25px;
+        }
     </style>
 </head>
 <body class="max-w-xl mx-auto px-4 pb-24">
     <div class="main-glow"></div>
 
-    <nav class="flex justify-between items-center py-6 mb-4">
+    <nav class="flex justify-between items-center py-8 mb-4">
         <div class="flex items-center gap-3 cursor-pointer" ondblclick="checkAdmin()">
-            <img src="logo2.png" alt="Brayan Lucena" class="w-16 h-16 rounded-full border-2 border-white/20 shadow-lg object-cover">
+            <div class="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center font-black text-xl border-2 border-white/20 shadow-lg italic">
+                BL
+            </div>
             <div>
                 <h1 class="font-black text-lg uppercase leading-none tracking-tighter">Brayan Lucena</h1>
                 <p class="text-[10px] text-blue-500 font-bold uppercase tracking-[0.3em]">Sorteo Oficial</p>
             </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
-            <img src="01KB7XJHRR2TC2YW06D29BSCCG.png" alt="CONALOT" class="h-6 opacity-80">
-            <button onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})" class="text-[9px] font-black bg-white/5 border border-white/10 px-3 py-1.5 rounded-full uppercase">Mis Tickets</button>
-        </div>
+        <button onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})" class="text-[10px] font-black bg-white/5 border border-white/10 px-4 py-2 rounded-full uppercase">Mis Tickets</button>
     </nav>
 
-    <div class="card-pro mb-8 shadow-2xl">
-        <div class="bg-white p-6 flex flex-col items-center relative overflow-hidden">
-            <img src="01KB7XKDXWKTAYQQYC8HPJ96Z9.png" alt="Tachira" class="absolute top-4 left-4 h-10">
-            <img src="01KB7XK2M5FV6NVX8V9X1AK498.png" alt="Super Gana" class="absolute top-4 right-4 h-10">
-            
-            <img src="jYnRXmHtVLBqGjKhRB2ZmDEJZTpMIGaN2u4iH1Js.png" alt="Coroto de la Suerte" class="w-64 mt-6 drop-shadow-2xl">
-            
-            <p class="text-blue-600 font-black text-xs mt-4 italic uppercase tracking-widest">¡Tu oportunidad de ganar!</p>
+    <div class="card-pro fade-up mb-8 shadow-2xl">
+        <div class="bg-white p-10 flex justify-center items-center">
+            <svg viewBox="0 0 24 24" class="w-48 h-48 text-blue-600" fill="currentColor">
+                <path d="M21,11C21,11 21,11 21,11C21,11 21,11 21,11M19.5,13.5A1.5,1.5 0 0,1 18,12A1.5,1.5 0 0,1 19.5,10.5A1.5,1.5 0 0,1 21,12A1.5,1.5 0 0,1 19.5,13.5M19.5,9A3,3 0 0,0 16.5,12C16.5,13.66 17.84,15 19.5,15C21.16,15 22.5,13.66 22.5,12A3,3 0 0,0 19.5,9M11,12V10H14V7H11V5H10V7H7V10H10V12H7V15H10V17H11V15H14V12H11M2.5,13.5A1.5,1.5 0 0,1 1,12A1.5,1.5 0 0,1 2.5,10.5A1.5,1.5 0 0,1 4,12A1.5,1.5 0 0,1 2.5,13.5M2.5,9A3,3 0 0,0 -0.5,12C-0.5,13.66 0.84,15 2.5,15C4.16,15 5.5,13.66 5.5,12A3,3 0 0,0 2.5,9Z" />
+            </svg>
         </div>
-
+        
         <div class="p-8">
             <div class="flex justify-between items-start mb-8">
                 <div>
                     <h2 class="text-3xl font-black italic uppercase">Bera SBR <span class="text-blue-500">2026</span></h2>
-                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Edición Especial Coroto</span>
+                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Edición Especial</span>
                 </div>
                 <div class="text-right">
                     <p class="text-4xl font-black italic">310<span class="text-blue-500 text-sm">Bs</span></p>
@@ -64,92 +117,83 @@
             <div class="grid grid-cols-3 gap-3 mb-8">
                 <div id="q1" onclick="setQty(1)" class="qty-btn active text-center">
                     <p class="text-2xl font-black">1</p>
-                    <p class="text-[9px] uppercase opacity-50">Ticket</p>
+                    <p class="text-[9px] font-bold uppercase opacity-50">Ticket</p>
                 </div>
                 <div id="q3" onclick="setQty(3)" class="qty-btn text-center">
                     <p class="text-2xl font-black">3</p>
-                    <p class="text-[9px] uppercase opacity-50">Tickets</p>
+                    <p class="text-[9px] font-bold uppercase opacity-50">Tickets</p>
                 </div>
                 <div id="q5" onclick="setQty(5)" class="qty-btn text-center">
                     <p class="text-2xl font-black">5</p>
-                    <p class="text-[9px] uppercase opacity-50">Tickets</p>
+                    <p class="text-[9px] font-bold uppercase opacity-50">Tickets</p>
                 </div>
             </div>
 
-            <button id="btn-get" onclick="getTickets()" class="w-full bg-blue-600 py-5 rounded-2xl font-black text-xl italic uppercase shadow-xl active:scale-95 transition-all">¡Obtener Números!</button>
+            <button onclick="getTickets()" class="w-full bg-blue-600 hover:bg-blue-700 py-5 rounded-2xl font-black text-xl italic uppercase shadow-xl shadow-blue-600/30 transition-all active:scale-95">
+                ¡Obtener Números!
+            </button>
         </div>
     </div>
 
-    <div id="tickets-area" class="hidden text-center mb-12">
+    <div id="tickets-area" class="hidden text-center mb-12 fade-up">
         <p class="text-blue-500 font-black text-[10px] uppercase mb-4 tracking-widest">Tus números asignados:</p>
         <div id="tickets-list"></div>
     </div>
 
-    <div id="consulta" class="card-pro p-8 mb-12 border-dashed border-2 border-white/5">
-        <h3 class="text-center font-black uppercase text-[10px] text-blue-500 tracking-[0.4em] mb-6">Verificador de Tickets</h3>
-        <div class="flex gap-2 mb-4">
-            <input type="text" id="search-input" placeholder="Nombre o ticket..." class="flex-1 bg-black/30 p-4 rounded-xl border border-white/10 outline-none text-white font-bold">
-            <button onclick="searchDB()" class="bg-blue-600 px-6 rounded-xl font-black uppercase text-[10px]">Buscar</button>
+    <div id="consulta" class="card-pro p-8 mb-12 border-dashed">
+        <h3 class="text-center font-black uppercase text-[10px] text-zinc-500 tracking-[0.4em] mb-6">Verificar mis números</h3>
+        <div class="flex gap-2">
+            <input type="text" id="search-input" placeholder="Tu nombre completo..." class="flex-1 bg-black/30 p-4 rounded-xl border border-white/10 outline-none focus:border-blue-500">
+            <button onclick="searchDB()" class="bg-zinc-800 px-6 rounded-xl font-black uppercase text-[10px]">Buscar</button>
         </div>
-        <div id="search-results" class="space-y-4"></div>
+        <div id="search-results" class="mt-6 flex flex-wrap justify-center gap-2"></div>
     </div>
 
     <div id="footer-pay" class="fixed bottom-0 left-0 w-full p-6 bg-slate-900/90 backdrop-blur-xl border-t border-white/10 hidden z-50">
         <div class="max-w-xl mx-auto flex justify-between items-center">
             <div>
-                <p class="text-[10px] text-zinc-500 font-bold uppercase">Total a pagar</p>
+                <p class="text-[10px] text-zinc-500 font-bold uppercase">Monto Total</p>
                 <p class="text-3xl font-black"><span id="total-price">310</span> <span class="text-blue-500 text-xs italic">Bs</span></p>
             </div>
             <button onclick="openRegister()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-lg">Continuar</button>
         </div>
     </div>
 
-    <div id="modal-reg" class="fixed inset-0 bg-black/95 z-[100] hidden p-6 overflow-y-auto">
+    <div id="modal-reg" class="fixed inset-0 bg-black/95 z-[100] hidden p-6">
         <div class="max-w-md mx-auto">
-            <div class="flex justify-center mb-6">
-                 <img src="logo2.png" alt="Logo" class="w-20 h-20 rounded-full border-2 border-blue-500">
-            </div>
-            <h2 class="text-3xl font-black uppercase italic mb-8 text-blue-500 text-center">Completar Registro</h2>
-            
+            <h2 class="text-3xl font-black uppercase italic mb-8 text-blue-500">Completar Registro</h2>
             <div class="card-pro p-6 mb-8 space-y-4">
-                <div class="flex justify-between border-b border-white/5 pb-2 text-sm"><span>Pago Móvil</span><strong>0412-1234567</strong></div>
-                <div class="flex justify-between text-sm"><span>Cédula/RIF</span><strong>V-12345678</strong></div>
-                <div class="flex justify-between text-sm"><span>Banco</span><strong>Banesco</strong></div>
+                <p class="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Información de Pago</p>
+                <div class="flex justify-between border-b border-white/5 pb-2"><span>Banco</span><strong>BANESCO</strong></div>
+                <div class="flex justify-between border-b border-white/5 pb-2"><span>Pago Móvil</span><strong>0412-1234567</strong></div>
+                <div class="flex justify-between"><span>RIF/CI</span><strong>V-12345678</strong></div>
             </div>
-
-            <div class="space-y-4 pb-10">
-                <input type="text" id="reg-name" placeholder="Nombre completo" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold text-white outline-none">
-                <input type="tel" id="reg-phone" placeholder="Teléfono de contacto" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold text-white outline-none">
-                
-                <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
-                    <p class="text-[10px] font-black uppercase text-zinc-500 mb-2">Adjuntar Comprobante (Captura)</p>
-                    <input type="file" id="reg-image" accept="image/*" class="text-xs text-white">
-                </div>
-                
+            <div class="space-y-4">
+                <input type="text" id="reg-name" placeholder="Tu nombre completo" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none focus:border-blue-500">
+                <input type="tel" id="reg-phone" placeholder="WhatsApp (Ej: 04141234567)" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none focus:border-blue-500">
                 <button onclick="finishSale()" class="w-full bg-green-600 py-5 rounded-2xl font-black uppercase text-lg shadow-lg">Confirmar Registro</button>
-                <button onclick="document.getElementById('modal-reg').classList.add('hidden')" class="w-full py-4 text-zinc-500 font-bold uppercase text-[10px]">Volver atrás</button>
+                <button onclick="document.getElementById('modal-reg').classList.add('hidden')" class="w-full py-4 text-zinc-500 font-bold uppercase text-[10px]">Cancelar</button>
             </div>
         </div>
     </div>
 
     <div id="admin-panel">
         <div class="flex justify-between items-center mb-10">
-            <div class="flex items-center gap-2">
-                <img src="logo2.png" class="w-8 h-8 rounded-full">
-                <h2 class="text-2xl font-black italic text-blue-500 uppercase">Panel Control</h2>
-            </div>
-            <button onclick="document.getElementById('admin-panel').style.display='none'" class="text-red-500 font-black px-4 py-2 bg-red-500/10 rounded-lg">CERRAR</button>
+            <h2 class="text-2xl font-black italic text-blue-500">ADMIN CONTROL</h2>
+            <button onclick="document.getElementById('admin-panel').style.display='none'" class="text-red-500 font-black">CERRAR</button>
         </div>
         <div id="admin-stats" class="grid grid-cols-2 gap-4 mb-8"></div>
         <div id="admin-list" class="space-y-4"></div>
-        <button onclick="if(confirm('¿Borrar base de datos?')){localStorage.clear();location.reload();}" class="w-full mt-20 border border-red-900/30 p-4 text-red-900 font-black text-[10px] tracking-[0.5em]">RESETEAR SISTEMA</button>
+        <button onclick="if(confirm('¿Borrar todo?')){localStorage.clear();location.reload();}" class="w-full mt-20 border border-red-900 p-4 text-red-900 font-black text-[10px]">RESET BASE DE DATOS</button>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('bera_final_v5')) || { sales: [], used: [] };
+        // --- DATA CORE ---
+        let db = JSON.parse(localStorage.getItem('bera_final_2026')) || { sales: [], used: [] };
         let currentQty = 1;
         let currentTickets = [];
 
+        // --- INTERFAZ ---
         function setQty(n) {
             currentQty = n;
             document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
@@ -162,7 +206,7 @@
             currentTickets = [];
             const list = document.getElementById('tickets-list');
             list.innerHTML = '';
-            
+
             while(currentTickets.length < currentQty) {
                 let n = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
                 if(!db.used.includes(n) && !currentTickets.includes(n)) {
@@ -179,7 +223,7 @@
             document.getElementById('total-price').innerText = currentQty * 310;
             
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+            confetti({ particleCount: 60, spread: 70, origin: { y: 0.9 } });
         }
 
         function openRegister() { document.getElementById('modal-reg').classList.remove('hidden'); }
@@ -187,34 +231,23 @@
         function finishSale() {
             const name = document.getElementById('reg-name').value.trim();
             const phone = document.getElementById('reg-phone').value.trim();
-            const fileInput = document.getElementById('reg-image');
-            
-            if(!name || !phone) { alert("Por favor, llena tus datos de contacto."); return; }
+            if(!name || !phone) return alert("Por favor llena los datos.");
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const sale = {
-                    id: Date.now(),
-                    name: name,
-                    phone: phone,
-                    tickets: [...currentTickets],
-                    total: currentQty * 310,
-                    img: e.target.result || "",
-                    date: new Date().toLocaleDateString()
-                };
-                db.sales.push(sale);
-                db.used.push(...currentTickets);
-                localStorage.setItem('bera_final_v5', JSON.stringify(db));
-                alert("¡Felicidades! Registro completado con éxito.");
-                location.reload();
+            const sale = {
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                tickets: [...currentTickets],
+                total: currentQty * 310,
+                date: new Date().toLocaleString()
             };
 
-            if(fileInput.files[0]) {
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                // Simular el evento si no hay imagen para proceder
-                reader.onload({ target: { result: "" } });
-            }
+            db.sales.push(sale);
+            db.used.push(...currentTickets);
+            localStorage.setItem('bera_final_2026', JSON.stringify(db));
+
+            alert("¡Registro realizado con éxito!");
+            location.reload();
         }
 
         function searchDB() {
@@ -223,35 +256,39 @@
             res.innerHTML = '';
             if(!q) return;
 
-            const found = db.sales.filter(s => s.name.toLowerCase().includes(q) || s.tickets.some(t => t.includes(q)));
-            
+            const found = db.sales.filter(s => s.name.toLowerCase().includes(q) || s.tickets.includes(q));
             if(found.length > 0) {
                 found.forEach(s => {
-                    res.innerHTML += `
-                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
-                            <p class="text-[10px] text-blue-500 font-black uppercase">${s.name}</p>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                ${s.tickets.map(t => `<span class="bg-blue-600 px-2 py-1 rounded-md text-[10px] font-black italic">#${t}</span>`).join('')}
-                            </div>
-                        </div>`;
+                    s.tickets.forEach(t => {
+                        res.innerHTML += `<span class="bg-blue-600 px-3 py-1 rounded-md text-xs font-black">#${t}</span>`;
+                    });
                 });
             } else {
-                res.innerHTML = '<p class="text-red-500 text-center text-xs font-black uppercase">Ticket no registrado o nombre incorrecto</p>';
+                res.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Sin registros</p>';
             }
         }
 
+        // --- ADMIN ---
         function checkAdmin() {
-            if(prompt("Clave de Acceso:") === "2026") {
-                document.getElementById('admin-panel').style.display = 'block';
+            if(prompt("Clave Admin:") === "2026") {
+                const panel = document.getElementById('admin-panel');
+                panel.style.display = 'block';
+                
                 const income = db.sales.reduce((acc, s) => acc + s.total, 0);
                 document.getElementById('admin-stats').innerHTML = `
-                    <div class="card-pro p-4 text-center"><p class="text-[10px] opacity-50 uppercase">Tickets Vendidos</p><p class="text-xl font-black">${db.used.length}</p></div>
-                    <div class="card-pro p-4 text-center"><p class="text-[10px] opacity-50 uppercase">Total Recaudado</p><p class="text-xl font-black text-green-500">${income} Bs</p></div>
+                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">TICKETS</p><p class="text-2xl font-black">${db.used.length}</p></div>
+                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">VENTAS</p><p class="text-2xl font-black text-green-500">${income} Bs</p></div>
                 `;
+
                 document.getElementById('admin-list').innerHTML = db.sales.map(s => `
-                    <div class="card-pro p-4 text-[10px] mb-2">
-                        <div class="flex justify-between font-black text-blue-400"><span>${s.name}</span><span>${s.total} Bs</span></div>
-                        <div class="mt-1 tracking-widest">${s.tickets.join(' - ')}</div>
-                        <div class="mt-2 flex justify-between items-center opacity-50">
-                            <span>${s.phone} | ${s.date}</span>
-                            ${s.img ? `<button onclick="showImg('${s.img}')
+                    <div class="card-pro p-4 text-[11px]">
+                        <div class="flex justify-between font-black text-blue-400 mb-1"><span>${s.name}</span><span>${s.total} Bs</span></div>
+                        <div class="text-zinc-500">${s.tickets.join(' - ')}</div>
+                        <div class="opacity-30 mt-2">${s.phone} | ${s.date}</div>
+                    </div>
+                `).reverse().join('');
+            }
+        }
+    </script>
+</body>
+</html>
