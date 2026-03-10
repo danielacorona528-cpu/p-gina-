@@ -25,7 +25,6 @@
             user-select: none;
         }
 
-        /* Efecto de fondo premium */
         .main-glow {
             position: fixed; top: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 500px; height: 100%;
@@ -41,7 +40,6 @@
             overflow: hidden;
         }
 
-        /* Botón de Cantidad Estilo Brayan Lucena */
         .qty-btn {
             background: rgba(255, 255, 255, 0.03);
             border: 2px solid rgba(255, 255, 255, 0.05);
@@ -56,7 +54,6 @@
             transform: scale(1.05);
         }
 
-        /* Ticket Dorado */
         .ticket-pro {
             background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
             color: #000;
@@ -69,14 +66,26 @@
             margin: 5px;
         }
 
-        /* Animaciones */
         .fade-up { animation: fadeUp 0.5s ease-out; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Estilo Admin */
         #admin-panel {
             display: none; position: fixed; inset: 0; background: #020617; 
             z-index: 9999; overflow-y: auto; padding: 25px;
+        }
+
+        /* Estilo para el input de archivo */
+        input[type="file"]::-webkit-file-upload-button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 10px;
+            cursor: pointer;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -98,7 +107,7 @@
 
     <div class="card-pro fade-up mb-8 shadow-2xl">
         <div class="bg-white p-10 flex justify-center items-center">
-            <svg viewBox="0 0 24 24" class="w-48 h-48 text-blue-600" fill="currentColor">
+             <svg viewBox="0 0 24 24" class="w-48 h-48 text-blue-600" fill="currentColor">
                 <path d="M21,11C21,11 21,11 21,11C21,11 21,11 21,11M19.5,13.5A1.5,1.5 0 0,1 18,12A1.5,1.5 0 0,1 19.5,10.5A1.5,1.5 0 0,1 21,12A1.5,1.5 0 0,1 19.5,13.5M19.5,9A3,3 0 0,0 16.5,12C16.5,13.66 17.84,15 19.5,15C21.16,15 22.5,13.66 22.5,12A3,3 0 0,0 19.5,9M11,12V10H14V7H11V5H10V7H7V10H10V12H7V15H10V17H11V15H14V12H11M2.5,13.5A1.5,1.5 0 0,1 1,12A1.5,1.5 0 0,1 2.5,10.5A1.5,1.5 0 0,1 4,12A1.5,1.5 0 0,1 2.5,13.5M2.5,9A3,3 0 0,0 -0.5,12C-0.5,13.66 0.84,15 2.5,15C4.16,15 5.5,13.66 5.5,12A3,3 0 0,0 2.5,9Z" />
             </svg>
         </div>
@@ -159,8 +168,8 @@
         </div>
     </div>
 
-    <div id="modal-reg" class="fixed inset-0 bg-black/95 z-[100] hidden p-6">
-        <div class="max-w-md mx-auto">
+    <div id="modal-reg" class="fixed inset-0 bg-black/95 z-[100] hidden p-6 overflow-y-auto">
+        <div class="max-w-md mx-auto py-10">
             <h2 class="text-3xl font-black uppercase italic mb-8 text-blue-500">Completar Registro</h2>
             <div class="card-pro p-6 mb-8 space-y-4">
                 <p class="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Información de Pago</p>
@@ -168,11 +177,20 @@
                 <div class="flex justify-between border-b border-white/5 pb-2"><span>Pago Móvil</span><strong>0412-1234567</strong></div>
                 <div class="flex justify-between"><span>RIF/CI</span><strong>V-12345678</strong></div>
             </div>
+            
             <div class="space-y-4">
-                <input type="text" id="reg-name" placeholder="Tu nombre completo" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none focus:border-blue-500">
-                <input type="tel" id="reg-phone" placeholder="WhatsApp (Ej: 04141234567)" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none focus:border-blue-500">
-                <button onclick="finishSale()" class="w-full bg-green-600 py-5 rounded-2xl font-black uppercase text-lg shadow-lg">Confirmar Registro</button>
-                <button onclick="document.getElementById('modal-reg').classList.add('hidden')" class="w-full py-4 text-zinc-500 font-bold uppercase text-[10px]">Cancelar</button>
+                <label class="block text-[10px] font-black uppercase text-zinc-500 ml-2">Datos Personales</label>
+                <input type="text" id="reg-name" placeholder="Nombre Completo" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none focus:border-blue-500">
+                <input type="tel" id="reg-phone" placeholder="Número Telefónico" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 font-bold outline-none focus:border-blue-500">
+                
+                <label class="block text-[10px] font-black uppercase text-zinc-500 ml-2 mt-6">Soporte de Pago</label>
+                <div class="w-full bg-white/5 p-5 rounded-2xl border border-dashed border-white/20">
+                    <p class="text-[10px] mb-3 opacity-50">Sube el Capture de tu Pago Móvil o Transferencia:</p>
+                    <input type="file" id="reg-capture" accept="image/*" class="text-xs text-zinc-400">
+                </div>
+
+                <button onclick="finishSale()" class="w-full bg-green-600 py-5 rounded-2xl font-black uppercase text-lg shadow-lg mt-4">Confirmar Registro</button>
+                <button onclick="document.getElementById('modal-reg').classList.add('hidden')" class="w-full py-4 text-zinc-500 font-bold uppercase text-[10px]">Volver Atrás</button>
             </div>
         </div>
     </div>
@@ -188,12 +206,10 @@
     </div>
 
     <script>
-        // --- DATA CORE ---
         let db = JSON.parse(localStorage.getItem('bera_final_2026')) || { sales: [], used: [] };
         let currentQty = 1;
         let currentTickets = [];
 
-        // --- INTERFAZ ---
         function setQty(n) {
             currentQty = n;
             document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
@@ -231,7 +247,11 @@
         function finishSale() {
             const name = document.getElementById('reg-name').value.trim();
             const phone = document.getElementById('reg-phone').value.trim();
-            if(!name || !phone) return alert("Por favor llena los datos.");
+            const capture = document.getElementById('reg-capture').files[0];
+
+            if(!name || !phone || !capture) {
+                return alert("⚠️ Debes completar Nombre, Teléfono y adjuntar el Capture de Pago.");
+            }
 
             const sale = {
                 id: Date.now(),
@@ -239,6 +259,7 @@
                 phone: phone,
                 tickets: [...currentTickets],
                 total: currentQty * 310,
+                capture_name: capture.name, // Guardamos el nombre del archivo para referencia
                 date: new Date().toLocaleString()
             };
 
@@ -246,7 +267,7 @@
             db.used.push(...currentTickets);
             localStorage.setItem('bera_final_2026', JSON.stringify(db));
 
-            alert("¡Registro realizado con éxito!");
+            alert("✅ Registro exitoso. Tu participación ha sido guardada.");
             location.reload();
         }
 
@@ -268,7 +289,6 @@
             }
         }
 
-        // --- ADMIN ---
         function checkAdmin() {
             if(prompt("Clave Admin:") === "2026") {
                 const panel = document.getElementById('admin-panel');
@@ -276,15 +296,22 @@
                 
                 const income = db.sales.reduce((acc, s) => acc + s.total, 0);
                 document.getElementById('admin-stats').innerHTML = `
-                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">TICKETS</p><p class="text-2xl font-black">${db.used.length}</p></div>
-                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">VENTAS</p><p class="text-2xl font-black text-green-500">${income} Bs</p></div>
+                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">TICKETS VENDIDOS</p><p class="text-2xl font-black">${db.used.length}</p></div>
+                    <div class="card-pro p-5 text-center"><p class="text-[10px] opacity-50">RECAUDACIÓN</p><p class="text-2xl font-black text-green-500">${income} Bs</p></div>
                 `;
 
                 document.getElementById('admin-list').innerHTML = db.sales.map(s => `
                     <div class="card-pro p-4 text-[11px]">
-                        <div class="flex justify-between font-black text-blue-400 mb-1"><span>${s.name}</span><span>${s.total} Bs</span></div>
-                        <div class="text-zinc-500">${s.tickets.join(' - ')}</div>
-                        <div class="opacity-30 mt-2">${s.phone} | ${s.date}</div>
+                        <div class="flex justify-between font-black text-blue-400 mb-1">
+                            <span>👤 ${s.name}</span>
+                            <span class="text-green-500">${s.total} Bs</span>
+                        </div>
+                        <div class="text-zinc-500 font-bold mb-2">🎟️ ${s.tickets.join(' - ')}</div>
+                        <div class="flex justify-between items-center opacity-50 mt-2 border-t border-white/5 pt-2">
+                            <span>📞 ${s.phone}</span>
+                            <span>📎 ${s.capture_name ? 'Capture Adjunto' : 'Sin Capture'}</span>
+                        </div>
+                        <div class="opacity-20 text-[8px] mt-1">${s.date}</div>
                     </div>
                 `).reverse().join('');
             }
